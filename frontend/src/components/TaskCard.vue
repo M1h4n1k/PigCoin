@@ -1,9 +1,13 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div class="flex w-full items-center justify-between py-2">
+  <div class="flex w-full items-center justify-between">
     <div class="flex items-center">
-      <img class="h-8 w-8" alt="" src="/telegram.svg" />
+      <div
+        class="flex h-[70px] w-[70px] items-center justify-center rounded-xl border p-2"
+      >
+        <img class="h-8 w-8" alt="" src="/telegram.svg" />
+      </div>
       <div class="ml-3">
         <p class="text-xl font-medium">Invite a fren</p>
         <p class="text-lg">+120🐽</p>

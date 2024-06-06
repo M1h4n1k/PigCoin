@@ -18,7 +18,7 @@ import Booster from "@/components/Booster.vue";
             <p class="text-xl">Pig</p>
             <p class="text-gray-600">2/3 available</p>
           </div>
-          <img height="50" width="50" src="/pig.png" alt="refill" />
+          <img height="40" width="40" src="/pig.png" alt="refill" />
         </div>
 
         <div
@@ -28,7 +28,7 @@ import Booster from "@/components/Booster.vue";
             <p class="text-xl">Refill</p>
             <p class="text-gray-600">2/3 available</p>
           </div>
-          <img height="60" width="60" src="/soapRefill.jpg" alt="refill" />
+          <img height="35" width="35" src="/soapRefill.jpg" alt="refill" />
         </div>
       </div>
     </div>

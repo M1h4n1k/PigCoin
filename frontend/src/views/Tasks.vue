@@ -8,7 +8,9 @@ import TaskCard from "@/components/TaskCard.vue";
       <p class="text-7xl">🐽</p>
       <p class="text-4xl">Earn more coins</p>
     </div>
-    <div class="mt-5">
+    <div
+      class="mt-8 flex flex-col justify-around gap-2 rounded-xl border px-4 py-3"
+    >
       <TaskCard v-for="i in 6" :key="i" />
     </div>
   </div>
