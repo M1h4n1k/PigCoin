@@ -24,7 +24,7 @@ defineProps({
 </script>
 
 <template>
-  <div class="relative flex items-center p-2">
+  <div class="relative flex items-center">
     <span
       class="w-14 text-center text-lg"
       :class="{

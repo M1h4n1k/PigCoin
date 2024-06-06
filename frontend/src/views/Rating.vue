@@ -61,6 +61,7 @@ const activeTab = ref("swineherds");
 
     <div class="mt-10 w-full bg-gray-100">
       <RatingUserCard
+        class="p-2"
         v-for="i in 10"
         :key="i"
         :rating="i"
