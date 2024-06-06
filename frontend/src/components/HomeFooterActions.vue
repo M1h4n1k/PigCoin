@@ -16,20 +16,20 @@
     <div
       class="flex h-14 w-fit items-center justify-center rounded-xl bg-gray-300"
     >
-      <div class="flex w-20 flex-col items-center">
+      <RouterLink to="/frens" class="flex w-20 flex-col items-center">
         <span>🐷</span>
         <span class="font-semibold">Frens</span>
-      </div>
+      </RouterLink>
       <div class="h-[70%] border border-gray-400"></div>
-      <div class="flex w-20 flex-col items-center">
+      <RouterLink to="/tasks" class="flex w-20 flex-col items-center">
         <span>📋</span>
         <span class="font-semibold">Tasks</span>
-      </div>
+      </RouterLink>
       <div class="h-[70%] border border-gray-400"></div>
-      <div class="flex w-20 flex-col items-center">
+      <RouterLink to="/boosts" class="flex w-20 flex-col items-center">
         <span>🚀</span>
         <span class="font-semibold">Boosts</span>
-      </div>
+      </RouterLink>
     </div>
   </div>
 </template>
