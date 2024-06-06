@@ -3,11 +3,7 @@
 <template>
   <div class="flex items-center justify-between">
     <div class="flex items-center">
-      <img
-        alt="⚡️"
-        class="h-10 w-10"
-        src="https://freepngimg.com/save/141596-energy-symbol-free-download-png-hd/512x512"
-      />
+      <img alt="🧼" class="h-10 w-10" src="/bathroom.svg" />
       <div class="flex flex-col">
         <span class="text-lg font-bold">1000</span>
         <span class="-mt-2 text-base font-semibold text-gray-500">/1000</span>
