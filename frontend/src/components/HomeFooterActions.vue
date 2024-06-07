@@ -10,7 +10,7 @@
       </div>
     </div>
     <div
-      class="flex h-14 w-fit items-center justify-center rounded-xl bg-gray-300"
+      class="flex h-14 w-fit items-center justify-center rounded-xl bg-gray-200"
     >
       <RouterLink to="/frens" class="flex w-20 flex-col items-center">
         <span>🐷</span>

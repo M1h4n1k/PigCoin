@@ -6,7 +6,7 @@ const activeTab = ref("swineherds");
 </script>
 
 <template>
-  <div id="container" class="flex flex-col items-center pt-6">
+  <div id="container" class="flex flex-col items-center px-5 pt-6">
     <div class="flex flex-col items-center">
       <div class="flex w-fit rounded-2xl bg-gray-200">
         <div
@@ -59,7 +59,7 @@ const activeTab = ref("swineherds");
       </div>
     </div>
 
-    <div class="mt-10 w-full bg-gray-100">
+    <div class="mt-10 w-full rounded-xl bg-gray-200">
       <RatingUserCard
         class="p-2"
         v-for="i in 10"
@@ -70,13 +70,15 @@ const activeTab = ref("swineherds");
       />
     </div>
   </div>
-  <div class="fixed bottom-0 w-full bg-gray-300">
-    <RatingUserCard
-      :is-you="true"
-      rating="100k+"
-      :coins="1000"
-      name="Mihanik"
-    />
+  <div class="fixed bottom-0 w-full px-5">
+    <div class="w-full bg-gray-300">
+      <RatingUserCard
+        :is-you="true"
+        rating="100k+"
+        :coins="1000"
+        name="Mihanik"
+      />
+    </div>
   </div>
 </template>
 

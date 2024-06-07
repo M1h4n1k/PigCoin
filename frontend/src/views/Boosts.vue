@@ -5,7 +5,7 @@ import Booster from "@/components/Booster.vue";
 <template>
   <div class="px-5 py-2">
     <div class="text-center">
-      <p class="text-lg">Balance</p>
+      <p class="text-2xl">Balance</p>
       <p class="text-4xl font-medium">🐽132 456</p>
     </div>
     <div class="mt-5">

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import TheSquadHeader from "@/components/HomeSquadHeader.vue";
-import TheUserStatsHeader from "@/components/HomeUserStatsHeader.vue";
-import ThePorkSnout from "@/components/HomePorkSnout.vue";
+import HomeSquadHeader from "@/components/HomeSquadHeader.vue";
+import HomeUserStatsHeader from "@/components/HomeUserStatsHeader.vue";
+import HomePorkSnout from "@/components/HomePorkSnout.vue";
 import HomeFooterActions from "@/components/HomeFooterActions.vue";
 </script>
 
@@ -11,10 +11,10 @@ import HomeFooterActions from "@/components/HomeFooterActions.vue";
     class="flex h-screen flex-col justify-between px-3 pb-8 pt-6"
   >
     <div>
-      <TheSquadHeader />
-      <TheUserStatsHeader class="mt-6" />
+      <HomeSquadHeader />
+      <HomeUserStatsHeader class="mt-6" />
     </div>
-    <ThePorkSnout />
+    <HomePorkSnout />
     <HomeFooterActions />
   </div>
 </template>
