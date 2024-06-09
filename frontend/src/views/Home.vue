@@ -6,16 +6,13 @@ import HomeFooterActions from "@/components/HomeFooterActions.vue";
 </script>
 
 <template>
-  <div
-    id="container"
-    class="flex h-screen flex-col justify-between px-3 pb-8 pt-6"
-  >
-    <div>
+  <div id="container" class="flex h-screen flex-col justify-between pb-8 pt-6">
+    <div class="px-3">
       <HomeSquadHeader />
       <HomeUserStatsHeader class="mt-6" />
     </div>
     <HomePorkSnout />
-    <HomeFooterActions />
+    <HomeFooterActions class="px-3" />
   </div>
 </template>
 
