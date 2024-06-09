@@ -36,11 +36,6 @@ async def get_tg_data(request: Request) -> dict:
     return orjson.loads(request.cookies.get('tg_data'))
 
 
-async def get_user_optional(tg_data: dict = Depends(get_tg_data), db=Depends(get_db)) -> models.User | None:
-    user = crud.users.get_user(db, tg_data['user']['id'])
-    return user
-
-
 async def get_user(tg_data: dict = Depends(get_tg_data), db=Depends(get_db)) -> models.User:
     user = crud.users.get_user(db, tg_data['user']['id'])
     if not user:

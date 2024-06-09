@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session, query
 from sqlalchemy.dialects.mysql import insert as upsert
 
 
-def get_user(db: Session, user_tg_id) -> models.User | None:
+def get_user(db: Session, user_tg_id: int) -> models.User | None:
     return db.get(models.User, user_tg_id)
 
 
@@ -35,7 +35,7 @@ def update_user_turbo(db: Session, user: models.User, turbo: bool) -> models.Use
 
 def user_use_free_refill(db: Session, user: models.User) -> models.User:
     user.free_refills -= 1
-    user.current_energy = 1000 + user.boosts.filter(models.Boost.name == 'capacity').count() * 100
+    user.current_energy = user.max_energy
     db.commit()
     db.refresh(user)
     return user

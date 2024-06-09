@@ -1,4 +1,10 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+defineProps({
+  title: String,
+  picture: String,
+  price: Number,
+});
+</script>
 
 <template>
   <div class="flex w-full items-center justify-between rounded-2xl">
@@ -6,11 +12,11 @@
       <div
         class="flex h-[70px] w-[70px] items-center justify-center rounded-xl border p-2"
       >
-        <img height="50" width="50" src="/pig.png" alt="refill" />
+        <img height="50" width="50" :src="picture" alt="refill" />
       </div>
       <div class="ml-2">
-        <p class="text-xl">Pig</p>
-        <p class="text-gray-600">🐽512,000</p>
+        <p class="text-xl">{{ title }}</p>
+        <p class="text-gray-600">🐽{{ price }}</p>
       </div>
     </div>
 

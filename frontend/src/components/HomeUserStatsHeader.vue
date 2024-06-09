@@ -1,8 +1,21 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useUserStore } from "@/store";
+import { storeToRefs } from "pinia";
+
+const userStore = useUserStore();
+const { user } = storeToRefs(userStore);
+</script>
 
 <template>
   <div class="flex flex-col items-center">
-    <div class="text-5xl font-semibold">🐽<span>10,000</span></div>
+    <div class="flex items-center text-5xl font-semibold">
+      🐽
+      <span
+        class="block h-12 w-40 animate-pulse rounded-lg bg-gray-200 p-2"
+        v-if="user === null"
+      ></span>
+      <span v-else>{{ user.current_coins }}</span>
+    </div>
     <RouterLink to="/rating" class="relative flex items-center justify-center">
       <span class="text-lg font-semibold">#213,312</span>
       <span class="mx-5 text-3xl font-semibold">·</span>

@@ -10,7 +10,7 @@ def get_tasks(db: Session) -> list:
 
 
 def get_task(db: Session, task_id: int) -> models.Task | None:
-    return db.query(models.Task).filter(models.Task.id == task_id).first()
+    return db.get(models.Task, task_id)
 
 
 def complete_task(db: Session, task_id: int, user_tg_id: int) -> None:

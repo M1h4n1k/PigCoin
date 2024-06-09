@@ -2,7 +2,6 @@ from pydantic import BaseModel
 
 
 class User(BaseModel):
-    tg_id: int
 
     class Config:
         from_attributes = True
@@ -11,14 +10,14 @@ class User(BaseModel):
 class UserPublic(User):
     picture: str
     username: str
+    total_coins: int
     league: int
 
 
 class UserPrivate(UserPublic):
-    referrer_tg_id: int
-    club_id: int
-
+    tg_id: int
     current_energy: int
+    max_energy: int
     turbo_available: bool
 
     total_coins: int
@@ -27,18 +26,15 @@ class UserPrivate(UserPublic):
     free_turbo: int
     free_refills: int
 
-    club: dict
+    club_id: int | None
+    club: dict | None
 
 
 class UserCreate(User):
     picture: str
     username: str
-    referrer_tg_id: int = None
-    club_id: int = None
-
-    @classmethod
-    def from_tg_data(cls, tg_data: dict) -> "UserCreate":
-        return cls(**tg_data)
+    referrer_tg_id: int| None = None
+    club_id: int| None = None
 
 
 class Task(BaseModel):
@@ -57,9 +53,8 @@ class Boost(BaseModel):
     id: int
     title: str
     picture: str
-    bonus: int
-    count: int
-    price: int
+    count: int = -1
+    price: int = -1
 
     class Config:
         from_attributes = True

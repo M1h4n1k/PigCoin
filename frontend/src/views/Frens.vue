@@ -1,5 +1,20 @@
 <script setup lang="ts">
 import RatingUserCard from "@/components/RatingUserCard.vue";
+import { useUserStore } from "@/store";
+
+const userStore = useUserStore();
+if (userStore.referrals.length === 0) {
+  fetch(import.meta.env.VITE_API_URL + "/user/referrals", {
+    credentials: "include",
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      userStore.referrals = data;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
 </script>
 
 <template>
@@ -28,11 +43,12 @@ import RatingUserCard from "@/components/RatingUserCard.vue";
     <h3 class="mt-10 text-center text-2xl font-medium">Frens</h3>
     <div class="mt-3 w-full space-y-3 rounded-xl border py-3">
       <RatingUserCard
-        v-for="i in 4"
-        :key="i"
-        :rating="i"
-        :coins="100000 * (10 - i)"
-        :name="'user' + i"
+        v-for="(referral, ix) in userStore.referrals"
+        :key="ix"
+        :picture="referral.picture"
+        :rating="ix + 1"
+        :coins="referral.total_coins"
+        :name="referral.username"
       />
     </div>
   </div>

@@ -15,8 +15,12 @@ class User(Base):
     tg_id: Mapped[int] = mapped_column(BIGINT, unique=True, primary_key=True)
     picture: Mapped[str] = mapped_column(VARCHAR(255))
     username: Mapped[str] = mapped_column(VARCHAR(255))
-    referrer_tg_id: Mapped[int] = mapped_column(BIGINT, ForeignKey('users.tg_id'), index=True)
-    club_id: Mapped[int] = mapped_column(BIGINT, ForeignKey('clubs.id'), index=True)
+    referrer_tg_id: Mapped[int] = mapped_column(
+        BIGINT, ForeignKey('users.tg_id', ondelete='SET NULL'), index=True, nullable=True
+    )
+    club_id: Mapped[int] = mapped_column(
+        BIGINT, ForeignKey('clubs.id', ondelete='SET NULL'), index=True, nullable=True
+    )
     blocked: Mapped[bool] = mapped_column(Boolean, default=False)
 
     current_energy: Mapped[int] = mapped_column(BIGINT, default=1000)
@@ -35,10 +39,22 @@ class User(Base):
     def league(self) -> int:
         return get_user_league(self.total_coins)
 
-    boosts: Mapped['Boost'] = relationship('Boost', secondary='user_boosts')
-    club: Mapped['Club'] = relationship('Club', back_populates='users')
-    referrals: Mapped['User'] = relationship('User', remote_side=[referrer_tg_id])
-    tasks_completed: Mapped['Task'] = relationship('Task', secondary='user_tasks')
+    @hybrid_property
+    def max_energy(self) -> int:
+        if self.boosts.filter(UserBoost.boost_type == 'capacity').first() is None:
+            return 1000
+
+        return 1000 + self.boosts.filter(UserBoost.boost_type == 'capacity').first().count * 100
+
+    boosts: Mapped[list['UserBoost']] = relationship(
+        'UserBoost', order_by='UserBoost.boost_id.asc()', lazy='dynamic'
+    )
+
+    club: Mapped['Club'] = relationship('Club', back_populates='members')
+    referrals: Mapped[list['User']] = relationship(
+        'User', remote_side=[referrer_tg_id], order_by='User.total_coins.desc()'
+    )
+    tasks_completed: Mapped[list['Task']] = relationship('Task', secondary='user_tasks')
 
 
 # it's possible to do it via simple json array, since I'm not planning to add any new boosts
@@ -46,18 +62,27 @@ class Boost(Base):
     __tablename__ = 'boosts'
 
     id: Mapped[int] = mapped_column(BIGINT, unique=True, primary_key=True)
-    name: Mapped[str] = mapped_column(VARCHAR(255))
+    title: Mapped[str] = mapped_column(VARCHAR(255))
     base_price: Mapped[int] = mapped_column(BIGINT)
     coins: Mapped[int] = mapped_column(BIGINT)
     picture: Mapped[str] = mapped_column(VARCHAR(255))
+    type: Mapped[str] = mapped_column(VARCHAR(255))
 
 
 class UserBoost(Base):
     __tablename__ = 'user_boosts'
 
-    user_tg_id: Mapped[int] = mapped_column(BIGINT, ForeignKey('users.tg_id'), primary_key=True)
-    boost_id: Mapped[int] = mapped_column(BIGINT, ForeignKey('boosts.id'), primary_key=True)
+    user_tg_id: Mapped[int] = mapped_column(
+        BIGINT, ForeignKey('users.tg_id', ondelete='CASCADE'), primary_key=True
+    )
+    boost_id: Mapped[int] = mapped_column(
+        BIGINT, ForeignKey('boosts.id', ondelete='CASCADE'), primary_key=True
+    )
     count: Mapped[int] = mapped_column(BIGINT, default=0)
+    boost_type: Mapped[str] = mapped_column(VARCHAR(255))
+    boost: Mapped['Boost'] = relationship(
+        'Boost', lazy='joined'
+    )
 
 
 class Club(Base):
@@ -69,7 +94,7 @@ class Club(Base):
     tg_link: Mapped[str] = mapped_column(VARCHAR(255))
 
     total_coins: Mapped[int] = mapped_column(BIGINT, default=0)
-    members: Mapped['User'] = relationship('User', back_populates='club')
+    members: Mapped[list['User']] = relationship('User', back_populates='club')
 
     @hybrid_property
     def league(self) -> int:
@@ -90,6 +115,10 @@ class Task(Base):
 class UserTask(Base):
     __tablename__ = 'user_tasks'
 
-    user_tg_id: Mapped[int] = mapped_column(BIGINT, ForeignKey('users.tg_id'), primary_key=True)
-    task_id: Mapped[int] = mapped_column(BIGINT, ForeignKey('tasks.id'), primary_key=True)
+    user_tg_id: Mapped[int] = mapped_column(
+        BIGINT, ForeignKey('users.tg_id', ondelete='CASCADE'), primary_key=True
+    )
+    task_id: Mapped[int] = mapped_column(
+        BIGINT, ForeignKey('tasks.id', ondelete='CASCADE'), primary_key=True
+    )
     completed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())

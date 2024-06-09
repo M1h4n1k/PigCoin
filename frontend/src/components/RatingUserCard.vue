@@ -8,7 +8,7 @@ defineProps({
     type: Number,
     required: true,
   },
-  avatar: {
+  picture: {
     type: String,
     required: false,
   },
@@ -24,7 +24,7 @@ defineProps({
 </script>
 
 <template>
-  <div class="relative flex items-center">
+  <div class="relative flex items-center py-2">
     <span
       class="w-14 text-center text-lg"
       :class="{
@@ -37,7 +37,7 @@ defineProps({
       {{ rating }}
     </span>
     <div class="flex items-center">
-      <img class="h-10 w-10 rounded-full bg-red-100" alt="" :src="avatar" />
+      <img class="h-10 w-10 rounded-full" alt="" :src="picture" />
       <div class="ml-2">
         <p class="font-medium">{{ name }}</p>
         <p class="text-gray-600">{{ coins }}🐽</p>

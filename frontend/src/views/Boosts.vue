@@ -1,32 +1,89 @@
 <script setup lang="ts">
 import Booster from "@/components/Booster.vue";
+import { useUserStore, useBoostsStore } from "@/store";
+
+const userStore = useUserStore();
+const boostsStore = useBoostsStore();
+
+if (boostsStore.boosts.length === 0) {
+  fetch(import.meta.env.VITE_API_URL + "/boosts/", {
+    credentials: "include",
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      boostsStore.boosts = data;
+    });
+}
+
+const buyBoost = (boostId: number) => {
+  fetch(import.meta.env.VITE_API_URL + `/boosts/buy/${boostId}`, {
+    method: "POST",
+    credentials: "include",
+  }).then(() => {
+    userStore.user!.current_coins -= boostsStore.boosts.find(
+      (b) => b.id === boostId,
+    )!.price;
+    boostsStore.boosts = boostsStore.boosts.map((b) => {
+      if (b.id === boostId) {
+        b.count++;
+        b.price += 100;
+      }
+      return b;
+    });
+  });
+};
+
+const useFreeBooster = (type: number) => {
+  fetch(import.meta.env.VITE_API_URL + `/boosts/use/${type}`, {
+    method: "POST",
+    credentials: "include",
+  }).then(() => {
+    if (type === 0) {
+      userStore.user!.free_turbo--;
+    } else {
+      userStore.user!.free_refills--;
+      userStore.user!.current_energy = userStore.user!.max_energy;
+    }
+  });
+};
 </script>
 
 <template>
   <div class="px-5 py-2">
     <div class="text-center">
       <p class="text-2xl">Balance</p>
-      <p class="text-4xl font-medium">🐽132 456</p>
+      <p class="text-4xl font-medium">
+        🐽
+        <span>{{ userStore.user?.current_coins }}</span>
+      </p>
     </div>
     <div class="mt-5">
       <h3 class="text-xl">Free daily boosters</h3>
       <div class="mt-2 flex justify-around gap-4">
         <div
           class="flex w-1/2 items-center justify-between rounded-2xl border py-2 pl-4 pr-2"
+          @click="useFreeBooster(0)"
         >
           <div>
             <p class="text-xl">Pig</p>
-            <p class="text-gray-600">2/3 available</p>
+            <p class="flex items-center text-gray-600">
+              <span>{{ userStore.user?.free_turbo }}</span
+              >/3 available
+            </p>
           </div>
           <img height="40" width="40" src="/pig.png" alt="refill" />
         </div>
 
         <div
           class="flex w-1/2 items-center justify-between rounded-2xl border py-2 pl-4 pr-2"
+          @click="useFreeBooster(1)"
         >
           <div>
             <p class="text-xl">Refill</p>
-            <p class="text-gray-600">2/3 available</p>
+            <p class="flex items-center text-gray-600">
+              <span>{{ userStore.user?.free_refills }}</span
+              >/3 available
+            </p>
           </div>
           <img height="35" width="35" src="/soapRefill.jpg" alt="refill" />
         </div>
@@ -38,7 +95,15 @@ import Booster from "@/components/Booster.vue";
       <div
         class="mt-2 flex flex-col justify-around gap-4 rounded-xl border p-5"
       >
-        <Booster v-for="i in 5" :key="i" />
+        <Booster
+          class="cursor-pointer"
+          v-for="b in boostsStore.boosts"
+          :key="b.id"
+          :picture="b.picture"
+          :title="b.title"
+          :price="b.price"
+          @click="buyBoost(b.id)"
+        />
       </div>
     </div>
   </div>

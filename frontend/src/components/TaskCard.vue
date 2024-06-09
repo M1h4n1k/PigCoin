@@ -1,4 +1,10 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+defineProps({
+  title: String,
+  picture: String,
+  reward: Number,
+});
+</script>
 
 <template>
   <div class="flex w-full items-center justify-between">
@@ -6,11 +12,11 @@
       <div
         class="flex h-[70px] w-[70px] items-center justify-center rounded-xl border p-2"
       >
-        <img class="h-8 w-8" alt="" src="/telegram.svg" />
+        <img class="h-8 w-8" alt="" :src="picture" />
       </div>
       <div class="ml-3">
-        <p class="text-xl font-medium">Invite a fren</p>
-        <p class="text-lg">+120🐽</p>
+        <p class="text-xl font-medium">{{ title }}</p>
+        <p class="text-lg">+{{ reward }}🐽</p>
       </div>
     </div>
     <svg height="25px" width="25px" viewBox="0 0 100 100">

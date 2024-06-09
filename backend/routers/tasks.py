@@ -8,7 +8,7 @@ router = APIRouter(prefix='/tasks', responses={404: {'description': 'User not fo
 
 
 @router.get(
-    '/tasks',
+    '/',
     response_model=list[schemas.Task],
     status_code=200,
 )
@@ -16,14 +16,11 @@ async def all_tasks(
     db: Session = Depends(get_db),
     user: models.User = Depends(get_user)
 ) -> list[schemas.Task]:
-    resp_tasks = []
-    tasks = crud.tasks.get_tasks(db) # small, less than 10-20
+    tasks = crud.tasks.get_tasks(db)  # small, less than 10-20
     for tc in tasks:  # <= len(tasks)
         if any(tc.id == task.id for task in user.tasks_completed):
-            resp_tasks.append(schemas.Task(**tc.dict(), completed=True))
-        else:
-            resp_tasks.append(schemas.Task(**tc.dict()))
-    return resp_tasks
+            tc.completed = True
+    return tasks
 
 
 @router.post(
