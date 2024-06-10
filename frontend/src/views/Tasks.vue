@@ -20,7 +20,9 @@ fetch(import.meta.env.VITE_API_URL + "/tasks/", {
       <p class="text-7xl">🐽</p>
       <p class="text-4xl">Earn more coins</p>
     </div>
-    <div class="mt-8 flex flex-col justify-around gap-4 rounded-xl border p-5">
+    <div
+      class="toned-bg mt-8 flex flex-col justify-around gap-4 rounded-xl p-5"
+    >
       <TaskCard
         v-for="t in tasks"
         :key="t"

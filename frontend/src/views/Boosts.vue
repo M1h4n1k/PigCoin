@@ -16,6 +16,13 @@ if (boostsStore.boosts.length === 0) {
 }
 
 const buyBoost = (boostId: number) => {
+  if (
+    userStore.user!.current_coins <
+    boostsStore.boosts.find((b) => b.id === boostId)!.price
+  ) {
+    return;
+  }
+
   fetch(import.meta.env.VITE_API_URL + `/boosts/buy/${boostId}`, {
     method: "POST",
     credentials: "include",
@@ -34,6 +41,12 @@ const buyBoost = (boostId: number) => {
 };
 
 const useFreeBooster = (type: number) => {
+  if (type === 0 && userStore.user!.free_turbo === 0) {
+    return;
+  }
+  if (type === 1 && userStore.user!.free_refills === 0) {
+    return;
+  }
   fetch(import.meta.env.VITE_API_URL + `/boosts/use/${type}`, {
     method: "POST",
     credentials: "include",
@@ -61,7 +74,7 @@ const useFreeBooster = (type: number) => {
       <h3 class="text-xl">Free daily boosters</h3>
       <div class="mt-2 flex justify-around gap-4">
         <div
-          class="flex w-1/2 items-center justify-between rounded-2xl border py-2 pl-4 pr-2"
+          class="toned-bg flex w-1/2 cursor-pointer items-center justify-between rounded-2xl py-2 pl-4 pr-2"
           @click="useFreeBooster(0)"
         >
           <div>
@@ -75,7 +88,7 @@ const useFreeBooster = (type: number) => {
         </div>
 
         <div
-          class="flex w-1/2 items-center justify-between rounded-2xl border py-2 pl-4 pr-2"
+          class="toned-bg flex w-1/2 items-center justify-between rounded-2xl py-2 pl-4 pr-2"
           @click="useFreeBooster(1)"
         >
           <div>
@@ -85,7 +98,7 @@ const useFreeBooster = (type: number) => {
               >/3 available
             </p>
           </div>
-          <img height="35" width="35" src="/soapRefill.jpg" alt="refill" />
+          <img height="35" width="35" src="/refill.png" alt="refill" />
         </div>
       </div>
     </div>
@@ -93,7 +106,7 @@ const useFreeBooster = (type: number) => {
     <div class="mt-5">
       <h3 class="text-xl">Boosters</h3>
       <div
-        class="mt-2 flex flex-col justify-around gap-4 rounded-xl border p-5"
+        class="toned-bg mt-2 flex flex-col justify-around gap-4 rounded-xl p-5"
       >
         <Booster
           class="cursor-pointer"

@@ -8,8 +8,8 @@ const { user } = storeToRefs(userStore);
 
 <template>
   <div class="flex items-center justify-between">
-    <div class="flex items-center">
-      <img alt="🧼" class="h-10 w-10" src="/bathroom.svg" />
+    <div class="toned-bg flex h-full items-center rounded-xl px-3">
+      <img alt="🧼" class="-ml-1 h-10 w-10" src="/bathroom.svg" />
       <div class="flex flex-col">
         <span
           class="my-2 block h-6 w-14 animate-pulse rounded-lg bg-gray-200 p-2"
@@ -27,18 +27,18 @@ const { user } = storeToRefs(userStore);
       </div>
     </div>
     <div
-      class="flex h-16 w-fit items-center justify-center rounded-xl bg-gray-200"
+      class="toned-bg flex h-16 w-fit items-center justify-center rounded-xl"
     >
       <RouterLink to="/frens" class="flex w-20 flex-col items-center">
         <img src="/pigsHead.png" alt="🐷" class="h-7 w-7" />
         <span class="font-semibold">Frens</span>
       </RouterLink>
-      <div class="h-[70%] border border-gray-400"></div>
+      <div class="h-[70%] border border-gray-400/40"></div>
       <RouterLink to="/tasks" class="flex w-20 flex-col items-center">
         <img src="/clipboard.png" alt="📋" class="h-7 w-7" />
         <span class="font-semibold">Tasks</span>
       </RouterLink>
-      <div class="h-[70%] border border-gray-400"></div>
+      <div class="h-[70%] border border-gray-400/40"></div>
       <RouterLink to="/boosts" class="flex w-20 flex-col items-center">
         <img src="/rocket.webp" alt="🚀" class="h-7 w-7" />
         <span class="font-semibold">Boosts</span>

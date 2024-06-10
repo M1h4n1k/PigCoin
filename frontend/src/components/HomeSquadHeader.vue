@@ -2,7 +2,7 @@
 
 <template>
   <div
-    class="flex w-full items-center justify-between rounded-xl bg-gray-200 px-5 py-2"
+    class="toned-bg flex w-full items-center justify-between rounded-xl px-5 py-2"
   >
     <div class="flex items-center">
       <img class="h-10 w-10 bg-red-100" alt="" />

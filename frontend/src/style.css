@@ -5,3 +5,25 @@
 :root {
   font-family: "Roboto", sans-serif;
 }
+
+.toned-bg {
+  background: rgba(255, 255, 255, 0.7);
+  /*filter: drop-shadow(0 10px 8px rgb(0 0 0 / 0.04)) drop-shadow(0 0px 3px rgb(0 0 0 / 0.1));*/
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 5%);
+  backdrop-filter: blur(5px);
+}
+
+.toned-image-bg {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+body{
+  background-image: url("/farm.jpg") !important;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+
+}

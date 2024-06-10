@@ -62,11 +62,4 @@ onMounted(() => {
     transform: scale(1);
   }
 }
-/*#container {
-//  background-image: url("/farm.jpg") !important;
-//  background-size: cover;
-//  background-position: center;
-//  background-repeat: no-repeat;
-//  background-attachment: fixed;
-//}*/
 </style>
