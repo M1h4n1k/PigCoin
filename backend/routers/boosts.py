@@ -34,7 +34,7 @@ async def get_user_boosts(
 
 @router.post(
     '/buy/{boost_id}',
-    response_model=None,
+    response_model=schemas.UserPrivate,
     status_code=200,
     responses={404: {'description': 'Boost not found'}, 400: {'description': 'Not enough coins'}},
 )
@@ -53,7 +53,9 @@ async def buy_boost(
         raise HTTPException(status_code=400, detail='Not enough coins')
 
     crud.boosts.buy_boost(db, user.tg_id, boost_id, boost.type)
-    return
+    crud.users.update_user_money(db, user, -(boost.base_price + added_price))
+    db.refresh(user)
+    return user
 
 
 @router.post(

@@ -57,9 +57,10 @@ const cleanDirtyBubble = (index: number) => {
   dirtyBubbles.value[index].hidden = true;
   setTimeout(
     () => {
+      if (container.value === null) return;
       dirtyBubbles.value[index] = {
-        x: 60 + Math.random() * (container.value!.clientWidth - 170),
-        y: 100 + Math.random() * (container.value!.clientWidth - 200),
+        x: 60 + Math.random() * (container.value.clientWidth - 170),
+        y: 100 + Math.random() * (container.value.clientWidth - 200),
         size: Math.random() * 20 + 20, // Random bubble size (20px - 40px)
         color: dirtyColors[Math.floor(Math.random() * dirtyColors.length)],
         hidden: false,

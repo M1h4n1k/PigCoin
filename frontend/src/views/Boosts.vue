@@ -19,18 +19,18 @@ const buyBoost = (boostId: number) => {
   fetch(import.meta.env.VITE_API_URL + `/boosts/buy/${boostId}`, {
     method: "POST",
     credentials: "include",
-  }).then(() => {
-    userStore.user!.current_coins -= boostsStore.boosts.find(
-      (b) => b.id === boostId,
-    )!.price;
-    boostsStore.boosts = boostsStore.boosts.map((b) => {
-      if (b.id === boostId) {
-        b.count++;
-        b.price += 100;
-      }
-      return b;
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      userStore.user = data;
+      boostsStore.boosts = boostsStore.boosts.map((b) => {
+        if (b.id === boostId) {
+          b.count++;
+          b.price += 100;
+        }
+        return b;
+      });
     });
-  });
 };
 
 const useFreeBooster = (type: number) => {

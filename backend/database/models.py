@@ -46,10 +46,9 @@ class User(Base):
 
     @hybrid_property
     def free_turbo(self) -> int:
-        return min(
-            self._free_turbo,
-            (datetime.now() - self.free_turbo_last_used).days
-        )
+        if datetime.now().day != self.free_turbo_last_used.day:
+            self._free_turbo = 3
+        return self._free_turbo
 
     @free_turbo.setter
     def free_turbo(self, value: int):
@@ -61,10 +60,9 @@ class User(Base):
 
     @hybrid_property
     def free_refills(self) -> int:
-        return min(
-            self._free_refills,
-            (datetime.now() - self.free_refills_last_used).days
-        )
+        if datetime.now().day != self.free_turbo_last_used.day:
+            self._free_refills = 3
+        return self._free_refills
 
     @free_refills.setter
     def free_refills(self, value: int):
