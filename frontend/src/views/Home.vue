@@ -3,6 +3,27 @@ import HomeSquadHeader from "@/components/HomeSquadHeader.vue";
 import HomeUserStatsHeader from "@/components/HomeUserStatsHeader.vue";
 import HomePorkSnout from "@/components/HomePorkSnout.vue";
 import HomeFooterActions from "@/components/HomeFooterActions.vue";
+import { ref, Ref, onMounted } from "vue";
+
+const noseContainer: Ref<HTMLElement | null> = ref(null);
+
+const squeezeWithRandomTimeout = () => {
+  // Generate random timeout between 5 and 15 seconds (adjust as needed)
+  const randomTimeout = Math.floor(Math.random() * (15000 - 5000 + 1)) + 5000;
+  if (!noseContainer.value) return;
+  noseContainer.value.classList.add("image-squeeze");
+  setTimeout(() => {
+    if (!noseContainer.value) return;
+    noseContainer.value.classList.remove("image-squeeze");
+  }, 500);
+
+  // Schedule next iteration with random timeout
+  setTimeout(squeezeWithRandomTimeout, randomTimeout);
+};
+
+onMounted(() => {
+  squeezeWithRandomTimeout();
+});
 </script>
 
 <template>
@@ -11,17 +32,41 @@ import HomeFooterActions from "@/components/HomeFooterActions.vue";
       <HomeSquadHeader />
       <HomeUserStatsHeader class="mt-6" />
     </div>
-    <HomePorkSnout />
+    <div class="select-none" ref="noseContainer">
+      <HomePorkSnout />
+    </div>
     <HomeFooterActions class="px-3" />
   </div>
 </template>
 
-<!--<style scoped>-->
-<!--#container {-->
-<!--  background-image: url("/farm.jpg") !important;-->
-<!--  background-size: cover;-->
-<!--  background-position: center;-->
-<!--  background-repeat: no-repeat;-->
-<!--  background-attachment: fixed;-->
-<!--}-->
-<!--</style>-->
+<style scoped>
+/* Used in the image-squeezer function */
+.image-squeeze {
+  animation: image-squeeze-animation 0.5s infinite;
+}
+
+@keyframes image-squeeze-animation {
+  0% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scaleY(0.95);
+  }
+  50% {
+    transform: scale(1);
+  }
+  75% {
+    transform: scaleY(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+/*#container {
+//  background-image: url("/farm.jpg") !important;
+//  background-size: cover;
+//  background-position: center;
+//  background-repeat: no-repeat;
+//  background-attachment: fixed;
+//}*/
+</style>

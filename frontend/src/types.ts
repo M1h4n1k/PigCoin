@@ -2,6 +2,8 @@ type User = {
   tg_id: number;
   picture: string;
   username: string;
+  click_price: number;
+  refill_rate: number;
   current_coins: number;
   total_coins: number;
   current_energy: number;
@@ -36,4 +38,23 @@ type Task = {
   completed: boolean;
 };
 
-export type { User, UserPublic, Boost, Task };
+type BubbleBase = {
+  x: number;
+  y: number;
+  size: number;
+};
+
+type Bubble = BubbleBase & {
+  opacity: number;
+  animation: string;
+  direction: string;
+  speed: number;
+};
+
+type DirtyBubble = BubbleBase & {
+  color: string;
+  hidden: boolean;
+  price: number;
+};
+
+export type { User, UserPublic, Boost, Task, Bubble, DirtyBubble };

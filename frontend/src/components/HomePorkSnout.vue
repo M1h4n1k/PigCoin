@@ -1,42 +1,22 @@
 <script setup lang="ts">
 import { ref, Ref, onMounted } from "vue";
+import { useUserStore } from "@/store";
+import { Bubble, DirtyBubble } from "@/types";
+
+const userStore = useUserStore();
 
 const cleaning = ref(false);
 const container: Ref<HTMLElement | null> = ref(null);
-const nose: Ref<HTMLElement | null> = ref(null);
-
-type Bubble = {
-  x: number;
-  y: number;
-  size: number;
-  opacity: number;
-  animation: string;
-  direction: string;
-  speed: number;
-};
 
 const bubbles: Ref<Bubble[]> = ref([]); // Array to store bubble objects
 const bubblesI = ref(0);
-const bubblesMaxCount = 100;
+const bubblesMaxCount = 60;
 
-const squeezeWithRandomTimeout = () => {
-  // Generate random timeout between 5 and 15 seconds (adjust as needed)
-  const randomTimeout = Math.floor(Math.random() * (15000 - 5000 + 1)) + 5000;
-  if (!nose.value) return;
+const dirtyColors = ["#a4764a", "#9b7653", "#94765a", "#987654", "#a67b5b"];
+const dirtyBubbles: Ref<DirtyBubble[]> = ref([]); // Array to store bubble objects
+const dirtyBubblesCleanedCount = ref(0); // helps to delay the next bubble appearance
 
-  nose.value.classList.add("image-squeeze");
-  setTimeout(() => {
-    if (!nose.value) return;
-    nose.value.classList.remove("image-squeeze");
-  }, 500);
-
-  // Schedule next iteration with random timeout
-  setTimeout(squeezeWithRandomTimeout, randomTimeout);
-};
-
-onMounted(() => {
-  setTimeout(() => squeezeWithRandomTimeout(), 2000);
-});
+const coinsCollectedBatch = ref(0);
 
 const touchMove = (e: TouchEvent | MouseEvent) => {
   if (!cleaning.value) return;
@@ -64,26 +44,76 @@ const touchMove = (e: TouchEvent | MouseEvent) => {
     direction: `ray(${Math.random() * 360}deg at ${x}px ${y}px)`, // Initial direction
     speed,
   };
-  if (bubbles.value.length != bubblesMaxCount) {
-    const lastBubble =
-      bubbles.value[
-        (bubblesI.value - 1 + bubbles.value.length) % bubbles.value.length
-      ];
-    const xN = (lastBubble.x + x) / 2;
-    const yN = (lastBubble.y + y) / 2;
-    bubbles.value[bubblesI.value + 1] = {
-      x: xN,
-      y: yN,
-      size: Math.random() * 15 + 15,
-      opacity: 1, // Initial opacity
-      animation: `bubble-animation ${Math.random() * 15 + 15 * 0.2}s ease-in-out 1 forwards`, // Animation duration based on size
-      direction: `ray(${Math.random() * 360}deg at ${xN}px ${yN}px)`, // Initial direction
-      speed,
-    };
-    bubblesI.value++;
-  }
   bubblesI.value++;
 };
+
+const cleanDirtyBubble = (index: number) => {
+  if (!cleaning.value || dirtyBubbles.value[index].hidden) {
+    return;
+  }
+  if (collectCoin()) {
+    dirtyBubbles.value[index].price = userStore.user!.click_price;
+  }
+  dirtyBubbles.value[index].hidden = true;
+  setTimeout(
+    () => {
+      dirtyBubbles.value[index] = {
+        x: 60 + Math.random() * (container.value!.clientWidth - 170),
+        y: 100 + Math.random() * (container.value!.clientWidth - 200),
+        size: Math.random() * 20 + 20, // Random bubble size (20px - 40px)
+        color: dirtyColors[Math.floor(Math.random() * dirtyColors.length)],
+        hidden: false,
+        price: 0,
+      };
+      dirtyBubblesCleanedCount.value--;
+    },
+    600 + dirtyBubblesCleanedCount.value * 100,
+  );
+  dirtyBubblesCleanedCount.value++;
+};
+
+const collectCoin = () => {
+  if (userStore.user!.current_energy < userStore.user!.click_price) {
+    return false;
+  }
+  userStore.user!.current_energy -= userStore.user!.click_price;
+  userStore.user!.current_coins += userStore.user!.click_price;
+  coinsCollectedBatch.value += userStore.user!.click_price;
+  return true;
+};
+
+const collectCoinsBatch = () => {
+  if (coinsCollectedBatch.value === 0) {
+    return;
+  }
+  fetch(import.meta.env.VITE_API_URL + "/game/collectCoins", {
+    method: "POST",
+    credentials: "include",
+    body: JSON.stringify({ coins: coinsCollectedBatch.value }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      userStore.user = data;
+      coinsCollectedBatch.value = 0;
+    });
+};
+
+onMounted(() => {
+  setInterval(collectCoinsBatch, 5000);
+  for (let i = 0; i < 10; i++) {
+    dirtyBubbles.value.push({
+      x: 80 + Math.random() * (container.value!.clientWidth - 160),
+      y: 100 + Math.random() * (container.value!.clientWidth - 200),
+      size: Math.random() * 20 + 20, // Random bubble size (20px - 40px)
+      color: dirtyColors[Math.floor(Math.random() * dirtyColors.length)],
+      hidden: false,
+      price: 0,
+    });
+  }
+});
 </script>
 
 <template>
@@ -98,7 +128,7 @@ const touchMove = (e: TouchEvent | MouseEvent) => {
     @touchend="cleaning = false"
   >
     <div
-      class="bubble pointer-events-none absolute rounded-full border border-blue-300 border-opacity-50 bg-white"
+      class="bubble pointer-events-none absolute z-20 rounded-full border border-blue-300 border-opacity-50 bg-white"
       v-for="(bubble, ind) in bubbles"
       :key="bubble.x * 1000 + bubble.y * 100 + ind * 10 + bubble.size"
       :style="{
@@ -106,12 +136,47 @@ const touchMove = (e: TouchEvent | MouseEvent) => {
         top: bubble.y - bubble.size / 2 + 'px',
         width: bubble.size + 'px',
         height: bubble.size + 'px',
-        'offset-path': bubble.direction,
+        offsetPath: bubble.direction,
       }"
     ></div>
 
+    <div
+      class="absolute z-10 flex select-none rounded-full border-black border-opacity-50 transition-opacity duration-500"
+      v-for="(dirtyBubble, ind) in dirtyBubbles"
+      :key="ind"
+      @mousedown="(e) => e.preventDefault()"
+      @mouseover="cleanDirtyBubble(ind)"
+      @touchmove="cleanDirtyBubble(ind)"
+      :style="{
+        left: dirtyBubble.x - dirtyBubble.size / 2 + 'px',
+        top: dirtyBubble.y - dirtyBubble.size / 2 + 'px',
+        width: '100px', //dirtyBubble.size + 'px',
+        height: '100px', // dirtyBubble.size + 'px',
+        opacity: dirtyBubble.hidden ? 0 : 1,
+        pointerEvents: dirtyBubble.hidden ? 'none' : 'auto',
+        // backgroundColor: dirtyBubble.color,
+      }"
+    >
+      <div class="relative h-full w-full">
+        <img class="h-auto w-full" src="/mud2.png" alt="" />
+      </div>
+    </div>
+
+    <!-- If I move it to the bubble component it will inherit the opacity and disappear quite quickly -->
+    <span
+      v-for="(dirtyBubble, ind) in dirtyBubbles"
+      :key="ind"
+      class="number absolute z-30 w-fit select-none text-2xl font-bold text-white"
+      :style="{
+        left: dirtyBubble.x - dirtyBubble.size / 2 + 'px',
+        top: dirtyBubble.y - dirtyBubble.size / 2 + 'px',
+        display: dirtyBubble.hidden ? 'inline' : 'none',
+      }"
+    >
+      +{{ dirtyBubble.price }}
+    </span>
+
     <img
-      ref="nose"
       class="h-auto w-full"
       src="/pigNose.webp"
       alt="None"
@@ -123,7 +188,6 @@ const touchMove = (e: TouchEvent | MouseEvent) => {
 <style scoped>
 .bubble {
   animation: bubble-animation forwards 0.8s ease-in-out; /* Initial animation */
-  z-index: 100;
 }
 /* animation: move 3000ms infinite alternate ease-in-out; */
 @keyframes bubble-animation {
@@ -140,26 +204,22 @@ const touchMove = (e: TouchEvent | MouseEvent) => {
   }
 }
 
-/* Used in the image-squeezer function */
-.image-squeeze {
-  animation: image-squeeze-animation 0.5s infinite;
+.number {
+  text-shadow:
+    -2px 0 black,
+    0 2px black,
+    2px 0 black,
+    0 -2px black;
+  animation: number-animation forwards 1s ease-in-out; /* Initial animation */
 }
 
-@keyframes image-squeeze-animation {
-  0% {
-    transform: scale(1);
+@keyframes number-animation {
+  from {
+    transform: translateY(0);
   }
-  25% {
-    transform: scaleY(0.95);
-  }
-  50% {
-    transform: scale(1);
-  }
-  75% {
-    transform: scaleY(0.95);
-  }
-  100% {
-    transform: scale(1);
+  to {
+    opacity: 0;
+    transform: translateY(-80px);
   }
 }
 </style>

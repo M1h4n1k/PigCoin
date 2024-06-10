@@ -30,7 +30,7 @@ async def login(
             username=tg_data_dict['user']['first_name'],
             picture='',
         ))
-
+        user = crud.users.get_user(db, tg_data_dict['user']['id'])
     return user
 
 

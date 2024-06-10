@@ -23,13 +23,53 @@ class User(Base):
     )
     blocked: Mapped[bool] = mapped_column(Boolean, default=False)
 
-    current_energy: Mapped[int] = mapped_column(BIGINT, default=1000)
+    _current_energy: Mapped[int] = mapped_column(BIGINT, default=1000)
+    energy_last_used: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
+
+    @hybrid_property
+    def current_energy(self) -> int:
+        return min(
+            self.max_energy,
+            self._current_energy + (datetime.now() - self.energy_last_used).seconds * self.refill_rate
+        )
+
+    @current_energy.setter
+    def current_energy(self, value: int):
+        self._current_energy = value
+        self.energy_last_used = func.now()
 
     total_coins: Mapped[int] = mapped_column(BIGINT, default=0, index=True)
     current_coins: Mapped[int] = mapped_column(BIGINT, default=0)
 
-    free_turbo: Mapped[int] = mapped_column(BIGINT, default=3, index=True)
-    free_refills: Mapped[int] = mapped_column(BIGINT, default=3, index=True)
+    _free_turbo: Mapped[int] = mapped_column(BIGINT, default=3, index=True)  # 3 free turbo per day
+    free_turbo_last_used: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
+
+    @hybrid_property
+    def free_turbo(self) -> int:
+        return min(
+            self._free_turbo,
+            (datetime.now() - self.free_turbo_last_used).days
+        )
+
+    @free_turbo.setter
+    def free_turbo(self, value: int):
+        self._free_turbo = value
+        self.free_turbo_last_used = func.now()
+
+    _free_refills: Mapped[int] = mapped_column(BIGINT, default=3, index=True)
+    free_refills_last_used: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
+
+    @hybrid_property
+    def free_refills(self) -> int:
+        return min(
+            self._free_refills,
+            (datetime.now() - self.free_refills_last_used).days
+        )
+
+    @free_refills.setter
+    def free_refills(self, value: int):
+        self._free_refills = value
+        self.free_refills_last_used = func.now()
 
     turbo_available: Mapped[bool] = mapped_column(Boolean, default=False)
 
@@ -45,6 +85,20 @@ class User(Base):
             return 1000
 
         return 1000 + self.boosts.filter(UserBoost.boost_type == 'capacity').first().count * 100
+
+    @hybrid_property
+    def click_price(self) -> int:
+        if self.boosts.filter(UserBoost.boost_type == 'click_price').first() is None:
+            return 1
+
+        return 1 + self.boosts.filter(UserBoost.boost_type == 'click_price').first().count
+
+    @hybrid_property
+    def refill_rate(self) -> int:
+        if self.boosts.filter(UserBoost.boost_type == 'refill_rate').first() is None:
+            return 1
+
+        return 1 + self.boosts.filter(UserBoost.boost_type == 'refill_rate').first().count
 
     boosts: Mapped[list['UserBoost']] = relationship(
         'UserBoost', order_by='UserBoost.boost_id.asc()', lazy='dynamic'

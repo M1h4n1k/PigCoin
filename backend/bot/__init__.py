@@ -1,5 +1,6 @@
+import os
 
-TOKEN = '123123123'
+TOKEN = os.getenv('BOT_TOKEN')
 
 
 __all__  = ['TOKEN']

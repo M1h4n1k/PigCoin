@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class User(BaseModel):
@@ -20,6 +20,8 @@ class UserPrivate(UserPublic):
     max_energy: int
     turbo_available: bool
 
+    click_price: int
+    refill_rate: int
     total_coins: int
     current_coins: int
 
@@ -31,6 +33,7 @@ class UserPrivate(UserPublic):
 
 
 class UserCreate(User):
+    tg_id: int
     picture: str
     username: str
     referrer_tg_id: int| None = None
@@ -70,3 +73,7 @@ class Club(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class CollectCoins(BaseModel):
+    coins: int

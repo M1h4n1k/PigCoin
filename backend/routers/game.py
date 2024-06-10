@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import Request, APIRouter, Depends, HTTPException, Query
+from fastapi import Request, APIRouter, Depends, HTTPException, Body, Form
 from database import crud, schemas, models
 from sqlalchemy.orm import Session
 from dependencies import get_db, get_user
@@ -9,23 +9,27 @@ router = APIRouter(prefix='/game', responses={404: {'description': 'User not fou
 
 
 @router.post(
-    '/collectCoin',
-    response_model=schemas.User,
+    '/collectCoins',
+    response_model=schemas.UserPrivate,
     status_code=200,
     responses={
         400: {'description': 'Coins should be positive or Not enough energy'},
     },
 )
 async def collect_coin(
-    coins: Annotated[int, Query(ge=0)],
+    coins: schemas.CollectCoins,
     user: models.User = Depends(get_user),
     db: Session = Depends(get_db),
-) -> schemas.User:
+) -> schemas.UserPrivate:
+    coins = coins.coins
+    if coins < 0:
+        raise HTTPException(status_code=400, detail='Coins should be positive')
     if user.current_energy < coins:
         raise HTTPException(status_code=400, detail='Not enough energy')
     crud.users.update_user_money(db, user, coins)
     crud.users.decrease_user_energy(db, user, coins)
-    crud.clubs.update_clubs_total_coins(db, user.club_id, coins)
+    if user.club_id:
+        crud.clubs.update_clubs_total_coins(db, user.club_id, coins)
     return user
 
 
@@ -47,7 +51,7 @@ async def get_turbo(user: models.User = Depends(get_user)) -> bool:
     },
 )
 async def collect_turbo_coins(
-    coins: Annotated[int, Query(ge=0, le=200)],
+    coins: Annotated[int, Body(ge=0, le=200)],
     db=Depends(get_db),
     user: models.User = Depends(get_user)
 ) -> schemas.UserPrivate:
