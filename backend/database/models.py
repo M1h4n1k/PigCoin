@@ -60,7 +60,7 @@ class User(Base):
 
     @hybrid_property
     def free_refills(self) -> int:
-        if datetime.now().day != self.free_turbo_last_used.day:
+        if datetime.now().day != self.free_refills_last_used.day:
             self._free_refills = 3
         return self._free_refills
 

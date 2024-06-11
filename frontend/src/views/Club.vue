@@ -29,11 +29,17 @@ if (userStore.clubMembers.length === 0) {
       <div class="relative cursor-pointer">
         <div>
           <p class="mt-2 text-center text-xl font-medium">
-            {{ userStore.user!.club?.name }}
+            {{ userStore.user!.club!.name }}
           </p>
-          <p class="text-center text-sm">
-            {{ userStore.clubMembers.length }} members
-          </p>
+          <div>
+            <span class="text-center text-sm">
+              {{ userStore.clubMembers.length }} members
+            </span>
+            <span class="ml-1 mr-2 text-xl font-semibold">·</span>
+            <span class="text-center text-sm">
+              {{ userStore.user!.club!.total_coins }} coins
+            </span>
+          </div>
         </div>
         <svg
           class="absolute -right-[25px] top-1/2"

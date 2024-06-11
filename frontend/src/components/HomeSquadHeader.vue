@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { useUserStore } from "@/store.ts";
 const userStore = useUserStore();
+
+import BarnIcon from "@/components/BarnIcon.vue";
 </script>
 
 <template>
@@ -16,8 +18,7 @@ const userStore = useUserStore();
       </div>
     </div>
     <div class="flex flex-col items-center">
-      <div class="h-8 w-8 bg-emerald-500"></div>
-      <span class="">Emerald</span>
+      <BarnIcon :league="userStore.user!.club?.league" class="h-12 w-12" />
     </div>
   </RouterLink>
 </template>

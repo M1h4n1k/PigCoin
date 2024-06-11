@@ -43,7 +43,7 @@ def user_use_free_refill(db: Session, user: models.User) -> models.User:
 
 def user_use_free_turbo(db: Session, user: models.User) -> models.User:
     user.free_turbo -= 1
-    user.turbo_available += 1
+    user.turbo_available = True
     db.commit()
     db.refresh(user)
     return user

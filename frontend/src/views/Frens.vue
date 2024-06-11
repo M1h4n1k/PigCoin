@@ -44,7 +44,7 @@ if (userStore.referrals.length === 0) {
       Invite frens
     </button>
 
-    <div class="toned-bg mt-10 w-full space-y-3 rounded-xl py-3">
+    <div class="toned-bg mt-10 w-full rounded-xl py-3">
       <h3 class="px-5 text-start text-2xl font-medium">Frens</h3>
       <RatingUserCard
         v-for="(referral, ix) in userStore.referrals"

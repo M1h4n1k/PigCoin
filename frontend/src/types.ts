@@ -71,4 +71,4 @@ type DirtyBubble = BubbleBase & {
   rotation: number;
 };
 
-export type { User, UserPublic, Boost, Task, Bubble, DirtyBubble };
+export type { User, UserPublic, Boost, Task, Bubble, DirtyBubble, Club };

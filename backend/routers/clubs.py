@@ -36,7 +36,7 @@ async def create_club(
 
 
 @router.post(
-    '/{club_id}',
+    '/{club_id}/join',
     response_model=schemas.Club,
     status_code=200,
     responses={404: {'description': 'Club or user not found'}},

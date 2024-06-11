@@ -9,7 +9,7 @@ const { user } = storeToRefs(userStore);
 <template>
   <div class="flex flex-col items-center">
     <div class="flex items-center text-5xl font-semibold">
-      🐽
+      <img src="/pigNoseCoin.svg" class="mr-2 h-9 w-9" />
       <span
         class="block h-12 w-40 animate-pulse rounded-lg bg-gray-200 p-2"
         v-if="user === null"

@@ -1,14 +1,20 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
-import RatingUserCard from "@/components/RatingUserCard.vue";
+import { ref, watch, Ref } from "vue";
+import RatingRowCard from "@/components/RatingUserCard.vue";
+import BarnIcon from "@/components/BarnIcon.vue";
+import PopupWindow from "@/components/PopupWindow.vue";
 import { useUserStore, useRatingStore } from "@/store.ts";
+import { Club } from "@/types.ts";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const userStore = useUserStore();
 const ratingStore = useRatingStore();
 
 const activeTab = ref(0);
 const league = ref(userStore.user?.league ?? 0);
-const tabNames = ["users", "clubs"];
+const tabNames: ["users", "clubs"] = ["users", "clubs"];
 
 const preloadRating = () => {
   if (ratingStore[tabNames[activeTab.value]][league.value] === undefined) {
@@ -29,13 +35,37 @@ const preloadRating = () => {
   }
 };
 
+const selectedClub: Ref<Club> = ref({ id: -1, header: "" } as Club);
+
 watch(league, preloadRating);
 watch(activeTab, preloadRating);
 preloadRating();
+
+const joinClub = (club: Club) => {
+  fetch(import.meta.env.VITE_API_URL + `/club/${club.id}/join`, {
+    method: "POST",
+    credentials: "include",
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.success) {
+        userStore.user!.club = data;
+        userStore.user!.club_id = data.id;
+        router.push("/club");
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+const showClub = (club: Club) => {
+  selectedClub.value = JSON.parse(JSON.stringify(club));
+};
 </script>
 
 <template>
-  <div id="container" class="flex flex-col items-center px-5 pt-6">
+  <div id="container" class="flex flex-col items-center px-5 py-6">
     <div class="flex flex-col items-center">
       <div class="toned-bg flex w-fit cursor-pointer rounded-2xl">
         <div
@@ -59,7 +89,7 @@ preloadRating();
       </div>
       <div class="mb-6 mt-5 flex items-center">
         <svg
-          class="-right-[22px] rotate-180"
+          class="-right-[22px] rotate-180 cursor-pointer"
           height="70px"
           width="70px"
           viewBox="0 0 100 100"
@@ -70,14 +100,14 @@ preloadRating();
           ></path>
         </svg>
         <div class="relative">
-          <div class="h-24 w-24 bg-gray-200" />
+          <BarnIcon class="h-24 w-24" :league="league" />
 
           <span class="absolute mt-2 w-full text-center font-medium">
             {{ league + 1 }}
           </span>
         </div>
         <svg
-          class="-right-[22px]"
+          class="-right-[22px] cursor-pointer"
           height="70px"
           width="70px"
           viewBox="0 0 100 100"
@@ -91,14 +121,16 @@ preloadRating();
     </div>
 
     <div class="toned-bg mt-10 min-h-full w-full rounded-xl">
-      <RatingUserCard
+      <RatingRowCard
         v-for="(row, i) in ratingStore[tabNames[activeTab]][league]"
+        @click="activeTab === 1 ? showClub(row) : null"
         :key="i"
         class="bottom-0 top-0 rounded-xl p-2"
         :class="{
           'toned-image-bg':
             row.tg_id === userStore.user?.tg_id ||
             row.id === userStore.user!.club?.id,
+          'cursor-pointer': activeTab === 1,
         }"
         :style="{
           position:
@@ -114,6 +146,37 @@ preloadRating();
         :is-you="row.tg_id === userStore.user?.tg_id"
       />
     </div>
+
+    <PopupWindow
+      @close="selectedClub.id = -1"
+      :style="{
+        transform: selectedClub.id > 0 ? 'translateY(0)' : 'translateY(100%)',
+      }"
+      :header="selectedClub?.name"
+    >
+      <!-- picture, total coins, members count and buttons to join and see the group -->
+      <div class="flex gap-4">
+        <img class="h-32 w-32" :src="selectedClub?.picture" alt="Club" />
+
+        <div class="flex w-full flex-col justify-between">
+          <div>
+            <p class="">{{ selectedClub?.total_coins }} Total coins</p>
+            <p class="">10 members</p>
+          </div>
+          <div class="mt-0.5 flex w-full flex-col">
+            <button class="w-full rounded-xl border px-4 py-2">
+              See group
+            </button>
+            <button
+              @click="joinClub(selectedClub!)"
+              class="mt-2 w-full rounded-xl border px-4 py-2 font-semibold"
+            >
+              Join
+            </button>
+          </div>
+        </div>
+      </div>
+    </PopupWindow>
   </div>
 </template>
 
