@@ -146,7 +146,7 @@ class Club(Base):
     tg_link: Mapped[str] = mapped_column(VARCHAR(255))
 
     total_coins: Mapped[int] = mapped_column(BIGINT, default=0)
-    members: Mapped[list['User']] = relationship('User', back_populates='club')
+    members: Mapped[list['User']] = relationship('User', back_populates='club', order_by='User.total_coins.desc()')
 
     @hybrid_property
     def league(self) -> int:

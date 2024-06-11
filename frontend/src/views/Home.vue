@@ -4,6 +4,9 @@ import HomeUserStatsHeader from "@/components/HomeUserStatsHeader.vue";
 import HomePorkSnout from "@/components/HomePorkSnout.vue";
 import HomeFooterActions from "@/components/HomeFooterActions.vue";
 import { ref, Ref, onMounted } from "vue";
+import { useUserStore } from "@/store";
+
+const userStore = useUserStore();
 
 const noseContainer: Ref<HTMLElement | null> = ref(null);
 
@@ -22,14 +25,19 @@ const squeezeWithRandomTimeout = () => {
 };
 
 onMounted(() => {
-  squeezeWithRandomTimeout();
+  setTimeout(
+    () => {
+      squeezeWithRandomTimeout();
+    },
+    Math.floor(Math.random() * (15000 - 5000 + 1)) + 5000,
+  );
 });
 </script>
 
 <template>
   <div id="container" class="flex h-screen flex-col justify-between pb-8 pt-6">
     <div class="px-3">
-      <HomeSquadHeader />
+      <HomeSquadHeader v-if="userStore.user?.club" />
       <HomeUserStatsHeader class="mt-6" />
     </div>
     <div class="select-none" ref="noseContainer">

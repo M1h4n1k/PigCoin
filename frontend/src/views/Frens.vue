@@ -38,10 +38,14 @@ if (userStore.referrals.length === 0) {
       </div>
     </div>
 
-    <button class="mt-5 w-full rounded-xl border p-2">Invite frens</button>
+    <button
+      class="mt-4 w-full rounded-full bg-[#2481cc] px-5 py-2 font-semibold text-white hover:!bg-[#1a8ad5]"
+    >
+      Invite frens
+    </button>
 
-    <h3 class="mt-10 text-center text-2xl font-medium">Frens</h3>
-    <div class="toned-bg mt-3 w-full space-y-3 rounded-xl py-3">
+    <div class="toned-bg mt-10 w-full space-y-3 rounded-xl py-3">
+      <h3 class="px-5 text-start text-2xl font-medium">Frens</h3>
       <RatingUserCard
         v-for="(referral, ix) in userStore.referrals"
         :key="ix"

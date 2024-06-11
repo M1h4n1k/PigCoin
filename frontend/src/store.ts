@@ -5,7 +5,8 @@ import { Ref, ref } from "vue";
 export const useUserStore = defineStore("user", () => {
   const user: Ref<User | null> = ref(null);
   const referrals: Ref<UserPublic[]> = ref([]);
-  return { user, referrals };
+  const clubMembers: Ref<UserPublic[]> = ref([]);
+  return { user, referrals, clubMembers };
 });
 
 export const useBoostsStore = defineStore("boost", () => {
@@ -14,6 +15,7 @@ export const useBoostsStore = defineStore("boost", () => {
 });
 
 export const useRatingStore = defineStore("rating", () => {
-  const userRating: Ref<{ [legionId: number]: UserPublic[] }> = ref({});
-  return { userRating };
+  const users: Ref<{ [legionId: number]: UserPublic[] }> = ref({});
+  const clubs: Ref<{ [legionId: number]: UserPublic[] }> = ref({});
+  return { users, clubs };
 });

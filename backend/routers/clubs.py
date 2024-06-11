@@ -59,7 +59,7 @@ async def join_club(
 
 @router.get(
     '/{club_id}/members',
-    response_model=list[schemas.User],
+    response_model=list[schemas.UserPublic],
     status_code=200,
     responses={404: {'description': 'Club not found'}},
 )

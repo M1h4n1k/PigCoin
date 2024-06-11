@@ -74,4 +74,5 @@ def get_users_within_coins_range(db: Session, min_total_coins: int, max_total_co
     qr = db.query(models.User).filter(models.User.total_coins >= min_total_coins)
     if max_total_coins:
         qr = qr.filter(models.User.total_coins <= max_total_coins)
+    qr = qr.order_by(desc(models.User.total_coins))
     return qr.all()

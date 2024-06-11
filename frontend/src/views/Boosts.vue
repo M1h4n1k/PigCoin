@@ -63,18 +63,18 @@ const useFreeBooster = (type: number) => {
 
 <template>
   <div class="px-5 py-2">
-    <div class="text-center">
-      <p class="text-2xl">Balance</p>
+    <div class="p-3 text-center">
+      <p class="text-3xl">Balance</p>
       <p class="text-4xl font-medium">
         🐽
         <span>{{ userStore.user?.current_coins }}</span>
       </p>
     </div>
-    <div class="mt-5">
-      <h3 class="text-xl">Free daily boosters</h3>
-      <div class="mt-2 flex justify-around gap-4">
+    <div class="toned-bg mt-5 px-3 py-4 pl-4">
+      <h3 class="text-2xl font-medium">Free daily boosters</h3>
+      <div class="mt-2 flex justify-around gap-2">
         <div
-          class="toned-bg flex w-1/2 cursor-pointer items-center justify-between rounded-2xl py-2 pl-4 pr-2"
+          class="toned-image-bg flex w-1/2 cursor-pointer items-center justify-between rounded-2xl py-2 pl-4 pr-2"
           @click="useFreeBooster(0)"
         >
           <div>
@@ -88,7 +88,7 @@ const useFreeBooster = (type: number) => {
         </div>
 
         <div
-          class="toned-bg flex w-1/2 items-center justify-between rounded-2xl py-2 pl-4 pr-2"
+          class="toned-image-bg flex w-1/2 cursor-pointer items-center justify-between rounded-2xl py-2 pl-4 pr-2"
           @click="useFreeBooster(1)"
         >
           <div>
@@ -104,10 +104,10 @@ const useFreeBooster = (type: number) => {
     </div>
 
     <div class="mt-5">
-      <h3 class="text-xl">Boosters</h3>
       <div
-        class="toned-bg mt-2 flex flex-col justify-around gap-4 rounded-xl p-5"
+        class="toned-bg mt-2 flex flex-col justify-around gap-4 rounded-xl p-4"
       >
+        <h3 class="text-2xl font-medium">Boosters</h3>
         <Booster
           class="cursor-pointer"
           v-for="b in boostsStore.boosts"

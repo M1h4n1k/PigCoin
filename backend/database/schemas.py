@@ -1,6 +1,18 @@
 from pydantic import BaseModel, Field
 
 
+class Club(BaseModel):
+    id: int
+    name: str
+    picture: str
+    tg_link: str
+    total_coins: int
+    league: int
+
+    class Config:
+        from_attributes = True
+
+
 class User(BaseModel):
 
     class Config:
@@ -8,10 +20,10 @@ class User(BaseModel):
 
 
 class UserPublic(User):
+    tg_id: int
     picture: str
     username: str
     total_coins: int
-    league: int
 
 
 class UserPrivate(UserPublic):
@@ -24,12 +36,13 @@ class UserPrivate(UserPublic):
     refill_rate: int
     total_coins: int
     current_coins: int
+    league: int
 
     free_turbo: int
     free_refills: int
 
     club_id: int | None
-    club: dict | None
+    club: Club | None
 
 
 class UserCreate(User):
@@ -58,18 +71,6 @@ class Boost(BaseModel):
     picture: str
     count: int = -1
     price: int = -1
-
-    class Config:
-        from_attributes = True
-
-
-class Club(BaseModel):
-    id: int
-    name: str
-    picture: str
-    tg_link: str
-    total_coins: int
-    league: int
 
     class Config:
         from_attributes = True

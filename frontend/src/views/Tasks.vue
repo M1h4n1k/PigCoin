@@ -16,7 +16,7 @@ fetch(import.meta.env.VITE_API_URL + "/tasks/", {
 
 <template>
   <div class="px-5">
-    <div class="mt-4 text-center">
+    <div class="toned-bg mt-4 pb-3 text-center">
       <p class="text-7xl">🐽</p>
       <p class="text-4xl">Earn more coins</p>
     </div>

@@ -65,6 +65,7 @@ const cleanDirtyBubble = (index: number) => {
         color: dirtyColors[Math.floor(Math.random() * dirtyColors.length)],
         hidden: false,
         price: 0,
+        rotation: Math.random() * 360,
       };
       dirtyBubblesCleanedCount.value--;
     },
@@ -112,6 +113,7 @@ onMounted(() => {
       color: dirtyColors[Math.floor(Math.random() * dirtyColors.length)],
       hidden: false,
       price: 0,
+      rotation: Math.random() * 360,
     });
   }
 });
@@ -156,6 +158,7 @@ onMounted(() => {
         opacity: dirtyBubble.hidden ? 0 : 1,
         pointerEvents: dirtyBubble.hidden ? 'none' : 'auto',
         // backgroundColor: dirtyBubble.color,
+        // transform: `rotate(${dirtyBubble.rotation}deg)`,
       }"
     >
       <div class="relative h-full w-full">

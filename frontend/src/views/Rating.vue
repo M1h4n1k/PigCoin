@@ -8,10 +8,10 @@ const ratingStore = useRatingStore();
 
 const activeTab = ref(0);
 const league = ref(userStore.user?.league ?? 0);
+const tabNames = ["users", "clubs"];
 
 const preloadRating = () => {
-  const tabNames = ["users", "clubs"];
-  if (ratingStore.userRating[league.value] === undefined) {
+  if (ratingStore[tabNames[activeTab.value]][league.value] === undefined) {
     fetch(
       import.meta.env.VITE_API_URL +
         `/rating/${tabNames[activeTab.value]}?league=${league.value}`,
@@ -21,7 +21,7 @@ const preloadRating = () => {
     )
       .then((res) => res.json())
       .then((data) => {
-        ratingStore.userRating[league.value] = data;
+        ratingStore[tabNames[activeTab.value]][league.value] = data;
       })
       .catch((err) => {
         console.log(err);
@@ -37,9 +37,9 @@ preloadRating();
 <template>
   <div id="container" class="flex flex-col items-center px-5 pt-6">
     <div class="flex flex-col items-center">
-      <div class="flex w-fit rounded-2xl bg-gray-200">
+      <div class="toned-bg flex w-fit cursor-pointer rounded-2xl">
         <div
-          class="rounded-2xl px-3 py-2 font-medium"
+          class="rounded-xl px-3 py-2 font-medium"
           :class="{
             'bg-yellow-300': activeTab === 0,
           }"
@@ -48,7 +48,7 @@ preloadRating();
           Swineherds
         </div>
         <div
-          class="rounded-2xl px-3 py-2 font-medium"
+          class="rounded-xl px-3 py-2 font-medium"
           :class="{
             'bg-yellow-300': activeTab === 1,
           }"
@@ -73,7 +73,7 @@ preloadRating();
           <div class="h-24 w-24 bg-gray-200" />
 
           <span class="absolute mt-2 w-full text-center font-medium">
-            {{ league }}
+            {{ league + 1 }}
           </span>
         </div>
         <svg
@@ -90,26 +90,28 @@ preloadRating();
       </div>
     </div>
 
-    <div class="mt-10 w-full rounded-xl bg-gray-200">
+    <div class="toned-bg mt-10 min-h-full w-full rounded-xl">
       <RatingUserCard
-        class="p-2"
-        v-for="(u, i) in ratingStore.userRating[league]"
+        v-for="(row, i) in ratingStore[tabNames[activeTab]][league]"
         :key="i"
-        :picture="u.picture"
+        class="bottom-0 top-0 rounded-xl p-2"
+        :class="{
+          'toned-image-bg':
+            row.tg_id === userStore.user?.tg_id ||
+            row.id === userStore.user!.club?.id,
+        }"
+        :style="{
+          position:
+            row.tg_id === userStore.user?.tg_id ||
+            row.id === userStore.user!.club?.id
+              ? 'sticky'
+              : 'static',
+        }"
+        :picture="row.picture"
         :rating="i + 1"
-        :coins="u.total_coins"
-        :name="u.username"
-      />
-    </div>
-  </div>
-  <div class="fixed bottom-0 w-full px-5">
-    <div class="w-full bg-gray-300">
-      <RatingUserCard
-        :is-you="true"
-        rating="100k+"
-        :coins="userStore.user?.total_coins"
-        :picture="userStore.user?.picture"
-        :name="userStore.user?.username"
+        :coins="row.total_coins"
+        :name="row.username ?? row.name"
+        :is-you="row.tg_id === userStore.user?.tg_id"
       />
     </div>
   </div>

@@ -17,19 +17,17 @@ async def get_user_rating(
     league: int = None
 ) -> list[schemas.UserPublic]:
     users = crud.users.get_users_within_coins_range(db, *get_user_league_range(league))
-    users = sorted(users, key=lambda x: x.total_coins, reverse=True)
     return users
 
 
 @router.get(
     '/clubs',
-    response_model=list[schemas.UserPublic],
+    response_model=list[schemas.Club],
     status_code=200,
 )
 async def get_club_rating(
     db: Session = Depends(get_db),
     league: int = None
-) -> list[schemas.UserPublic]:
+) -> list[schemas.Club]:
     clubs = crud.clubs.get_clubs_within_coins_range(db, *get_club_league_range(league))
-    clubs = sorted(clubs, key=lambda x: x.total_coins, reverse=True)
     return clubs

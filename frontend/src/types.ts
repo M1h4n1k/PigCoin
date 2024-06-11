@@ -1,3 +1,13 @@
+type Club = {
+  id: number;
+  name: string;
+  picture: string;
+  membersCount: number;
+  total_coins: number;
+  tg_link: string;
+  league: number;
+};
+
 type User = {
   tg_id: number;
   picture: string;
@@ -12,9 +22,12 @@ type User = {
   free_turbo: number;
   free_refills: number;
   league: number;
+  club_id?: number;
+  club?: Club;
 };
 
 type UserPublic = {
+  tg_id: number;
   picture: string;
   username: string;
   total_coins: number;
@@ -55,6 +68,7 @@ type DirtyBubble = BubbleBase & {
   color: string;
   hidden: boolean;
   price: number;
+  rotation: number;
 };
 
 export type { User, UserPublic, Boost, Task, Bubble, DirtyBubble };
