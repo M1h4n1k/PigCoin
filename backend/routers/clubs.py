@@ -51,7 +51,9 @@ async def join_club(
         raise HTTPException(status_code=404, detail='Club not found')
     if user.club_id:
         crud.clubs.update_clubs_total_coins(db, user.club_id, user.total_coins * -1)
+        crud.clubs.remove_member_from_club(db, user.club_id)
     crud.users.update_user_club(db, user, club_id)
+    crud.clubs.add_member_to_club(db, club_id)
     crud.clubs.update_clubs_total_coins(db, club_id, user.total_coins)
 
     return club

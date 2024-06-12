@@ -8,6 +8,7 @@ class Club(BaseModel):
     tg_link: str
     total_coins: int
     league: int
+    members_count: int
 
     class Config:
         from_attributes = True

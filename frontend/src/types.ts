@@ -6,6 +6,7 @@ type Club = {
   total_coins: number;
   tg_link: string;
   league: number;
+  members_count: number;
 };
 
 type User = {

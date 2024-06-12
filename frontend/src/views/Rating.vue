@@ -35,23 +35,25 @@ const preloadRating = () => {
   }
 };
 
-const selectedClub: Ref<Club> = ref({ id: -1, header: "" } as Club);
+const selectedClub: Ref<Club> = ref({ id: -2, name: "" } as Club);
 
 watch(league, preloadRating);
 watch(activeTab, preloadRating);
 preloadRating();
 
 const joinClub = (club: Club) => {
-  fetch(import.meta.env.VITE_API_URL + `/club/${club.id}/join`, {
+  fetch(import.meta.env.VITE_API_URL + `/clubs/${club.id}/join`, {
     method: "POST",
     credentials: "include",
   })
     .then((res) => res.json())
     .then((data) => {
-      if (data.success) {
-        userStore.user!.club = data;
-        userStore.user!.club_id = data.id;
-        router.push("/club");
+      router.push("/club");
+      selectedClub.value = { id: -2, name: "" };
+      userStore.user!.club = data;
+      userStore.user!.club_id = data.id;
+      for (const i of Array(3).keys()) {
+        ratingStore[tabNames[activeTab.value]][i] = undefined;
       }
     })
     .catch((err) => {
@@ -158,16 +160,19 @@ const showClub = (club: Club) => {
       <div class="flex gap-4">
         <img class="h-32 w-32" :src="selectedClub?.picture" alt="Club" />
 
-        <div class="flex w-full flex-col justify-between">
+        <div class="flex w-full flex-col justify-around">
           <div>
-            <p class="">{{ selectedClub?.total_coins }} Total coins</p>
-            <p class="">10 members</p>
+            <p class="text-center">{{ selectedClub?.members_count }} members</p>
+            <p class="text-center">
+              {{ selectedClub?.total_coins }} total coins
+            </p>
           </div>
           <div class="mt-0.5 flex w-full flex-col">
             <button class="w-full rounded-xl border px-4 py-2">
-              See group
+              See channel
             </button>
             <button
+              v-if="selectedClub.id !== userStore.user?.club_id"
               @click="joinClub(selectedClub!)"
               class="mt-2 w-full rounded-xl border px-4 py-2 font-semibold"
             >

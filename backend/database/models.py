@@ -147,6 +147,7 @@ class Club(Base):
 
     total_coins: Mapped[int] = mapped_column(BIGINT, default=0)
     members: Mapped[list['User']] = relationship('User', back_populates='club', order_by='User.total_coins.desc()')
+    members_count: Mapped[int] = mapped_column(BIGINT, default=0)
 
     @hybrid_property
     def league(self) -> int:
