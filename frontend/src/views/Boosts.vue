@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import Booster from "@/components/Booster.vue";
 import { useUserStore, useBoostsStore } from "@/store";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const userStore = useUserStore();
 const boostsStore = useBoostsStore();
@@ -53,9 +56,11 @@ const useFreeBooster = (type: number) => {
   }).then(() => {
     if (type === 0) {
       userStore.user!.free_turbo--;
+      router.push("/minigame");
     } else {
       userStore.user!.free_refills--;
       userStore.user!.current_energy = userStore.user!.max_energy;
+      router.push("/");
     }
   });
 };
@@ -78,7 +83,7 @@ const useFreeBooster = (type: number) => {
           @click="useFreeBooster(0)"
         >
           <div>
-            <p class="text-xl">Pig</p>
+            <p class="text-xl">Pigfall</p>
             <p class="flex items-center text-gray-600">
               <span>{{ userStore.user?.free_turbo }}</span
               >/3 available

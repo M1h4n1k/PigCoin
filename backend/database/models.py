@@ -24,6 +24,7 @@ class User(Base):
         BIGINT, ForeignKey('clubs.id', ondelete='SET NULL'), index=True, nullable=True
     )
     blocked: Mapped[bool] = mapped_column(Boolean, default=False)
+    cheated_count: Mapped[int] = mapped_column(BIGINT, default=0)
 
     _current_energy: Mapped[int] = mapped_column(BIGINT, default=1000)
     energy_last_used: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
@@ -54,6 +55,9 @@ class User(Base):
     _free_turbo: Mapped[int] = mapped_column(BIGINT, default=3, index=True)  # 3 free turbo per day
     free_turbo_last_used: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
 
+    # so that I am able to update it programmatically without increasing the free daily count
+    turbo_available: Mapped[bool] = mapped_column(Boolean, default=False, index=True)
+
     @hybrid_property
     def free_turbo(self) -> int:
         if datetime.now().day != self.free_turbo_last_used.day:
@@ -79,7 +83,6 @@ class User(Base):
         self._free_refills = value
         self.free_refills_last_used = func.now()
 
-    turbo_available: Mapped[bool] = mapped_column(Boolean, default=False)
 
     join_date: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
 

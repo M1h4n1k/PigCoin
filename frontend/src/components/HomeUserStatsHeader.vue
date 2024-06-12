@@ -10,12 +10,14 @@ const { user } = storeToRefs(userStore);
 <template>
   <div class="flex flex-col items-center">
     <div class="flex items-center text-5xl font-semibold">
-      <img src="/pigNoseCoin.svg" alt="🐽" class="mr-2 h-9 w-9" />
       <span
         class="block h-12 w-40 animate-pulse rounded-lg bg-gray-200 p-2"
         v-if="user === null"
       ></span>
-      <span v-else>{{ user.current_coins }}</span>
+      <span v-else class="flex items-center">
+        {{ user.current_coins }}
+        <img src="/pigNoseCoin.svg" alt="🐽" class="h-9 w-9"
+      /></span>
     </div>
     <RouterLink to="/rating" class="relative flex items-center justify-center">
       <span class="text-lg font-semibold">#{{ userStore.user?.position }}</span>

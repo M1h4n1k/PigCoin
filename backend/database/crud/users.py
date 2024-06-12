@@ -83,3 +83,10 @@ def get_position_in_league(db: Session, user: models.User, coins_max: int | None
     if coins_max:
         qr = qr.filter(models.User.total_coins <= coins_max)
     return qr.count() + 1
+
+
+def update_cheated_count(db: Session, user: models.User, count: int) -> models.User:
+    user.cheated_count += count
+    db.commit()
+    db.refresh(user)
+    return user

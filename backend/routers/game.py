@@ -43,7 +43,7 @@ async def get_turbo(user: models.User = Depends(get_user)) -> bool:
     return user.turbo_available
 
 
-@router.get(
+@router.post(
     '/collectTurboCoins',
     response_model=schemas.UserPrivate,
     status_code=200,
@@ -52,12 +52,19 @@ async def get_turbo(user: models.User = Depends(get_user)) -> bool:
     },
 )
 async def collect_turbo_coins(
-    coins: Annotated[int, Body(ge=0, le=200)],
+    coins: schemas.CollectCoins,
     db=Depends(get_db),
     user: models.User = Depends(get_user)
-) -> schemas.UserPrivate:
+):
     if not user.turbo_available:
         raise HTTPException(status_code=400, detail='Turbo not available')
+
+    coins = coins.coins
+    if coins < 0:
+        raise HTTPException(status_code=400, detail='Coins should be positive')
+    if coins > 200:
+        crud.users.update_cheated_count(db, user, 1)
+        raise HTTPException(status_code=400, detail='Too many coins')
 
     crud.users.update_user_money(db, user, coins)
     if user.club_id:

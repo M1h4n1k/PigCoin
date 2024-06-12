@@ -17,8 +17,8 @@ defineProps({
       <div class="ml-2">
         <p class="text-xl">{{ title }}</p>
         <p class="text-gray-600">
-          <img class="mb-0.5 inline h-3 w-3" src="/pigNoseCoin.svg" alt="🐽" />
           {{ price }}
+          <img class="mb-0.5 inline h-3 w-3" src="/pigNoseCoin.svg" alt="🐽" />
         </p>
       </div>
     </div>
