@@ -76,3 +76,10 @@ def get_users_within_coins_range(db: Session, min_total_coins: int, max_total_co
         qr = qr.filter(models.User.total_coins <= max_total_coins)
     qr = qr.order_by(desc(models.User.total_coins))
     return qr.all()
+
+
+def get_position_in_league(db: Session, user: models.User, coins_max: int | None) -> int:
+    qr = db.query(models.User).filter(models.User.total_coins > user.total_coins)
+    if coins_max:
+        qr = qr.filter(models.User.total_coins <= coins_max)
+    return qr.count() + 1

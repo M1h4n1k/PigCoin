@@ -5,6 +5,7 @@ from database import crud, schemas, models
 from sqlalchemy.orm import Session
 from dependencies import get_db, get_user
 
+
 router = APIRouter(prefix='/game', responses={404: {'description': 'User not found'}})
 
 

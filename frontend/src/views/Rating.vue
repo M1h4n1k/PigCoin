@@ -2,6 +2,7 @@
 import { ref, watch, Ref } from "vue";
 import RatingRowCard from "@/components/RatingUserCard.vue";
 import BarnIcon from "@/components/BarnIcon.vue";
+import FarmerIcon from "@/components/FarmerIcon.vue";
 import PopupWindow from "@/components/PopupWindow.vue";
 import { useUserStore, useRatingStore } from "@/store.ts";
 import { Club } from "@/types.ts";
@@ -15,6 +16,8 @@ const ratingStore = useRatingStore();
 const activeTab = ref(0);
 const league = ref(userStore.user?.league ?? 0);
 const tabNames: ["users", "clubs"] = ["users", "clubs"];
+
+const leagueNames = ["Bronze", "Gold", "Diamond"];
 
 const preloadRating = () => {
   if (ratingStore[tabNames[activeTab.value]][league.value] === undefined) {
@@ -102,10 +105,19 @@ const showClub = (club: Club) => {
           ></path>
         </svg>
         <div class="relative">
-          <BarnIcon class="h-24 w-24" :league="league" />
+          <FarmerIcon
+            v-if="activeTab === 0"
+            class="h-24 w-24"
+            :league="league"
+          />
+          <BarnIcon
+            v-else-if="activeTab === 1"
+            class="h-24 w-24"
+            :league="league"
+          />
 
           <span class="absolute mt-2 w-full text-center font-medium">
-            {{ league + 1 }}
+            {{ leagueNames[league] }}
           </span>
         </div>
         <svg
@@ -164,7 +176,8 @@ const showClub = (club: Club) => {
           <div>
             <p class="text-center">{{ selectedClub?.members_count }} members</p>
             <p class="text-center">
-              {{ selectedClub?.total_coins }} total coins
+              {{ selectedClub?.total_coins }}
+              total coins
             </p>
           </div>
           <div class="mt-0.5 flex w-full flex-col">

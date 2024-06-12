@@ -45,6 +45,8 @@ class UserPrivate(UserPublic):
     club_id: int | None
     club: Club | None
 
+    position: int | None = None
+
 
 class UserCreate(User):
     tg_id: int

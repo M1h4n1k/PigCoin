@@ -1,8 +1,10 @@
 from datetime import datetime
 from sqlalchemy.ext.hybrid import hybrid_property
-from sqlalchemy import ForeignKey, DateTime, Text, Boolean, func, BIGINT, VARCHAR, Double
-from sqlalchemy.orm import relationship, DeclarativeBase, mapped_column, Mapped
-from utils import get_user_league, get_club_league
+from sqlalchemy import ForeignKey, DateTime, Text, Boolean, func, BIGINT, VARCHAR, Double, text, select
+from sqlalchemy.orm import relationship, DeclarativeBase, mapped_column, Mapped, column_property
+from utils import get_user_league, get_club_league, get_user_league_range
+
+from sqlalchemy.orm import object_session
 
 
 class Base(DeclarativeBase):
@@ -40,6 +42,14 @@ class User(Base):
 
     total_coins: Mapped[int] = mapped_column(BIGINT, default=0, index=True)
     current_coins: Mapped[int] = mapped_column(BIGINT, default=0)
+
+    @hybrid_property
+    def position(self) -> int:
+        qr = object_session(self).query(User).filter(User.total_coins > self.total_coins)
+        league_range = get_user_league_range(self.league)
+        if league_range[1] is not None:
+            qr = qr.filter(User.total_coins <= league_range[1])
+        return qr.count() + 1
 
     _free_turbo: Mapped[int] = mapped_column(BIGINT, default=3, index=True)  # 3 free turbo per day
     free_turbo_last_used: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())

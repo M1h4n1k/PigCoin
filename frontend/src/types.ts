@@ -9,30 +9,26 @@ type Club = {
   members_count: number;
 };
 
-type User = {
-  tg_id: number;
-  picture: string;
-  username: string;
-  click_price: number;
-  refill_rate: number;
-  current_coins: number;
-  total_coins: number;
-  current_energy: number;
-  max_energy: number;
-  turbo_available: boolean;
-  free_turbo: number;
-  free_refills: number;
-  league: number;
-  club_id?: number;
-  club?: Club;
-};
-
 type UserPublic = {
   tg_id: number;
   picture: string;
   username: string;
   total_coins: number;
   league: number;
+};
+
+type User = UserPublic & {
+  click_price: number;
+  refill_rate: number;
+  current_coins: number;
+  current_energy: number;
+  max_energy: number;
+  turbo_available: boolean;
+  free_turbo: number;
+  free_refills: number;
+  club_id?: number;
+  club?: Club;
+  position?: number;
 };
 
 type Boost = {

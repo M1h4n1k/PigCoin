@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useUserStore } from "@/store";
 import { storeToRefs } from "pinia";
+import FarmerIcon from "@/components/FarmerIcon.vue";
 
 const userStore = useUserStore();
 const { user } = storeToRefs(userStore);
@@ -9,7 +10,7 @@ const { user } = storeToRefs(userStore);
 <template>
   <div class="flex flex-col items-center">
     <div class="flex items-center text-5xl font-semibold">
-      <img src="/pigNoseCoin.svg" class="mr-2 h-9 w-9" />
+      <img src="/pigNoseCoin.svg" alt="🐽" class="mr-2 h-9 w-9" />
       <span
         class="block h-12 w-40 animate-pulse rounded-lg bg-gray-200 p-2"
         v-if="user === null"
@@ -17,14 +18,13 @@ const { user } = storeToRefs(userStore);
       <span v-else>{{ user.current_coins }}</span>
     </div>
     <RouterLink to="/rating" class="relative flex items-center justify-center">
-      <span class="text-lg font-semibold">#213,312</span>
+      <span class="text-lg font-semibold">#{{ userStore.user?.position }}</span>
       <span class="mx-5 text-3xl font-semibold">·</span>
       <div class="flex items-center">
-        <div class="h-5 w-5 bg-orange-300"></div>
-        <span class="ml-2">Bronze</span>
+        <FarmerIcon class="h-8 w-8" :league="userStore.user?.league" />
       </div>
       <svg
-        class="absolute -right-[22px]"
+        class="absolute -right-[24px]"
         height="20px"
         width="20px"
         viewBox="0 0 100 100"

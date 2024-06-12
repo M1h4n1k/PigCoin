@@ -16,7 +16,10 @@ defineProps({
       </div>
       <div class="ml-3">
         <p class="text-xl font-medium">{{ title }}</p>
-        <p class="text-lg">+{{ reward }}🐽</p>
+        <p class="text-lg">
+          +{{ reward }}
+          <img class="mb-1 inline h-4 w-4" src="/pigNoseCoin.svg" alt="🐽" />
+        </p>
       </div>
     </div>
     <svg height="25px" width="25px" viewBox="0 0 100 100">

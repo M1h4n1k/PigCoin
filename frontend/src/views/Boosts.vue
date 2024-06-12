@@ -66,7 +66,7 @@ const useFreeBooster = (type: number) => {
     <div class="p-3 text-center">
       <p class="text-3xl">Balance</p>
       <p class="text-4xl font-medium">
-        🐽
+        <img class="mb-1 mr-1 inline h-6 w-6" src="/pigNoseCoin.svg" alt="🐽" />
         <span>{{ userStore.user?.current_coins }}</span>
       </p>
     </div>

@@ -40,7 +40,10 @@ defineProps({
       <img class="h-10 w-10 rounded-full" alt="" :src="picture" />
       <div class="ml-2">
         <p class="font-medium">{{ name }}</p>
-        <p class="text-gray-600">{{ coins }}🐽</p>
+        <p class="text-gray-600">
+          {{ coins }}
+          <img class="inline h-3 w-3" src="/pigNoseCoin.svg" alt="🐽" />
+        </p>
       </div>
     </div>
     <span v-if="isYou" class="absolute right-5 text-center font-semibold"

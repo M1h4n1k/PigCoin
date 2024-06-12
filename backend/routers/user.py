@@ -3,6 +3,7 @@ from database import crud, schemas, models
 from sqlalchemy.orm import Session
 from dependencies import get_db, get_tg_data, get_user, validate_tg_data
 import orjson
+from utils import get_user_league_range
 
 router = APIRouter(prefix='/user', responses={
     400: {'description': 'No tg_data or invalid hash'},
@@ -44,3 +45,15 @@ async def login(
 )
 async def get_referrals(user: models.User = Depends(get_user)):
     return user.referrals
+
+
+@router.get(
+    '/position',
+    response_model=int,
+    status_code=200,
+    responses={
+        404: {'description': 'User not found'},
+    }
+)
+async def get_position(db: Session = Depends(get_db), user: models.User = Depends(get_user)):
+    return crud.users.get_position_in_league(db, user, get_user_league_range(user.league)[1])
