@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { User, UserPublic, Boost } from "@/types.ts";
+import { User, UserPublic, Boost, Task } from "@/types.ts";
 import { Ref, ref } from "vue";
 
 export const useUserStore = defineStore("user", () => {
@@ -18,4 +18,9 @@ export const useRatingStore = defineStore("rating", () => {
   const users: Ref<{ [legionId: number]: UserPublic[] }> = ref({});
   const clubs: Ref<{ [legionId: number]: UserPublic[] }> = ref({});
   return { users, clubs };
+});
+
+export const useTasksStore = defineStore("rating", () => {
+  const tasks: Ref<Task[]> = ref([]);
+  return { tasks };
 });

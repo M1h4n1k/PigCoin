@@ -140,7 +140,7 @@ const exitGame = () => {
       :src="coinTypes[coin.type].picture"
       :style="{
         left: coin.x + 'px',
-        width: coin.size + 'px',
+        width: 'auto',
         height: coin.size + 'px',
         animationDuration: coin.speed + 's',
         animationIterationCount: game.timer === 0 ? 1 : 'infinite',

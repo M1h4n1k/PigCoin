@@ -2,15 +2,16 @@
 import TaskCard from "@/components/TaskCard.vue";
 import { Ref, ref } from "vue";
 import { Task } from "@/types";
+import { useTasksStore } from "@/store.ts";
 
-const tasks: Ref<Task[]> = ref([]);
+const tasksStore = useTasksStore();
 
 fetch(import.meta.env.VITE_API_URL + "/tasks/", {
   credentials: "include",
 })
   .then((res) => res.json())
   .then((data) => {
-    tasks.value = data;
+    tasksStore.tasks = data;
   });
 </script>
 
@@ -28,11 +29,12 @@ fetch(import.meta.env.VITE_API_URL + "/tasks/", {
       class="toned-bg mt-8 flex flex-col justify-around gap-4 rounded-xl p-5"
     >
       <TaskCard
-        v-for="t in tasks"
+        v-for="t in tasksStore.tasks"
         :key="t"
         :picture="t.picture"
         :reward="t.reward"
         :type="t.type"
+        :completed="t.completed"
       />
     </div>
   </div>
