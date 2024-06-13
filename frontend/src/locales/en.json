@@ -1,3 +1,39 @@
 {
-  "hello": "hello"
+  "common.frens": "Frens",
+  "common.tasks": "Tasks",
+  "common.boosts": "Boosts",
+  "common.you": "You",
+  "common.members": "member | members",
+  "common.coins": "coin | coins",
+
+  "tasks.earn": "Earn more coins",
+  "tasks.subscribe": "Invite a fren",
+  "tasks.invite": "Subscribe to channel",
+
+  "frens.earn": "Invite Frens, get coins",
+  "frens.invite": "Invite fren",
+  "frens.premium": "Invite fren with Premium",
+  "frens.invite.desc": "for you and your fren",
+  "frens.invite.cta": "Invite frens",
+
+  "rating.option.1": "Swineherds",
+  "rating.option.2": "Barns",
+  "rating.see_channel": "See channel",
+  "rating.join": "Join",
+
+  "minigame.game_over": "Time's up!",
+  "minigame.your_score": "Your score",
+  "minigame.ok": "OK",
+
+
+  "boosts": "Boosters",
+  "boosts.balance": "balance",
+  "boosts.available": "available",
+  "boosts.free": "Free daily boosters",
+  "boosts.pigfall": "Pigfall",
+  "boosts.refill": "Refill",
+  "boosts.sponge": "Sponge",
+  "boosts.bottle_capacity": "Bottle capacity",
+  "boosts.refill_rate": "Refill rate",
+  "boosts.herdsman": "herdsman"
 }

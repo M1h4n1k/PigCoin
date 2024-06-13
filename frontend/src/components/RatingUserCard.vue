@@ -46,9 +46,9 @@ defineProps({
         </p>
       </div>
     </div>
-    <span v-if="isYou" class="absolute right-5 text-center font-semibold"
-      >You</span
-    >
+    <span v-if="isYou" class="absolute right-5 text-center font-semibold">{{
+      $t("common.you")
+    }}</span>
   </div>
 </template>
 

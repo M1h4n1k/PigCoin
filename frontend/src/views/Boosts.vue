@@ -69,24 +69,24 @@ const useFreeBooster = (type: number) => {
 <template>
   <div class="px-5 py-2">
     <div class="p-3 text-center">
-      <p class="text-3xl">Balance</p>
-      <p class="text-4xl font-medium">
-        <img class="mb-1 mr-1 inline h-6 w-6" src="/pigNoseCoin.svg" alt="🐽" />
+      <p class="text-3xl">{{ $t("boosts.balance") }}</p>
+      <p class="flex items-center justify-center text-4xl font-medium">
         <span>{{ userStore.user?.current_coins }}</span>
+        <img class="ml-1 inline h-6 w-6" src="/pigNoseCoin.svg" alt="🐽" />
       </p>
     </div>
     <div class="toned-bg mt-5 px-3 py-4 pl-4">
-      <h3 class="text-2xl font-medium">Free daily boosters</h3>
+      <h3 class="text-2xl font-medium">{{ $t("boosts.free") }}</h3>
       <div class="mt-2 flex justify-around gap-2">
         <div
           class="toned-image-bg flex w-1/2 cursor-pointer items-center justify-between rounded-2xl py-2 pl-4 pr-2"
           @click="useFreeBooster(0)"
         >
           <div>
-            <p class="text-xl">Pigfall</p>
+            <p class="text-xl">{{ $t("boosts.pigfall") }}</p>
             <p class="flex items-center text-gray-600">
               <span>{{ userStore.user?.free_turbo }}</span
-              >/3 available
+              >/3 {{ $t("boosts.available") }}
             </p>
           </div>
           <img height="40" width="40" src="/pig.png" alt="refill" />
@@ -97,10 +97,10 @@ const useFreeBooster = (type: number) => {
           @click="useFreeBooster(1)"
         >
           <div>
-            <p class="text-xl">Refill</p>
+            <p class="text-xl">{{ $t("boosts.refill") }}</p>
             <p class="flex items-center text-gray-600">
               <span>{{ userStore.user?.free_refills }}</span
-              >/3 available
+              >/3 {{ $t("boosts.available") }}
             </p>
           </div>
           <img height="35" width="35" src="/refill.png" alt="refill" />
@@ -112,13 +112,13 @@ const useFreeBooster = (type: number) => {
       <div
         class="toned-bg mt-2 flex flex-col justify-around gap-4 rounded-xl p-4"
       >
-        <h3 class="text-2xl font-medium">Boosters</h3>
+        <h3 class="text-2xl font-medium">{{ $t("boosts") }}</h3>
         <Booster
           class="cursor-pointer"
           v-for="b in boostsStore.boosts"
           :key="b.id"
           :picture="b.picture"
-          :title="b.title"
+          :title="$t('boosts.' + b.title.toLowerCase().replace(' ', '_'))"
           :price="b.price"
           @click="buyBoost(b.id)"
         />

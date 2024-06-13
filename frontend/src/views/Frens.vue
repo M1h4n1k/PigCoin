@@ -20,20 +20,20 @@ if (userStore.referrals.length === 0) {
 <template>
   <div class="px-5 py-2">
     <div class="toned-bg mt-10 space-y-4 rounded-xl p-5">
-      <h3 class="text-center text-2xl font-medium">Invite Frens, get coins</h3>
+      <h3 class="text-center text-2xl font-medium">{{ $t("frens.earn") }}</h3>
       <div class="flex items-center">
         <img height="50" width="50" src="/pigNose.webp" alt="" />
         <div class="ml-4">
-          <p class="text-lg font-medium">Invite fren</p>
-          <p class="text-gray-600">2500 for you and your fren</p>
+          <p class="text-lg font-medium">{{ $t("frens.invite") }}</p>
+          <p class="text-gray-600">2500 {{ $t("frens.invite.desc") }}</p>
         </div>
       </div>
 
       <div class="flex items-center">
         <img height="50" width="50" src="/Telegram_Premium.png" alt="" />
         <div class="ml-4">
-          <p class="text-lg font-medium">Invite fren with Premium</p>
-          <p class="text-gray-600">25000 for you and your fren</p>
+          <p class="text-lg font-medium">{{ $t("frens.premium") }}</p>
+          <p class="text-gray-600">25000 {{ $t("frens.invite.desc") }}</p>
         </div>
       </div>
     </div>
@@ -41,11 +41,13 @@ if (userStore.referrals.length === 0) {
     <button
       class="mt-4 w-full rounded-full bg-[#2481cc] px-5 py-2 font-semibold text-white hover:!bg-[#1a8ad5]"
     >
-      Invite frens
+      {{ $t("frens.invite.cta") }}
     </button>
 
     <div class="toned-bg mt-10 w-full rounded-xl py-3">
-      <h3 class="px-5 text-start text-2xl font-medium">Frens</h3>
+      <h3 class="px-5 text-start text-2xl font-medium">
+        {{ $t("common.frens") }}
+      </h3>
       <RatingUserCard
         v-for="(referral, ix) in userStore.referrals"
         :key="ix"

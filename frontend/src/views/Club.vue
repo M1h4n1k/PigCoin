@@ -33,11 +33,13 @@ if (userStore.clubMembers.length === 0) {
           </p>
           <div>
             <span class="text-center text-sm">
-              {{ userStore.clubMembers.length }} members
+              {{ userStore.clubMembers.length }}
+              {{ $t("common.members", userStore.user!.club!.members_count) }}
             </span>
             <span class="ml-1 mr-2 text-xl font-semibold">·</span>
             <span class="text-center text-sm">
-              {{ userStore.user!.club!.total_coins }} coins
+              {{ userStore.user!.club!.total_coins }}
+              {{ $t("common.coins", userStore.user!.club!.total_coins) }}
             </span>
           </div>
         </div>

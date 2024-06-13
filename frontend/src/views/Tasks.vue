@@ -20,7 +20,9 @@ fetch(import.meta.env.VITE_API_URL + "/tasks/", {
       <p class="text-7xl">
         <img class="inline h-14 w-14" src="/pigNoseCoin.svg" alt="🐽" />
       </p>
-      <p class="text-4xl">Earn more coins</p>
+      <p class="text-4xl">
+        {{ $t("tasks.earn") }}
+      </p>
     </div>
     <div
       class="toned-bg mt-8 flex flex-col justify-around gap-4 rounded-xl p-5"
@@ -29,8 +31,8 @@ fetch(import.meta.env.VITE_API_URL + "/tasks/", {
         v-for="t in tasks"
         :key="t"
         :picture="t.picture"
-        :title="t.title"
         :reward="t.reward"
+        :type="t.type"
       />
     </div>
   </div>

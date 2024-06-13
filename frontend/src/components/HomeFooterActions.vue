@@ -31,17 +31,17 @@ const { user } = storeToRefs(userStore);
     >
       <RouterLink to="/frens" class="flex w-20 flex-col items-center">
         <img src="/pigsHead.png" alt="🐷" class="h-7 w-7" />
-        <span class="font-semibold">Frens</span>
+        <span class="font-semibold">{{ $t("common.frens") }}</span>
       </RouterLink>
       <div class="h-[70%] border border-gray-400/40"></div>
       <RouterLink to="/tasks" class="flex w-20 flex-col items-center">
         <img src="/clipboard.png" alt="📋" class="h-7 w-7" />
-        <span class="font-semibold">Tasks</span>
+        <span class="font-semibold">{{ $t("common.tasks") }}</span>
       </RouterLink>
       <div class="h-[70%] border border-gray-400/40"></div>
       <RouterLink to="/boosts" class="flex w-20 flex-col items-center">
         <img src="/rocket.webp" alt="🚀" class="h-7 w-7" />
-        <span class="font-semibold">Boosts</span>
+        <span class="font-semibold">{{ $t("common.boosts") }}</span>
       </RouterLink>
     </div>
   </div>

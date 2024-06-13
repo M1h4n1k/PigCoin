@@ -14,7 +14,10 @@ import BarnIcon from "@/components/BarnIcon.vue";
       <img class="h-10 w-10" :src="userStore.user!.club!.picture" alt="" />
       <div class="ml-2 flex flex-col items-start justify-center">
         <span class="text-lg font-bold">{{ userStore.user!.club?.name }}</span>
-        <span>{{ userStore.user!.club!.members_count }} members</span>
+        <span
+          >{{ userStore.user!.club!.members_count }}
+          {{ $t("common.members", userStore.user!.club!.members_count) }}</span
+        >
       </div>
     </div>
     <div class="flex flex-col items-center">

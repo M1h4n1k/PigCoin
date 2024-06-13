@@ -1,8 +1,8 @@
 <script setup lang="ts">
 defineProps({
-  title: String,
   picture: String,
   reward: Number,
+  type: String,
 });
 </script>
 
@@ -15,7 +15,7 @@ defineProps({
         <img class="h-8 w-8" alt="" :src="picture" />
       </div>
       <div class="ml-3">
-        <p class="text-xl font-medium">{{ title }}</p>
+        <p class="text-xl font-medium">{{ $t("tasks." + type) }}</p>
         <p class="text-lg">
           +{{ reward }}
           <img class="mb-1 inline h-4 w-4" src="/pigNoseCoin.svg" alt="🐽" />

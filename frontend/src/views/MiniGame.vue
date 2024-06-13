@@ -103,9 +103,9 @@ const exitGame = () => {
       class="toned-image-bg absolute left-1/2 top-1/2 z-10 flex h-48 w-80 max-w-full -translate-x-1/2 -translate-y-1/2 transform flex-col items-center justify-center rounded-xl px-10"
     >
       <div class="text-center">
-        <h3 class="text-2xl font-bold">Game over</h3>
-        <p class="flex items-center text-xl">
-          Your score: {{ game.score
+        <h3 class="text-2xl font-bold">{{ $t("minigame.game_over") }}</h3>
+        <p class="flex items-center justify-center text-xl">
+          {{ $t("minigame.your_score") }}: {{ game.score
           }}<img src="/pigNoseCoin.svg" alt="🐽" class="ml-1 inline h-4 w-4" />
         </p>
       </div>
@@ -114,7 +114,7 @@ const exitGame = () => {
         @click="exitGame"
         class="mt-6 w-full rounded-full border bg-[#64b5ef] py-2 font-semibold text-white"
       >
-        OK
+        {{ $t("minigame.ok") }}
       </button>
     </div>
 

@@ -1,3 +1,38 @@
 {
-  "hello": "привет"
+  "common.frens": "Френы",
+  "common.tasks": "Таски",
+  "common.boosts": "Бусты",
+  "common.you": "Вы",
+  "common.members": "участников | участник | участника | участников",
+  "common.coins": "коинов | коин | коина | коинов",
+
+  "tasks.earn": "Заработай больше коинов",
+  "tasks.subscribe": "Подпишись на канал",
+  "tasks.invite": "Пригласи френа",
+
+  "frens.earn": "Приглашай френов и зарабатывай",
+  "frens.invite": "Пригласите френа",
+  "frens.premium": "Пригласите френа с премиумом",
+  "frens.invite.desc": "для вас и вашего френа",
+  "frens.invite.cta": "Пригласить френа",
+
+  "rating.option.1": "Свинопасы",
+  "rating.option.2": "Хлева",
+  "rating.see_channel": "Посмотреть канал",
+  "rating.join": "Вступить",
+
+  "minigame.game_over": "Время вышло!",
+  "minigame.your_score": "Ваш счет",
+  "minigame.ok": "ОК",
+
+  "boosts": "Бустеры",
+  "boosts.balance": "Баланс",
+  "boosts.available": "доступно",
+  "boosts.free": "Ежедневные бустеры",
+  "boosts.pigfall": "Свинопад",
+  "boosts.refill": "Наполнение",
+  "boosts.sponge": "Губка",
+  "boosts.bottle_capacity": "Вместимость",
+  "boosts.refill_rate": "Скорость наполнения",
+  "boosts.herdsman": "Авто-свинопас"
 }

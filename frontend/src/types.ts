@@ -41,9 +41,9 @@ type Boost = {
 
 type Task = {
   id: number;
-  title: string;
   picture: string;
   reward: number;
+  type: string;
   link: string;
   completed: boolean;
 };

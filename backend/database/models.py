@@ -175,6 +175,7 @@ class Task(Base):
     picture: Mapped[str] = mapped_column(VARCHAR(255))
     reward: Mapped[int] = mapped_column(BIGINT)
     link: Mapped[str] = mapped_column(VARCHAR(255))
+    type: Mapped[str] = mapped_column(VARCHAR(255))
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
 
 

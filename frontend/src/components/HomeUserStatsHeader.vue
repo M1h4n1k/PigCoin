@@ -16,7 +16,7 @@ const { user } = storeToRefs(userStore);
       ></span>
       <span v-else class="flex items-center">
         {{ user.current_coins }}
-        <img src="/pigNoseCoin.svg" alt="🐽" class="h-9 w-9"
+        <img src="/pigNoseCoin.svg" alt="🐽" class="ml-1 h-9 w-9"
       /></span>
     </div>
     <RouterLink to="/rating" class="relative flex items-center justify-center">

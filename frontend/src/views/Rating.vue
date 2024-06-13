@@ -80,7 +80,7 @@ const showClub = (club: Club) => {
           }"
           @click="activeTab = 0"
         >
-          Swineherds
+          {{ $t("rating.option.1") }}
         </div>
         <div
           class="rounded-xl px-3 py-2 font-medium"
@@ -89,7 +89,7 @@ const showClub = (club: Club) => {
           }"
           @click="activeTab = 1"
         >
-          Barns
+          {{ $t("rating.option.2") }}
         </div>
       </div>
       <div class="mb-6 mt-5 flex items-center">
@@ -174,22 +174,25 @@ const showClub = (club: Club) => {
 
         <div class="flex w-full flex-col justify-around">
           <div>
-            <p class="text-center">{{ selectedClub?.members_count }} members</p>
+            <p class="text-center">
+              {{ selectedClub?.members_count }}
+              {{ $t("common.members", selectedClub?.members_count) }}
+            </p>
             <p class="text-center">
               {{ selectedClub?.total_coins }}
-              total coins
+              {{ $t("common.coins") }}
             </p>
           </div>
           <div class="mt-0.5 flex w-full flex-col">
             <button class="w-full rounded-xl border px-4 py-2">
-              See channel
+              {{ $t("rating.see_channel") }}
             </button>
             <button
               v-if="selectedClub.id !== userStore.user?.club_id"
               @click="joinClub(selectedClub!)"
               class="mt-2 w-full rounded-xl border px-4 py-2 font-semibold"
             >
-              Join
+              {{ $t("rating.join") }}
             </button>
           </div>
         </div>

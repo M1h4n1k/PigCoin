@@ -58,10 +58,10 @@ class UserCreate(User):
 
 class Task(BaseModel):
     id: int
-    title: str
     picture: str
     reward: int
     link: str
+    type: str
     completed: bool = False
 
     class Config:
