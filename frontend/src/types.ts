@@ -29,6 +29,7 @@ type User = UserPublic & {
   club_id?: number;
   club?: Club;
   position?: number;
+  position_in_club?: number;
 };
 
 type Boost = {

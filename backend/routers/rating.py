@@ -1,4 +1,5 @@
-from fastapi import Request, APIRouter, Depends, HTTPException
+from fastapi import Request, APIRouter, Depends, HTTPException, Query
+from typing import Annotated
 from database import crud, schemas, models
 from sqlalchemy.orm import Session
 from dependencies import get_db
@@ -14,9 +15,11 @@ router = APIRouter(prefix='/rating')
 )
 async def get_user_rating(
     db: Session = Depends(get_db),
-    league: int = None
+    league: int = None,
+    offset: int = 0,
+    limit: Annotated[int, Query(..., le=100)] = 10
 ) -> list[schemas.UserPublic]:
-    users = crud.users.get_users_within_coins_range(db, *get_user_league_range(league))
+    users = crud.users.get_users_within_coins_range(db, *get_user_league_range(league), offset, limit)
     return users
 
 
@@ -27,7 +30,9 @@ async def get_user_rating(
 )
 async def get_club_rating(
     db: Session = Depends(get_db),
-    league: int = None
+    league: int = None,
+    offset: int = 0,
+    limit: Annotated[int, Query(..., le=100)] = 10
 ) -> list[schemas.Club]:
-    clubs = crud.clubs.get_clubs_within_coins_range(db, *get_club_league_range(league))
+    clubs = crud.clubs.get_clubs_within_coins_range(db, *get_club_league_range(league), offset, limit)
     return clubs

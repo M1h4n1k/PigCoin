@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { ref, watch, Ref } from "vue";
+import { ref, watch, Ref, onMounted, onUnmounted } from "vue";
 import RatingRowCard from "@/components/RatingUserCard.vue";
 import BarnIcon from "@/components/BarnIcon.vue";
 import FarmerIcon from "@/components/FarmerIcon.vue";
 import PopupWindow from "@/components/PopupWindow.vue";
 import { useUserStore, useRatingStore } from "@/store.ts";
-import { Club } from "@/types.ts";
+import { Club, UserPublic } from "@/types.ts";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
@@ -17,32 +17,43 @@ const activeTab = ref(0);
 const league = ref(userStore.user?.league ?? 0);
 const tabNames: ["users", "clubs"] = ["users", "clubs"];
 
-const leagueNames = ["Bronze", "Gold", "Diamond"];
+const rowsContainer: Ref<Element | null> = ref(null);
+const loading = ref(false);
 
-const preloadRating = () => {
-  if (ratingStore[tabNames[activeTab.value]][league.value] === undefined) {
-    fetch(
-      import.meta.env.VITE_API_URL +
-        `/rating/${tabNames[activeTab.value]}?league=${league.value}`,
-      {
-        credentials: "include",
-      },
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        ratingStore[tabNames[activeTab.value]][league.value] = data;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
+const preloadRating = (offset = 0, limit = 10) => {
+  const leagueRows = ratingStore[tabNames[activeTab.value]][league.value];
+
+  if (leagueRows?.loaded) return;
+  if (leagueRows !== undefined && offset < leagueRows.data.length) return;
+  if (loading.value) return;
+  loading.value = true;
+
+  fetch(
+    import.meta.env.VITE_API_URL +
+      `/rating/${tabNames[activeTab.value]}?league=${league.value}&offset=${offset}&limit=${limit}`,
+    {
+      credentials: "include",
+    },
+  )
+    .then((res) => res.json())
+    .then((data) => {
+      if (leagueRows === undefined) {
+        ratingStore[tabNames[activeTab.value]][league.value] = {
+          data: [],
+          loaded: false,
+        };
+      }
+      if (data.length === 0 || data.length < limit)
+        ratingStore[tabNames[activeTab.value]][league.value].loaded = true;
+      ratingStore[tabNames[activeTab.value]][league.value].data.push(...data);
+      loading.value = false;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 const selectedClub: Ref<Club> = ref({ id: -2, name: "" } as Club);
-
-watch(league, preloadRating);
-watch(activeTab, preloadRating);
-preloadRating();
 
 const joinClub = (club: Club) => {
   fetch(import.meta.env.VITE_API_URL + `/clubs/${club.id}/join`, {
@@ -52,11 +63,11 @@ const joinClub = (club: Club) => {
     .then((res) => res.json())
     .then((data) => {
       router.push("/club");
-      selectedClub.value = { id: -2, name: "" };
+      selectedClub.value = { id: -2, name: "" } as Club;
       userStore.user!.club = data;
       userStore.user!.club_id = data.id;
       for (const i of Array(3).keys()) {
-        ratingStore[tabNames[activeTab.value]][i] = undefined;
+        delete ratingStore[tabNames[activeTab.value]][i];
       }
     })
     .catch((err) => {
@@ -67,10 +78,30 @@ const joinClub = (club: Club) => {
 const showClub = (club: Club) => {
   selectedClub.value = JSON.parse(JSON.stringify(club));
 };
+
+const windowScroller = () => {
+  if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
+    preloadRating(
+      ratingStore[tabNames[activeTab.value]][league.value]?.data.length ?? 0,
+    );
+  }
+};
+
+onMounted(() => {
+  window.addEventListener("scroll", windowScroller);
+});
+
+onUnmounted(() => {
+  window.removeEventListener("scroll", windowScroller);
+});
+
+watch(league, () => preloadRating());
+watch(activeTab, () => preloadRating());
+preloadRating();
 </script>
 
 <template>
-  <div id="container" class="flex flex-col items-center px-5 py-6">
+  <div ref="rowsContainer" class="flex flex-col items-center px-5 py-6">
     <div class="flex flex-col items-center">
       <div class="toned-bg flex w-fit cursor-pointer rounded-2xl">
         <div
@@ -117,7 +148,7 @@ const showClub = (club: Club) => {
           />
 
           <span class="absolute mt-2 w-full text-center font-medium">
-            {{ leagueNames[league] }}
+            {{ $t("rating.leagues", league) }}
           </span>
         </div>
         <svg
@@ -136,28 +167,44 @@ const showClub = (club: Club) => {
 
     <div class="toned-bg mt-10 min-h-full w-full rounded-xl">
       <RatingRowCard
-        v-for="(row, i) in ratingStore[tabNames[activeTab]][league]"
-        @click="activeTab === 1 ? showClub(row) : null"
+        v-for="(row, i) in ratingStore[tabNames[activeTab]][league]?.data ?? []"
+        @click="activeTab === 1 ? showClub(row as Club) : null"
         :key="i"
         class="bottom-0 top-0 rounded-xl p-2"
         :class="{
           'toned-image-bg':
-            row.tg_id === userStore.user?.tg_id ||
-            row.id === userStore.user!.club?.id,
+            (row as UserPublic).tg_id === userStore.user?.tg_id ||
+            (row as Club).id === userStore.user!.club?.id,
           'cursor-pointer': activeTab === 1,
         }"
         :style="{
           position:
-            row.tg_id === userStore.user?.tg_id ||
-            row.id === userStore.user!.club?.id
+            (row as UserPublic).tg_id === userStore.user?.tg_id ||
+            (row as Club).id === userStore.user!.club?.id
               ? 'sticky'
               : 'static',
         }"
         :picture="row.picture"
         :rating="i + 1"
         :coins="row.total_coins"
-        :name="row.username ?? row.name"
-        :is-you="row.tg_id === userStore.user?.tg_id"
+        :name="(row as UserPublic).username ?? (row as Club).name"
+        :is-you="(row as UserPublic).tg_id === userStore.user?.tg_id"
+      />
+
+      <RatingRowCard
+        v-if="
+          league === userStore.user!.league &&
+          activeTab === 0 &&
+          ratingStore[tabNames[activeTab]][league] &&
+          userStore.user!.position! >
+            ratingStore[tabNames[activeTab]][league].data.length
+        "
+        class="toned-image-bg sticky bottom-0 top-0 rounded-xl p-2"
+        :picture="userStore.user!.picture"
+        :rating="userStore.user!.position"
+        :coins="userStore.user!.total_coins"
+        :name="userStore.user!.username"
+        :is-you="true"
       />
     </div>
 

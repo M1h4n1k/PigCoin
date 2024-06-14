@@ -1,7 +1,9 @@
-from fastapi import Request, APIRouter, Depends, HTTPException
+from fastapi import Request, APIRouter, Depends, HTTPException, Query
 from database import crud, schemas, models
 from sqlalchemy.orm import Session
 from dependencies import get_db, get_user
+from typing import Annotated
+
 
 router = APIRouter(prefix='/clubs')
 
@@ -68,9 +70,11 @@ async def join_club(
 async def get_club_members(
     club_id: int,
     db: Session = Depends(get_db),
+    offset: int = 0,
+    limit: Annotated[int, Query(..., le=100)] = 10
 ) -> list[schemas.User]:
     club = crud.clubs.get_club(db, club_id)
     if not club:
         raise HTTPException(status_code=404, detail='Club not found')
-    return club.members
+    return club.members.offset(offset).limit(limit).all()
 

@@ -8,7 +8,7 @@ defineProps({
 </script>
 
 <template>
-  <div class="flex w-full items-center justify-between">
+  <div class="flex w-full cursor-pointer items-center justify-between">
     <div class="flex items-center">
       <div
         class="toned-image-bg flex h-[70px] w-[70px] items-center justify-center rounded-xl p-2"

@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import TaskCard from "@/components/TaskCard.vue";
-import { Ref, ref } from "vue";
-import { Task } from "@/types";
 import { useTasksStore } from "@/store.ts";
 
 const tasksStore = useTasksStore();

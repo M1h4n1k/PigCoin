@@ -15,11 +15,11 @@ def get_club(db: Session, club_id: int) -> models.Club | None:
     return db.get(models.Club, club_id)
 
 
-def get_clubs_within_coins_range(db: Session, min_total_coins: int, max_total_coins: int | None) -> list:
+def get_clubs_within_coins_range(db: Session, min_total_coins: int, max_total_coins: int | None, offset: int, limit: int) -> list:
     qr = db.query(models.Club).filter(models.Club.total_coins >= min_total_coins)
     if max_total_coins:
         qr = qr.filter(models.Club.total_coins <= max_total_coins)
-    qr = qr.order_by(desc(models.Club.total_coins))
+    qr = qr.order_by(desc(models.Club.total_coins)).offset(offset).limit(limit)
     return qr.all()
 
 

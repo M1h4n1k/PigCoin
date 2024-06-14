@@ -1,12 +1,13 @@
 import { defineStore } from "pinia";
-import { User, UserPublic, Boost, Task } from "@/types.ts";
+import { User, UserPublic, Boost, Task, Club } from "@/types.ts";
 import { Ref, ref } from "vue";
 
 export const useUserStore = defineStore("user", () => {
   const user: Ref<User | null> = ref(null);
   const referrals: Ref<UserPublic[]> = ref([]);
   const clubMembers: Ref<UserPublic[]> = ref([]);
-  return { user, referrals, clubMembers };
+  const clubMembersLoaded: Ref<boolean> = ref(false);
+  return { user, referrals, clubMembers, clubMembersLoaded };
 });
 
 export const useBoostsStore = defineStore("boost", () => {
@@ -15,8 +16,18 @@ export const useBoostsStore = defineStore("boost", () => {
 });
 
 export const useRatingStore = defineStore("rating", () => {
-  const users: Ref<{ [legionId: number]: UserPublic[] }> = ref({});
-  const clubs: Ref<{ [legionId: number]: UserPublic[] }> = ref({});
+  const users: Ref<{
+    [legionId: number]: {
+      data: UserPublic[];
+      loaded: boolean;
+    };
+  }> = ref({});
+  const clubs: Ref<{
+    [legionId: number]: {
+      data: Club[];
+      loaded: boolean;
+    };
+  }> = ref({});
   return { users, clubs };
 });
 

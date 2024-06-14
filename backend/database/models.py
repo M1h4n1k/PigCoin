@@ -1,6 +1,6 @@
 from datetime import datetime
 from sqlalchemy.ext.hybrid import hybrid_property
-from sqlalchemy import ForeignKey, DateTime, Text, Boolean, func, BIGINT, VARCHAR, Double, text, select
+from sqlalchemy import ForeignKey, DateTime, Text, Boolean, func, BIGINT, VARCHAR, Double, text, select, and_
 from sqlalchemy.orm import relationship, DeclarativeBase, mapped_column, Mapped, column_property
 from utils import get_user_league, get_club_league, get_user_league_range
 
@@ -50,6 +50,14 @@ class User(Base):
         league_range = get_user_league_range(self.league)
         if league_range[1] is not None:
             qr = qr.filter(User.total_coins <= league_range[1])
+        return qr.count() + 1
+
+    @hybrid_property
+    def position_in_club(self) -> int:
+        qr = object_session(self).query(User).filter(and_(
+            User.club_id == self.club_id,
+            User.total_coins > self.total_coins
+        ))
         return qr.count() + 1
 
     _free_turbo: Mapped[int] = mapped_column(BIGINT, default=3, index=True)  # 3 free turbo per day
@@ -159,7 +167,12 @@ class Club(Base):
     tg_link: Mapped[str] = mapped_column(VARCHAR(255))
 
     total_coins: Mapped[int] = mapped_column(BIGINT, default=0)
-    members: Mapped[list['User']] = relationship('User', back_populates='club', order_by='User.total_coins.desc()')
+    members: Mapped[list['User']] = relationship(
+        'User',
+        back_populates='club',
+        order_by='User.total_coins.desc()',
+        lazy='dynamic'
+    )
     members_count: Mapped[int] = mapped_column(BIGINT, default=0)
 
     @hybrid_property

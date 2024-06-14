@@ -42,7 +42,12 @@ defineProps({
         <p class="font-medium">{{ name }}</p>
         <p class="text-gray-600">
           {{ coins }}
-          <img class="inline h-3 w-3" src="/pigNoseCoin.svg" alt="🐽" />
+          <img
+            class="inline h-3 w-3"
+            src="/pigNoseCoin.svg"
+            alt="🐽"
+            loading="lazy"
+          />
         </p>
       </div>
     </div>
