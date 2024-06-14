@@ -2,6 +2,31 @@ import { defineStore } from "pinia";
 import { User, UserPublic, Boost, Task, Club } from "@/types.ts";
 import { Ref, ref } from "vue";
 
+export const useAlertStore = defineStore("alert", () => {
+  const message: Ref<string | null> = ref(null);
+  const type: Ref<string | null> = ref(null);
+  const isDisplayed = ref(false);
+  const _timeout: Ref<NodeJS.Timeout | null> = ref(null);
+
+  const displayAlert = (
+    _message: string,
+    _type: string = "info",
+    duration: number = 2000,
+  ) => {
+    message.value = _message;
+    type.value = _type;
+    isDisplayed.value = true;
+    if (_timeout.value) {
+      clearTimeout(_timeout.value);
+    }
+    _timeout.value = setTimeout(() => {
+      isDisplayed.value = false;
+    }, duration);
+  };
+
+  return { message, type, isDisplayed, displayAlert, _timeout };
+});
+
 export const useUserStore = defineStore("user", () => {
   const user: Ref<User | null> = ref(null);
   const referrals: Ref<UserPublic[]> = ref([]);
