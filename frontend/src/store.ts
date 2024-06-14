@@ -32,7 +32,7 @@ export const useRatingStore = defineStore("rating", () => {
   return { users, clubs };
 });
 
-export const useTasksStore = defineStore("rating", () => {
+export const useTasksStore = defineStore("tasks", () => {
   const tasks: Ref<Task[]> = ref([]);
   return { tasks };
 });

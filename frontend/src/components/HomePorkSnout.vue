@@ -7,6 +7,7 @@ const userStore = useUserStore();
 
 const cleaning = ref(false);
 const container: Ref<HTMLElement | null> = ref(null);
+const noseElement: Ref<HTMLElement | null> = ref(null);
 
 const bubbles: Ref<Bubble[]> = ref([]); // Array to store bubble objects
 const bubblesI = ref(0);
@@ -57,10 +58,10 @@ const cleanDirtyBubble = (index: number) => {
   dirtyBubbles.value[index].hidden = true;
   setTimeout(
     () => {
-      if (container.value === null) return;
+      if (noseElement.value === null) return;
       dirtyBubbles.value[index] = {
-        x: 60 + Math.random() * (container.value.clientWidth - 170),
-        y: 100 + Math.random() * (container.value.clientWidth - 200),
+        x: 60 + Math.random() * (noseElement.value.clientWidth - 170),
+        y: 100 + Math.random() * (noseElement.value.clientWidth - 200),
         size: Math.random() * 20 + 20, // Random bubble size (20px - 40px)
         color: dirtyColors[Math.floor(Math.random() * dirtyColors.length)],
         hidden: false,
@@ -107,9 +108,9 @@ onMounted(() => {
   setInterval(collectCoinsBatch, 5000);
   for (let i = 0; i < 10; i++) {
     dirtyBubbles.value.push({
-      x: 80 + Math.random() * (container.value!.clientWidth - 160),
-      y: 100 + Math.random() * (container.value!.clientWidth - 200),
-      size: Math.random() * 20 + 20, // Random bubble size (20px - 40px)
+      x: 80 + Math.random() * (noseElement.value!.clientWidth - 160),
+      y: 100 + Math.random() * (noseElement.value!.clientWidth - 200),
+      size: Math.random() * 20 + 30, // Random bubble size (30px - 50px)
       color: dirtyColors[Math.floor(Math.random() * dirtyColors.length)],
       hidden: false,
       price: 0,
@@ -130,8 +131,11 @@ onMounted(() => {
     @touchmove="touchMove"
     @touchend="cleaning = false"
   >
-    <div
-      class="bubble pointer-events-none absolute z-20 rounded-full border border-blue-300 border-opacity-50 bg-white"
+    <!-- soap -->
+    <img
+      src="/soap.png"
+      alt=""
+      class="bubble pointer-events-none absolute z-20 rounded-full bg-white/90 "
       v-for="(bubble, ind) in bubbles"
       :key="bubble.x * 1000 + bubble.y * 100 + ind * 10 + bubble.size"
       :style="{
@@ -141,8 +145,9 @@ onMounted(() => {
         height: bubble.size + 'px',
         offsetPath: bubble.direction,
       }"
-    ></div>
+    ></img>
 
+    <!-- dirt -->
     <div
       class="absolute z-10 flex select-none rounded-full border-black border-opacity-50 transition-opacity duration-500"
       v-for="(dirtyBubble, ind) in dirtyBubbles"
@@ -181,6 +186,7 @@ onMounted(() => {
     </span>
 
     <img
+      ref="noseElement"
       class="h-auto w-full"
       src="/pigNose.webp"
       alt="None"

@@ -40,10 +40,10 @@ defineProps({
       <img class="h-10 w-10 rounded-full" alt="" :src="picture" />
       <div class="ml-2">
         <p class="font-medium">{{ name }}</p>
-        <p class="text-gray-600">
+        <p class="flex items-center text-gray-600">
           {{ coins }}
           <img
-            class="inline h-3 w-3"
+            class="ml-1 h-3 w-3"
             src="/pigNoseCoin.svg"
             alt="🐽"
             loading="lazy"

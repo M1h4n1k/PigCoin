@@ -3,6 +3,7 @@ import { ref, onMounted, onUnmounted } from "vue";
 import RatingUserCard from "@/components/RatingUserCard.vue";
 import { useUserStore } from "@/store.ts";
 import RatingRowCard from "@/components/RatingUserCard.vue";
+import LoadingIcon from "@/components/LoadingIcon.vue";
 
 const userStore = useUserStore();
 const loading = ref(false);
@@ -95,6 +96,10 @@ onUnmounted(() => {
         :name="row.username"
         :is-you="row.tg_id === userStore.user?.tg_id"
       />
+
+      <div v-if="loading" class="flex w-full items-center justify-center p-4">
+        <LoadingIcon />
+      </div>
 
       <RatingRowCard
         v-if="userStore.user!.position_in_club! > userStore.clubMembers.length"

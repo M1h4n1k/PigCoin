@@ -1,16 +1,22 @@
 <script setup lang="ts">
+import { ref } from "vue";
 import TaskCard from "@/components/TaskCard.vue";
 import { useTasksStore } from "@/store.ts";
+import LoadingIcon from "@/components/LoadingIcon.vue";
 
 const tasksStore = useTasksStore();
+const loading = ref(tasksStore.tasks.length === 0);
 
-fetch(import.meta.env.VITE_API_URL + "/tasks/", {
-  credentials: "include",
-})
-  .then((res) => res.json())
-  .then((data) => {
-    tasksStore.tasks = data;
-  });
+if (tasksStore.tasks.length === 0) {
+  fetch(import.meta.env.VITE_API_URL + "/tasks/", {
+    credentials: "include",
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      tasksStore.tasks = data;
+      loading.value = false;
+    });
+}
 </script>
 
 <template>
@@ -34,6 +40,10 @@ fetch(import.meta.env.VITE_API_URL + "/tasks/", {
         :type="t.type"
         :completed="t.completed"
       />
+
+      <div v-if="loading" class="flex w-full items-center justify-center p-2">
+        <LoadingIcon />
+      </div>
     </div>
   </div>
 </template>

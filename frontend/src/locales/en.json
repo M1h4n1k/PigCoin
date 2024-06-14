@@ -5,6 +5,7 @@
   "common.you": "You",
   "common.members": "member | members",
   "common.coins": "coin | coins",
+  "common.no_data": "No data yet",
 
   "home.offline_coins": "While you were away you got",
   "home.collect": "Collect",

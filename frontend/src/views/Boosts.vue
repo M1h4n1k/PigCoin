@@ -1,12 +1,15 @@
 <script setup lang="ts">
+import { ref } from "vue";
 import Booster from "@/components/Booster.vue";
 import { useUserStore, useBoostsStore } from "@/store";
 import { useRouter } from "vue-router";
+import LoadingIcon from "@/components/LoadingIcon.vue";
 
 const router = useRouter();
 
 const userStore = useUserStore();
 const boostsStore = useBoostsStore();
+const loading = ref(boostsStore.boosts.length === 0);
 
 if (boostsStore.boosts.length === 0) {
   fetch(import.meta.env.VITE_API_URL + "/boosts/", {
@@ -15,6 +18,7 @@ if (boostsStore.boosts.length === 0) {
     .then((res) => res.json())
     .then((data) => {
       boostsStore.boosts = data;
+      loading.value = false;
     });
 }
 
@@ -122,6 +126,10 @@ const useFreeBooster = (type: number) => {
           :price="b.price"
           @click="buyBoost(b.id)"
         />
+
+        <div v-if="loading" class="flex w-full items-center justify-center p-2">
+          <LoadingIcon />
+        </div>
       </div>
     </div>
   </div>

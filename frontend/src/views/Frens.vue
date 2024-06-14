@@ -1,8 +1,11 @@
 <script setup lang="ts">
+import { ref } from "vue";
 import RatingUserCard from "@/components/RatingUserCard.vue";
 import { useUserStore } from "@/store";
+import LoadingIcon from "@/components/LoadingIcon.vue";
 
 const userStore = useUserStore();
+const loading = ref(userStore.referrals.length === 0);
 if (userStore.referrals.length === 0) {
   fetch(import.meta.env.VITE_API_URL + "/user/referrals", {
     credentials: "include",
@@ -10,6 +13,7 @@ if (userStore.referrals.length === 0) {
     .then((res) => res.json())
     .then((data) => {
       userStore.referrals = data;
+      loading.value = false;
     })
     .catch((err) => {
       console.log(err);
@@ -56,12 +60,15 @@ if (userStore.referrals.length === 0) {
         :coins="referral.total_coins"
         :name="referral.username"
       />
-      <span
+      <div v-if="loading" class="flex w-full items-center justify-center p-2">
+        <LoadingIcon />
+      </div>
+      <div
         v-if="userStore.referrals.length === 0"
         class="block w-full text-center text-lg"
       >
-        No frens yet
-      </span>
+        {{ $t("common.no_data") }}
+      </div>
     </div>
   </div>
 </template>

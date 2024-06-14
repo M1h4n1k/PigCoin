@@ -7,6 +7,7 @@ import PopupWindow from "@/components/PopupWindow.vue";
 import { useUserStore, useRatingStore } from "@/store.ts";
 import { Club, UserPublic } from "@/types.ts";
 import { useRouter } from "vue-router";
+import LoadingIcon from "@/components/LoadingIcon.vue";
 
 const router = useRouter();
 
@@ -190,6 +191,9 @@ preloadRating();
         :name="(row as UserPublic).username ?? (row as Club).name"
         :is-you="(row as UserPublic).tg_id === userStore.user?.tg_id"
       />
+      <div v-if="loading" class="flex w-full items-center justify-center p-4">
+        <LoadingIcon />
+      </div>
 
       <RatingRowCard
         v-if="
@@ -206,6 +210,15 @@ preloadRating();
         :name="userStore.user!.username"
         :is-you="true"
       />
+
+      <div
+        v-if="
+          (ratingStore[tabNames[activeTab]][league]?.data ?? [1]).length === 0
+        "
+        class="p-5 text-center text-2xl"
+      >
+        {{ $t("common.no_data") }}
+      </div>
     </div>
 
     <PopupWindow
