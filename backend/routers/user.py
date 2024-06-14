@@ -57,3 +57,27 @@ async def get_referrals(user: models.User = Depends(get_user)):
 )
 async def get_position(db: Session = Depends(get_db), user: models.User = Depends(get_user)):
     return crud.users.get_position_in_league(db, user, get_user_league_range(user.league)[1])
+
+
+@router.get(
+    '/autoCoins',
+    response_model=int,
+    status_code=200,
+)
+async def collect_auto_coins(
+    user: models.User = Depends(get_user),
+):
+    return user.auto_coins
+
+
+@router.post(
+    '/autoCoins',
+    response_model=schemas.UserPrivate,
+    status_code=200,
+)
+async def collect_auto_coins(
+    user: models.User = Depends(get_user),
+    db: Session = Depends(get_db),
+):
+    user = crud.users.update_user_money(db, user, user.auto_coins)
+    return user

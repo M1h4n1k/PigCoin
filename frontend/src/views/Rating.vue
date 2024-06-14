@@ -20,7 +20,7 @@ const tabNames: ["users", "clubs"] = ["users", "clubs"];
 const rowsContainer: Ref<Element | null> = ref(null);
 const loading = ref(false);
 
-const preloadRating = (offset = 0, limit = 10) => {
+const preloadRating = (offset = 0, limit = 20) => {
   const leagueRows = ratingStore[tabNames[activeTab.value]][league.value];
 
   if (leagueRows?.loaded) return;

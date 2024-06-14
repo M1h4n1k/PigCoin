@@ -21,6 +21,7 @@ def update_user_money(db: Session, user: models.User, money: int) -> models.User
     user.current_coins += money
     if money > 0:
         user.total_coins += money
+    user.last_coin_collected = datetime.now()
     db.commit()
     db.refresh(user)
     return user

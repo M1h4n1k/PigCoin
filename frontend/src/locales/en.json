@@ -6,6 +6,9 @@
   "common.members": "member | members",
   "common.coins": "coin | coins",
 
+  "home.offline_coins": "While you were away you got",
+  "home.collect": "Collect",
+
   "tasks.earn": "Earn more coins",
   "tasks.subscribe": "Invite a fren",
   "tasks.invite": "Subscribe to channel",

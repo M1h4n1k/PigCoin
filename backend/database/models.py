@@ -29,6 +29,19 @@ class User(Base):
     _current_energy: Mapped[int] = mapped_column(BIGINT, default=1000)
     energy_last_used: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
 
+    last_coin_collected: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
+
+    @property
+    def auto_coins(self) -> int:
+        if self.boosts.filter(UserBoost.boost_type == 'auto').first() is None:
+            return 0
+
+        hours_passed = min(
+            (datetime.now() - self.last_coin_collected).seconds // 3600,
+            self.boosts.filter(UserBoost.boost_type == 'auto').first().count
+        )
+        return hours_passed * 1000
+
     @hybrid_property
     def current_energy(self) -> int:
         return min(
@@ -90,7 +103,6 @@ class User(Base):
     def free_refills(self, value: int):
         self._free_refills = value
         self.free_refills_last_used = func.now()
-
 
     join_date: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
 

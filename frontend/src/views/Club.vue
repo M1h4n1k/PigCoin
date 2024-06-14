@@ -7,7 +7,7 @@ import RatingRowCard from "@/components/RatingUserCard.vue";
 const userStore = useUserStore();
 const loading = ref(false);
 
-const loadMembers = (offset = 0, limit = 10) => {
+const loadMembers = (offset = 0, limit = 20) => {
   if (userStore.clubMembersLoaded) return;
   if (loading.value) return;
   if (offset < userStore.clubMembers.length) return;

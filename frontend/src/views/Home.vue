@@ -24,6 +24,34 @@ const squeezeWithRandomTimeout = () => {
   setTimeout(squeezeWithRandomTimeout, randomTimeout);
 };
 
+if (userStore.autoCoins === null) {
+  fetch(import.meta.env.VITE_API_URL + "/user/autoCoins", {
+    credentials: "include",
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      userStore.autoCoins = data;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+
+const collectAutoCoins = () => {
+  userStore.autoCoins = 0;
+  fetch(import.meta.env.VITE_API_URL + "/user/autoCoins", {
+    method: "POST",
+    credentials: "include",
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      userStore.user = data;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
 onMounted(() => {
   setTimeout(
     () => {
@@ -36,6 +64,26 @@ onMounted(() => {
 
 <template>
   <div id="container" class="flex h-screen flex-col justify-between pb-8 pt-6">
+    <div
+      v-if="userStore.autoCoins !== null && userStore.autoCoins > 0"
+      class="toned-image-bg absolute left-1/2 top-1/2 z-30 flex h-48 w-80 max-w-full -translate-x-1/2 -translate-y-1/2 transform flex-col items-center justify-center rounded-xl px-10"
+    >
+      <div class="text-center">
+        <h3 class="text-2xl font-bold"></h3>
+        <p class="flex items-center justify-center text-xl">
+          {{ $t("home.offline_coins") }} {{ userStore.autoCoins }}
+          {{ $t("common.coins", userStore.autoCoins) }}
+        </p>
+      </div>
+
+      <button
+        @click="collectAutoCoins"
+        class="mt-6 w-full rounded-full border bg-[#64b5ef] py-2 font-semibold text-white"
+      >
+        {{ $t("home.collect") }}
+      </button>
+    </div>
+
     <div class="px-3">
       <HomeSquadHeader v-if="userStore.user?.club" />
       <HomeUserStatsHeader class="mt-6" />

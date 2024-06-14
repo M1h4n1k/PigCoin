@@ -7,7 +7,8 @@ export const useUserStore = defineStore("user", () => {
   const referrals: Ref<UserPublic[]> = ref([]);
   const clubMembers: Ref<UserPublic[]> = ref([]);
   const clubMembersLoaded: Ref<boolean> = ref(false);
-  return { user, referrals, clubMembers, clubMembersLoaded };
+  const autoCoins: Ref<number | null> = ref(null);
+  return { user, referrals, clubMembers, clubMembersLoaded, autoCoins };
 });
 
 export const useBoostsStore = defineStore("boost", () => {
