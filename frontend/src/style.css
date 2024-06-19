@@ -20,15 +20,6 @@
   border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-body{
-  background-image: url("/farm.jpg") !important;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-
-}
-
 @-webkit-keyframes bg-move {
   0%   { background-position: -500px 0; }
   100% { background-position: 1000px 0; }

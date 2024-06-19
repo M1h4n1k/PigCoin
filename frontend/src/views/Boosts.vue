@@ -71,7 +71,7 @@ const useFreeBooster = (type: number) => {
 </script>
 
 <template>
-  <div class="px-5 py-2">
+  <div class="px-5 py-2 pb-4">
     <div class="p-3 text-center">
       <p class="text-3xl">{{ $t("boosts.balance") }}</p>
       <p class="flex items-center justify-center text-4xl font-medium">
@@ -79,6 +79,7 @@ const useFreeBooster = (type: number) => {
         <img class="ml-1 inline h-6 w-6" src="/pigNoseCoin.svg" alt="🐽" />
       </p>
     </div>
+
     <div class="toned-bg mt-5 px-3 py-4 pl-4">
       <h3 class="text-2xl font-medium">{{ $t("boosts.free") }}</h3>
       <div class="mt-2 flex justify-around gap-2">
@@ -93,7 +94,7 @@ const useFreeBooster = (type: number) => {
               >/3 {{ $t("boosts.available") }}
             </p>
           </div>
-          <img height="40" width="40" src="/pig.png" alt="refill" />
+          <img height="40" width="40" src="/pigFall.svg" alt="refill" />
         </div>
 
         <div
@@ -107,7 +108,7 @@ const useFreeBooster = (type: number) => {
               >/3 {{ $t("boosts.available") }}
             </p>
           </div>
-          <img height="35" width="35" src="/refill.png" alt="refill" />
+          <img height="45" width="45" src="/refill.png" alt="refill" />
         </div>
       </div>
     </div>

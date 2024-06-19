@@ -22,7 +22,7 @@ if (userStore.referrals.length === 0) {
 </script>
 
 <template>
-  <div class="px-5 py-2">
+  <div class="px-5 py-2 pb-4">
     <div class="toned-bg mt-10 space-y-4 rounded-xl p-5">
       <h3 class="text-center text-2xl font-medium">{{ $t("frens.earn") }}</h3>
       <div class="flex items-center">

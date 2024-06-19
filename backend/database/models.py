@@ -36,6 +36,7 @@ class User(Base):
         if self.boosts.filter(UserBoost.boost_type == 'auto').first() is None:
             return 0
 
+        # TODO change that every second is counted except for the first 10 mins
         hours_passed = min(
             (datetime.now() - self.last_coin_collected).seconds // 3600,
             self.boosts.filter(UserBoost.boost_type == 'auto').first().count

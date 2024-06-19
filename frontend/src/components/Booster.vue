@@ -12,7 +12,13 @@ defineProps({
       <div
         class="toned-image-bg flex h-[70px] w-[70px] items-center justify-center rounded-xl p-2"
       >
-        <img height="50" width="50" :src="picture" alt="refill" />
+        <img
+          class="h-[50px] w-[50px]"
+          height="50"
+          width="50"
+          :src="picture"
+          alt="refill"
+        />
       </div>
       <div class="ml-2">
         <p class="text-xl">{{ title }}</p>
