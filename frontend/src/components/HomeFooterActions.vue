@@ -8,7 +8,7 @@ const { user } = storeToRefs(userStore);
 
 <template>
   <div class="flex items-center justify-between">
-    <div class="toned-bg flex h-full items-center rounded-xl px-3">
+    <div class="toned-bg flex h-full items-center rounded-xl px-2">
       <img alt="🧼" class="-ml-3 h-11 w-11" src="/bottle.png" />
       <div class="flex flex-col">
         <span

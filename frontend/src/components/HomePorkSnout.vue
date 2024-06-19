@@ -2,6 +2,7 @@
 import { ref, Ref, onMounted } from "vue";
 import { useUserStore } from "@/store";
 import { Bubble, DirtyBubble } from "@/types";
+import { getRandomNumber } from "@/utils";
 
 const userStore = useUserStore();
 
@@ -16,6 +17,7 @@ const bubblesMaxCount = 60;
 const dirtyColors = ["#a4764a", "#9b7653", "#94765a", "#987654", "#a67b5b"];
 const dirtyBubbles: Ref<DirtyBubble[]> = ref([]); // Array to store bubble objects
 const dirtyBubblesCleanedCount = ref(0); // helps to delay the next bubble appearance
+const lastCleanedDirtPosition = ref<{ x: number; y: number }>({ x: 0, y: 0 });
 
 const coinsCollectedBatch = ref(0);
 
@@ -59,9 +61,23 @@ const cleanDirtyBubble = (index: number) => {
   setTimeout(
     () => {
       if (noseElement.value === null) return;
+      lastCleanedDirtPosition.value = {
+        x: getRandomNumber(
+          50,
+          noseElement.value.clientWidth - 50,
+          lastCleanedDirtPosition.value.x,
+          50,
+        ),
+        y: getRandomNumber(
+          50,
+          noseElement.value.clientWidth - 100,
+          lastCleanedDirtPosition.value.x,
+          50,
+        ),
+      };
       dirtyBubbles.value[index] = {
-        x: 60 + Math.random() * (noseElement.value.clientWidth - 170),
-        y: 100 + Math.random() * (noseElement.value.clientWidth - 200),
+        x: lastCleanedDirtPosition.value.x,
+        y: lastCleanedDirtPosition.value.y,
         size: Math.random() * 20 + 20, // Random bubble size (20px - 40px)
         color: dirtyColors[Math.floor(Math.random() * dirtyColors.length)],
         hidden: false,
@@ -106,10 +122,14 @@ const collectCoinsBatch = () => {
 
 onMounted(() => {
   setInterval(collectCoinsBatch, 5000);
+  let x = 0;
+  let y = 0;
   for (let i = 0; i < 10; i++) {
+    x = getRandomNumber(50, noseElement.value!.clientWidth - 50, x, 50);
+    y = getRandomNumber(50, noseElement.value!.clientWidth - 100, y, 50);
     dirtyBubbles.value.push({
-      x: 80 + Math.random() * (noseElement.value!.clientWidth - 160),
-      y: 100 + Math.random() * (noseElement.value!.clientWidth - 200),
+      x: x,
+      y: y,
       size: Math.random() * 20 + 30, // Random bubble size (30px - 50px)
       color: dirtyColors[Math.floor(Math.random() * dirtyColors.length)],
       hidden: false,
@@ -135,7 +155,7 @@ onMounted(() => {
     <img
       src="/soap.png"
       alt=""
-      class="bubble pointer-events-none absolute z-20 rounded-full bg-white/90 "
+      class="bubble pointer-events-none absolute z-20 rounded-full bg-white/90"
       v-for="(bubble, ind) in bubbles"
       :key="bubble.x * 1000 + bubble.y * 100 + ind * 10 + bubble.size"
       :style="{
@@ -145,7 +165,7 @@ onMounted(() => {
         height: bubble.size + 'px',
         offsetPath: bubble.direction,
       }"
-    ></img>
+    />
 
     <!-- dirt -->
     <div

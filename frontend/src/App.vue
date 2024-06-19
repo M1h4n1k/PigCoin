@@ -73,7 +73,7 @@ const spawnCloudInterval = setInterval(() => spawnCloud(), 5000);
         }"
       />
     </div>
-    <RouterView class="" />
+    <RouterView />
   </main>
 </template>
 
