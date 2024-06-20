@@ -29,3 +29,17 @@ def get_user_league_range(legion: int) -> tuple[int, int | None]:
 
 def get_club_league_range(legion: int) -> tuple[int, int | None]:
     return club_league_ranges[legion]
+
+
+def get_locale(msg: str, lang: str) -> str:
+    locales = {
+        'en': {
+            'start': 'Hello',
+            'open': 'Open',
+        },
+        'ru': {
+            'start': 'Привет',
+            'open': 'Открыть',
+        }
+    }
+    return locales.get(lang, locales['en']).get(msg)

@@ -4,7 +4,7 @@ import messagesEN from "@/locales/en.json";
 
 export default createI18n({
   legacy: false,
-  locale: "ru",
+  locale: Telegram.WebApp.initDataUnsafe.user?.language_code,
   fallbackLocale: "en",
   pluralRules: {
     ru: function (choice, choicesLength) {

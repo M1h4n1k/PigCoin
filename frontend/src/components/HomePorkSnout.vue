@@ -12,6 +12,7 @@ const noseElement: Ref<HTMLElement | null> = ref(null);
 
 const bubbles: Ref<Bubble[]> = ref([]); // Array to store bubble objects
 const bubblesI = ref(0);
+const bubblesSkipCounter = ref(0);
 const bubblesMaxCount = 60;
 
 const dirtyColors = ["#a4764a", "#9b7653", "#94765a", "#987654", "#a67b5b"];
@@ -22,6 +23,9 @@ const lastCleanedDirtPosition = ref<{ x: number; y: number }>({ x: 0, y: 0 });
 const coinsCollectedBatch = ref(0);
 
 const touchMove = (e: TouchEvent | MouseEvent) => {
+  bubblesSkipCounter.value++;
+  if (bubblesSkipCounter.value % 2 !== 0) return;
+  bubblesSkipCounter.value %= 2;
   if (!cleaning.value) return;
   e.preventDefault();
 
@@ -63,8 +67,8 @@ const cleanDirtyBubble = (index: number) => {
       if (noseElement.value === null) return;
       lastCleanedDirtPosition.value = {
         x: getRandomNumber(
-          50,
-          noseElement.value.clientWidth - 50,
+          80,
+          noseElement.value.clientWidth - 80,
           lastCleanedDirtPosition.value.x,
           50,
         ),
@@ -86,7 +90,7 @@ const cleanDirtyBubble = (index: number) => {
       };
       dirtyBubblesCleanedCount.value--;
     },
-    600 + dirtyBubblesCleanedCount.value * 100,
+    300 + dirtyBubblesCleanedCount.value * 100,
   );
   dirtyBubblesCleanedCount.value++;
 };
@@ -125,7 +129,7 @@ onMounted(() => {
   let x = 0;
   let y = 0;
   for (let i = 0; i < 10; i++) {
-    x = getRandomNumber(50, noseElement.value!.clientWidth - 50, x, 50);
+    x = getRandomNumber(80, noseElement.value!.clientWidth - 80, x, 50);
     y = getRandomNumber(50, noseElement.value!.clientWidth - 100, y, 50);
     dirtyBubbles.value.push({
       x: x,
@@ -143,7 +147,7 @@ onMounted(() => {
 <template>
   <div
     ref="container"
-    class="relative overflow-hidden"
+    class="relative overflow-hidden px-4 py-8"
     @mousedown="cleaning = true"
     @mousemove="touchMove"
     @mouseup="cleaning = false"

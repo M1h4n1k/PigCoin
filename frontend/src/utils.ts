@@ -11,4 +11,12 @@ const getRandomNumber = (
   return random;
 };
 
-export { getRandomNumber };
+const openLink = (url: string): void => {
+  if (url.startsWith("https://t.me/")) {
+    Telegram.WebApp.openTelegramLink(url);
+  } else {
+    Telegram.WebApp.openLink(url);
+  }
+};
+
+export { getRandomNumber, openLink };

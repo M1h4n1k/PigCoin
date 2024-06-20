@@ -6,12 +6,12 @@ export const useAlertStore = defineStore("alert", () => {
   const message: Ref<string | null> = ref(null);
   const type: Ref<string | null> = ref(null);
   const isDisplayed = ref(false);
-  const _timeout: Ref<NodeJS.Timeout | null> = ref(null);
+  const _timeout: Ref<number | null> = ref(null);
 
   const displayAlert = (
     _message: string,
     _type: string = "info",
-    duration: number = 2000,
+    duration: number = 1500,
   ) => {
     message.value = _message;
     type.value = _type;

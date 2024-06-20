@@ -2,6 +2,7 @@
 import { ref, onMounted, onUnmounted } from "vue";
 import RatingUserCard from "@/components/RatingUserCard.vue";
 import { useUserStore } from "@/store.ts";
+import { openLink } from "@/utils.ts";
 import RatingRowCard from "@/components/RatingUserCard.vue";
 import LoadingIcon from "@/components/LoadingIcon.vue";
 
@@ -53,7 +54,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div id="container" class="flex flex-col items-center px-5 py-6">
+  <div id="container" class="flex flex-col items-center px-3 py-6">
     <div class="flex gap-4">
       <img class="h-32 w-32" :src="userStore.user!.club?.picture" alt="Club" />
 
@@ -72,7 +73,8 @@ onUnmounted(() => {
           </p>
         </div>
         <button
-          class="toned-image-bg mt-0.5 w-full cursor-pointer rounded-xl border px-4 py-2"
+          @click="openLink(userStore.user!.club?.tg_link)"
+          class="toned-image-bg mt-0.5 w-full cursor-pointer rounded-xl !border-2 px-4 py-2 font-medium"
         >
           {{ $t("rating.see_channel") }}
         </button>

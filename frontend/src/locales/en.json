@@ -7,6 +7,9 @@
   "common.coins": "coin | coins",
   "common.no_data": "No data yet",
 
+  "error.no_coins": "Not enough coins",
+  "error.no_boost": "No such boosters left",
+
   "home.offline_coins": "While you were away you got",
   "home.collect": "Collect",
 

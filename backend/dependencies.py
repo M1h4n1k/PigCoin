@@ -17,7 +17,11 @@ def get_db():
 
 def validate_tg_data(tg_data: str):
     secret_key = hmac.new(b'WebAppData', msg=TOKEN.replace('/test', '').encode(), digestmod=sha256).digest()
+    if not tg_data:
+        return False
     tg_data = orjson.loads(tg_data)
+    if 'user' not in tg_data:
+        return False
     user_data = orjson.dumps(tg_data['user']).decode().replace('/', '\\/')
     tg_data['user'] = user_data
     sorted_items = sorted(tg_data.items())

@@ -11,9 +11,9 @@ defineProps({
   <div class="flex w-full cursor-pointer items-center justify-between">
     <div class="flex items-center">
       <div
-        class="toned-image-bg flex h-[70px] w-[70px] items-center justify-center rounded-xl p-2"
+        class="toned-image-bg flex h-[70px] w-[70px] items-center justify-center rounded-xl p-4"
       >
-        <img class="h-8 w-8" alt="" :src="picture" />
+        <img class="h-full w-full" alt="" :src="picture" />
       </div>
       <div class="ml-3">
         <p class="text-xl font-medium">{{ $t("tasks." + type) }}</p>

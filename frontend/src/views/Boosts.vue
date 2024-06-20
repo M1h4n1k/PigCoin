@@ -1,13 +1,16 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import Booster from "@/components/Booster.vue";
-import { useUserStore, useBoostsStore } from "@/store";
+import { useUserStore, useBoostsStore, useAlertStore } from "@/store";
 import { useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 import LoadingIcon from "@/components/LoadingIcon.vue";
 
 const router = useRouter();
+const { t } = useI18n();
 
 const userStore = useUserStore();
+const alertStore = useAlertStore();
 const boostsStore = useBoostsStore();
 const loading = ref(boostsStore.boosts.length === 0);
 
@@ -27,6 +30,8 @@ const buyBoost = (boostId: number) => {
     userStore.user!.current_coins <
     boostsStore.boosts.find((b) => b.id === boostId)!.price
   ) {
+    Telegram.WebApp.HapticFeedback.notificationOccurred("error");
+    alertStore.displayAlert(t("error.no_coins"), "error");
     return;
   }
 
@@ -49,9 +54,13 @@ const buyBoost = (boostId: number) => {
 
 const useFreeBooster = (type: number) => {
   if (type === 0 && userStore.user!.free_turbo === 0) {
+    Telegram.WebApp.HapticFeedback.notificationOccurred("error");
+    alertStore.displayAlert(t("error.no_boost"), "error");
     return;
   }
   if (type === 1 && userStore.user!.free_refills === 0) {
+    Telegram.WebApp.HapticFeedback.notificationOccurred("error");
+    alertStore.displayAlert(t("error.no_boost"), "error");
     return;
   }
   fetch(import.meta.env.VITE_API_URL + `/boosts/use/${type}`, {
@@ -71,7 +80,7 @@ const useFreeBooster = (type: number) => {
 </script>
 
 <template>
-  <div class="px-5 py-2 pb-4">
+  <div class="px-3 py-2 pb-4">
     <div class="p-3 text-center">
       <p class="text-3xl">{{ $t("boosts.balance") }}</p>
       <p class="flex items-center justify-center text-4xl font-medium">
@@ -80,11 +89,11 @@ const useFreeBooster = (type: number) => {
       </p>
     </div>
 
-    <div class="toned-bg mt-5 px-3 py-4 pl-4">
+    <div class="toned-bg px-3 py-3">
       <h3 class="text-2xl font-medium">{{ $t("boosts.free") }}</h3>
       <div class="mt-2 flex justify-around gap-2">
         <div
-          class="toned-image-bg flex w-1/2 cursor-pointer items-center justify-between rounded-2xl py-2 pl-4 pr-2"
+          class="toned-image-bg flex w-1/2 cursor-pointer items-center justify-between rounded-2xl px-2 py-2"
           @click="useFreeBooster(0)"
         >
           <div>
@@ -98,7 +107,7 @@ const useFreeBooster = (type: number) => {
         </div>
 
         <div
-          class="toned-image-bg flex w-1/2 cursor-pointer items-center justify-between rounded-2xl py-2 pl-4 pr-2"
+          class="toned-image-bg flex w-1/2 cursor-pointer items-center justify-between rounded-2xl px-2 py-2"
           @click="useFreeBooster(1)"
         >
           <div>
@@ -115,7 +124,7 @@ const useFreeBooster = (type: number) => {
 
     <div class="mt-5">
       <div
-        class="toned-bg mt-2 flex flex-col justify-around gap-4 rounded-xl p-4"
+        class="toned-bg mt-2 flex flex-col justify-around gap-4 rounded-xl p-3"
       >
         <h3 class="text-2xl font-medium">{{ $t("boosts") }}</h3>
         <Booster

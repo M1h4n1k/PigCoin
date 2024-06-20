@@ -7,6 +7,7 @@ import PopupWindow from "@/components/PopupWindow.vue";
 import { useUserStore, useRatingStore } from "@/store.ts";
 import { Club, UserPublic } from "@/types.ts";
 import { useRouter } from "vue-router";
+import { openLink } from "@/utils.ts";
 import LoadingIcon from "@/components/LoadingIcon.vue";
 
 const router = useRouter();
@@ -54,7 +55,11 @@ const preloadRating = (offset = 0, limit = 20) => {
     });
 };
 
-const selectedClub: Ref<Club> = ref({ id: -2, name: "" } as Club);
+const selectedClub = ref({
+  id: 0,
+  name: "",
+  isDisplayed: false,
+} as Club & { isDisplayed: boolean });
 
 const joinClub = (club: Club) => {
   fetch(import.meta.env.VITE_API_URL + `/clubs/${club.id}/join`, {
@@ -64,7 +69,9 @@ const joinClub = (club: Club) => {
     .then((res) => res.json())
     .then((data) => {
       router.push("/club");
-      selectedClub.value = { id: -2, name: "" } as Club;
+      selectedClub.value = { id: -2, name: "", isDisplayed: false } as Club & {
+        isDisplayed: boolean;
+      };
       userStore.user!.club = data;
       userStore.user!.club_id = data.id;
       for (const i of Array(3).keys()) {
@@ -78,6 +85,7 @@ const joinClub = (club: Club) => {
 
 const showClub = (club: Club) => {
   selectedClub.value = JSON.parse(JSON.stringify(club));
+  selectedClub.value.isDisplayed = true;
 };
 
 const windowScroller = () => {
@@ -102,7 +110,7 @@ preloadRating();
 </script>
 
 <template>
-  <div ref="rowsContainer" class="flex flex-col items-center px-5 py-6">
+  <div ref="rowsContainer" class="flex flex-col items-center px-3 py-6">
     <div class="flex flex-col items-center">
       <div class="toned-bg flex w-fit cursor-pointer rounded-2xl">
         <div
@@ -222,11 +230,13 @@ preloadRating();
     </div>
 
     <PopupWindow
-      @close="selectedClub.id = -1"
+      @close="selectedClub.isDisplayed = false"
       :style="{
-        transform: selectedClub.id > 0 ? 'translateY(0)' : 'translateY(100%)',
+        transform: selectedClub.isDisplayed
+          ? 'translateY(0)'
+          : 'translateY(100%)',
       }"
-      :header="selectedClub?.name"
+      :header="selectedClub.name"
     >
       <!-- picture, total coins, members count and buttons to join and see the group -->
       <div class="flex gap-4">
@@ -235,8 +245,8 @@ preloadRating();
         <div class="flex w-full flex-col justify-around">
           <div>
             <p class="text-center">
-              {{ selectedClub?.members_count }}
-              {{ $t("common.members", selectedClub?.members_count) }}
+              {{ selectedClub.members_count }}
+              {{ $t("common.members", selectedClub.members_count) }}
             </p>
             <p class="text-center">
               {{ selectedClub?.total_coins }}
@@ -244,7 +254,10 @@ preloadRating();
             </p>
           </div>
           <div class="mt-0.5 flex w-full flex-col">
-            <button class="w-full rounded-xl border px-4 py-2">
+            <button
+              @click="openLink(selectedClub.tg_link)"
+              class="w-full rounded-xl border px-4 py-2"
+            >
               {{ $t("rating.see_channel") }}
             </button>
             <button

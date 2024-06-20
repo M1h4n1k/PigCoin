@@ -23,4 +23,17 @@ const router = createRouter({
   routes,
 });
 
+router.beforeEach((to, _, next) => {
+  if (to.path === "/") {
+    Telegram.WebApp.BackButton.hide();
+  } else {
+    Telegram.WebApp.BackButton.show();
+  }
+  Telegram.WebApp.BackButton.onClick(() => {
+    router.push("/");
+  });
+
+  next();
+});
+
 export default router;
