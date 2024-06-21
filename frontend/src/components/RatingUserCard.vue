@@ -41,7 +41,7 @@ defineProps({
       <div class="ml-2">
         <p class="font-medium">{{ name }}</p>
         <p class="flex items-center text-gray-600">
-          {{ coins }}
+          {{ coins.toLocaleString() }}
           <img
             class="ml-1 h-3 w-3"
             src="/pigNoseCoin.svg"

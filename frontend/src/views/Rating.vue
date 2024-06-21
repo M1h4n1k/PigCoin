@@ -255,7 +255,7 @@ preloadRating();
               {{ $t("common.members", selectedClub.members_count) }}
             </p>
             <p class="text-center">
-              {{ selectedClub?.total_coins }}
+              {{ selectedClub?.total_coins?.toLocaleString() }}
               {{ $t("common.coins") }}
             </p>
           </div>

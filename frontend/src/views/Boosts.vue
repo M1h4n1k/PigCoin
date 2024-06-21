@@ -84,7 +84,7 @@ const useFreeBooster = (type: number) => {
     <div class="p-3 text-center">
       <p class="text-3xl">{{ $t("boosts.balance") }}</p>
       <p class="flex items-center justify-center text-4xl font-medium">
-        <span>{{ userStore.user?.current_coins }}</span>
+        <span>{{ userStore.user?.current_coins.toLocaleString() }}</span>
         <img class="ml-1 inline h-6 w-6" src="/pigNoseCoin.svg" alt="🐽" />
       </p>
     </div>

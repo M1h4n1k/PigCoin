@@ -15,7 +15,7 @@ const { user } = storeToRefs(userStore);
         v-if="user === null"
       ></span>
       <span v-else class="flex items-center">
-        {{ user.current_coins }}
+        {{ user.current_coins.toLocaleString() }}
         <img src="/pigNoseCoin.svg" alt="🐽" class="ml-1 h-9 w-9"
       /></span>
     </div>

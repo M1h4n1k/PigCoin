@@ -29,7 +29,9 @@ if (userStore.referrals.length === 0) {
         <img height="50" width="50" src="/pigNose.webp" alt="" />
         <div class="ml-4">
           <p class="text-lg font-medium">{{ $t("frens.invite") }}</p>
-          <p class="text-gray-600">2500 {{ $t("frens.invite.desc") }}</p>
+          <p class="text-gray-600">
+            {{ (2500).toLocaleString() }} {{ $t("frens.invite.desc") }}
+          </p>
         </div>
       </div>
 
@@ -39,7 +41,9 @@ if (userStore.referrals.length === 0) {
           <p class="text-lg font-medium leading-5">
             {{ $t("frens.premium") }}
           </p>
-          <p class="text-gray-600">25000 {{ $t("frens.invite.desc") }}</p>
+          <p class="text-gray-600">
+            {{ (25000).toLocaleString() }} {{ $t("frens.invite.desc") }}
+          </p>
         </div>
       </div>
     </div>

@@ -91,7 +91,7 @@ onUnmounted(() => {
             {{ $t("common.members", userStore.user!.club?.members_count) }}
           </p>
           <p class="text-center">
-            {{ userStore.user!.club?.total_coins }}
+            {{ userStore.user!.club?.total_coins.toLocaleString() }}
             {{ $t("common.coins") }}
           </p>
         </div>
