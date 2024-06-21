@@ -36,12 +36,11 @@ async def create_club(
     db: Session = Depends(get_db),
     user: models.User = Depends(get_user),
 ):
-    if re.match(r'^[A-Z0-9_]', club_tag):
+    if re.match(r'[^A-Z0-9_]', club_tag):
         raise HTTPException(status_code=400, detail='Invalid club tag')
     # research telegram api for getting public channels
 
     club = models.Club(
-        id=123,
         name=club_tag,
         picture='https://t.me/club',
         tg_link=f'https://t.me/{club_tag}',

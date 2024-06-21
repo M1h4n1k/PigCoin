@@ -147,7 +147,7 @@ onMounted(() => {
 <template>
   <div
     ref="container"
-    class="relative overflow-hidden px-4 py-8"
+    class="relative overflow-y-visible px-4 py-8"
     @mousedown="cleaning = true"
     @mousemove="touchMove"
     @mouseup="cleaning = false"

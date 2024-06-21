@@ -84,14 +84,14 @@ onMounted(() => {
       </button>
     </div>
 
-    <div class="px-3">
+    <div class="z-30 px-3">
       <HomeSquadHeader />
       <HomeUserStatsHeader class="mt-3" />
     </div>
     <div class="select-none" ref="noseContainer">
       <HomePorkSnout />
     </div>
-    <HomeFooterActions class="px-3" />
+    <HomeFooterActions class="z-30 px-3" />
   </div>
 </template>
 
