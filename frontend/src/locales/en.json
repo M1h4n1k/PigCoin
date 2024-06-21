@@ -7,6 +7,19 @@
   "common.coins": "coin | coins",
   "common.no_data": "No data yet",
 
+  "club.see_channel": "See channel",
+  "club.leave": "Leave",
+  "club.invite": "Invite",
+  "club.join": "Join",
+  "club.create": "Create or join club",
+
+  "club.create.title": "Create or join a club",
+  "club.create.compete": "Compete in ratings",
+  "club.create.prizes": "Win prizes",
+  "club.create.input_placeholder": "Channel link",
+  "club.create.button": "Create",
+  "club.create.invalid": "Invalid channel link",
+
   "error.no_coins": "Not enough coins",
   "error.no_boost": "No such boosters left",
 
@@ -25,8 +38,6 @@
 
   "rating.option.1": "Swineherds",
   "rating.option.2": "Barns",
-  "rating.see_channel": "See channel",
-  "rating.join": "Join",
   "rating.leagues": "Bronze | Gold | Diamond",
 
   "minigame.game_over": "Time's up!",

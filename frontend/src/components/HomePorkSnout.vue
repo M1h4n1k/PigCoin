@@ -157,7 +157,7 @@ onMounted(() => {
   >
     <!-- soap -->
     <img
-      src="/soap.png"
+      src="/soap.webp"
       alt=""
       class="bubble pointer-events-none absolute z-20 rounded-full bg-white/90"
       v-for="(bubble, ind) in bubbles"
@@ -191,7 +191,7 @@ onMounted(() => {
       }"
     >
       <div class="relative h-full w-full">
-        <img class="h-auto w-full" src="/mud2.png" alt="" />
+        <img class="h-auto w-full" src="/mud.webp" alt="" />
       </div>
     </div>
 

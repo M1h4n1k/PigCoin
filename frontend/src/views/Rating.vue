@@ -183,13 +183,15 @@ preloadRating();
         :class="{
           'toned-image-bg':
             (row as UserPublic).tg_id === userStore.user?.tg_id ||
-            (row as Club).id === userStore.user!.club?.id,
+            (userStore.user!.club &&
+              (row as Club).id === userStore.user!.club.id),
           'cursor-pointer': activeTab === 1,
         }"
         :style="{
           position:
             (row as UserPublic).tg_id === userStore.user?.tg_id ||
-            (row as Club).id === userStore.user!.club?.id
+            (userStore.user!.club &&
+              (row as Club).id === userStore.user!.club.id)
               ? 'sticky'
               : 'static',
         }"
@@ -239,10 +241,14 @@ preloadRating();
       :header="selectedClub.name"
     >
       <!-- picture, total coins, members count and buttons to join and see the group -->
-      <div class="flex gap-4">
-        <img class="h-32 w-32" :src="selectedClub?.picture" alt="Club" />
+      <div class="flex items-center gap-4">
+        <img
+          class="h-32 w-32 rounded-xl"
+          :src="selectedClub?.picture"
+          alt="Club"
+        />
 
-        <div class="flex w-full flex-col justify-around">
+        <div class="flex flex-grow flex-col justify-around">
           <div>
             <p class="text-center">
               {{ selectedClub.members_count }}
@@ -256,16 +262,26 @@ preloadRating();
           <div class="mt-0.5 flex w-full flex-col">
             <button
               @click="openLink(selectedClub.tg_link)"
-              class="w-full rounded-xl border px-4 py-2"
+              class="flex w-full items-center justify-center rounded-xl border px-4 py-2"
             >
-              {{ $t("rating.see_channel") }}
+              {{ $t("club.see_channel") }}
+              <svg
+                class="ml-1"
+                height="20px"
+                width="20px"
+                viewBox="0 0 100 100"
+              >
+                <path
+                  d="M50.0 16.7L50.0 16.7L49.7 17.0Q49.0 18.3 48.7 19.7Q48.3 21.0 48.0 23.3L48.0 23.3L48.0 30.3Q30.7 31.7 20.3 42.7L20.3 42.7Q10.7 52.7 7.3 70.3L7.3 70.3L6.3 75.7L6.3 79L7.3 80.7Q9.0 83.7 12.3 83.7L12.3 83.7L13.7 83.7Q14.3 83.7 14.7 83.3L14.7 83.3L23.0 77Q33.0 69 47.3 68L47.3 68L48.0 68L48.0 74Q48.0 77 48.5 78.5Q49.0 80 50.0 81.3L50.0 81.3Q52.7 84.3 56.7 84.3L56.7 84.3L57.7 84Q59.3 84 61.3 82.7L61.3 82.7L91.3 55.0Q92.7 53.3 93.3 51.7L93.3 51.7Q94.3 49.0 93.3 46.3L93.3 46.3Q93.0 44.7 91.7 43.3L91.7 43.3L64.7 18.3L61.0 15.0Q59.3 14.0 57.7 13.7L57.7 13.7L56.7 13.7Q52.7 13.3 50.0 16.7ZM56.3 34.3L56.7 22.3L57.7 23.0L85.7 49.0L58.7 73.7L56.7 75.7L56.3 63.7Q56.3 61.7 55.2 60.5Q54.0 59.3 52.3 59.3L52.3 59.3Q30.7 59.3 16.7 71.3L16.7 71.3L15.7 72L15.7 72Q18.7 56.0 27.0 47.7L27.0 47.7Q36.3 38.7 52.3 38.7L52.3 38.7Q54.0 38.7 55.2 37.3Q56.3 36 56.3 34.3L56.3 34.3Z"
+                ></path>
+              </svg>
             </button>
             <button
               v-if="selectedClub.id !== userStore.user?.club_id"
               @click="joinClub(selectedClub!)"
               class="mt-2 w-full rounded-xl border px-4 py-2 font-semibold"
             >
-              {{ $t("rating.join") }}
+              {{ $t("club.join") }}
             </button>
           </div>
         </div>

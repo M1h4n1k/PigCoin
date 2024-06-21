@@ -29,7 +29,7 @@ onUnmounted(() => {
 <template>
   <div
     ref="modalEl"
-    class="fixed bottom-0 w-full rounded-t-xl bg-white opacity-100 transition-all duration-150 ease-in-out"
+    class="fixed bottom-0 w-full rounded-t-xl border-2 bg-white opacity-100 shadow-2xl transition-all duration-150 ease-in-out"
   >
     <p class="border-b-2 px-4 py-2 text-center text-2xl font-bold">
       {{ header }}

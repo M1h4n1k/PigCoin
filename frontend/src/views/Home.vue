@@ -66,7 +66,7 @@ onMounted(() => {
   <div id="container" class="flex h-screen flex-col justify-between pb-8 pt-2">
     <div
       v-if="userStore.autoCoins !== null && userStore.autoCoins > 0"
-      class="toned-image-bg absolute left-1/2 top-1/2 z-30 flex h-48 w-80 max-w-full -translate-x-1/2 -translate-y-1/2 transform flex-col items-center justify-center rounded-xl px-10"
+      class="absolute left-1/2 top-1/2 z-30 flex h-48 w-80 max-w-full -translate-x-1/2 -translate-y-1/2 transform flex-col items-center justify-center rounded-xl !border-2 bg-white px-10 shadow-2xl"
     >
       <div class="text-center">
         <h3 class="text-2xl font-bold"></h3>
@@ -85,7 +85,7 @@ onMounted(() => {
     </div>
 
     <div class="px-3">
-      <HomeSquadHeader v-if="userStore.user?.club" />
+      <HomeSquadHeader />
       <HomeUserStatsHeader class="mt-3" />
     </div>
     <div class="select-none" ref="noseContainer">

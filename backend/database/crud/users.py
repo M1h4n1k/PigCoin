@@ -59,7 +59,7 @@ def decrease_user_energy(db: Session, user: models.User, energy: int) -> models.
     return user
 
 
-def update_user_club(db: Session, user: models.User, club_id: int) -> None:
+def update_user_club(db: Session, user: models.User, club_id: int | None) -> None:
     user.club_id = club_id
     db.commit()
     return

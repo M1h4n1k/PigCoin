@@ -7,6 +7,19 @@
   "common.coins": "коинов | коин | коина | коинов",
   "common.no_data": "Пока нет данных",
 
+  "club.see_channel": "Открыть канал",
+  "club.leave": "Покинуть",
+  "club.invite": "Пригласить",
+  "club.join": "Вступить",
+  "club.create": "Присоединиться к клубу",
+
+  "club.create.title": "Создай или присоединись к клубу",
+  "club.create.compete": "Соревнуйтесь в рейтинге",
+  "club.create.prizes": "Выигрывайте призы",
+  "club.create.input_placeholder": "Ссылка на канал",
+  "club.create.button": "Создать",
+  "club.create.invalid": "Неверная ссылка на канал",
+
   "error.no_coins": "Недостаточно коинов",
   "error.no_boost": "Такие бусты закончились",
 
@@ -25,8 +38,6 @@
 
   "rating.option.1": "Свинопасы",
   "rating.option.2": "Хлева",
-  "rating.see_channel": "Посмотреть канал",
-  "rating.join": "Вступить",
   "rating.leagues": "Бронза | Золото | Алмаз",
 
   "minigame.game_over": "Время вышло!",

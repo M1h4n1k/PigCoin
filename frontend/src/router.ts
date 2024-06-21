@@ -6,6 +6,7 @@ const Boosts = () => import("@/views/Boosts.vue");
 const Tasks = () => import("@/views/Tasks.vue");
 const Frens = () => import("@/views/Frens.vue");
 const Club = () => import("@/views/Club.vue");
+const CreateClub = () => import("@/views/CreateClub.vue");
 const MiniGame = () => import("@/views/MiniGame.vue");
 
 const routes = [
@@ -15,6 +16,7 @@ const routes = [
   { path: "/tasks", component: Tasks },
   { path: "/frens", component: Frens },
   { path: "/club", component: Club },
+  { path: "/createClub", component: CreateClub },
   { path: "/minigame", component: MiniGame },
 ];
 
