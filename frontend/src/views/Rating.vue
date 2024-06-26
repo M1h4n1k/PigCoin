@@ -261,7 +261,7 @@ preloadRating();
           </div>
           <div class="mt-0.5 flex w-full flex-col">
             <button
-              @click="openLink(selectedClub.tg_link)"
+              @click="openLink('https://t.me/' + selectedClub.tg_tag)"
               class="flex w-full items-center justify-center rounded-xl border px-4 py-2"
             >
               {{ $t("club.see_channel") }}

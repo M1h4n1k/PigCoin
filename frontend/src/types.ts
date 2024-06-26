@@ -4,7 +4,7 @@ type Club = {
   picture: string;
   membersCount: number;
   total_coins: number;
-  tg_link: string;
+  tg_tag: string;
   league: number;
   members_count: number;
 };

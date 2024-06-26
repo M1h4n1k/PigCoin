@@ -96,7 +96,7 @@ onUnmounted(() => {
           </p>
         </div>
         <button
-          @click="openLink(userStore.user!.club!.tg_link)"
+          @click="openLink('https://t.me/' + userStore.user!.club!.tg_tag)"
           class="toned-image-bg mt-0.5 flex w-full cursor-pointer items-center justify-center rounded-xl !border-2 px-4 py-2 font-medium"
         >
           {{ $t("club.see_channel") }}
@@ -111,7 +111,7 @@ onUnmounted(() => {
 
     <div class="mt-2 flex w-full gap-1">
       <button
-        @click="openLink(userStore.user!.club!.tg_link)"
+        @click="openLink('https://t.me/' + userStore.user!.club!.tg_tag)"
         class="toned-image-bg flex w-1/2 cursor-pointer items-center justify-center rounded-xl !border-2 px-2 py-2 font-medium"
       >
         {{ $t("club.invite") }}

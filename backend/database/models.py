@@ -23,6 +23,7 @@ class User(Base):
     club_id: Mapped[int] = mapped_column(
         BIGINT, ForeignKey('clubs.id', ondelete='SET NULL'), index=True, nullable=True
     )
+    club: Mapped['Club'] = relationship('Club', back_populates='members')
     blocked: Mapped[bool] = mapped_column(Boolean, default=False)
     cheated_count: Mapped[int] = mapped_column(BIGINT, default=0)
 
@@ -136,7 +137,6 @@ class User(Base):
         'UserBoost', order_by='UserBoost.boost_id.asc()', lazy='dynamic'
     )
 
-    club: Mapped['Club'] = relationship('Club', back_populates='members')
     referrals: Mapped[list['User']] = relationship(
         'User', remote_side=[referrer_tg_id], order_by='User.total_coins.desc()'
     )
@@ -177,7 +177,9 @@ class Club(Base):
     id: Mapped[int] = mapped_column(BIGINT, unique=True, primary_key=True)
     name: Mapped[str] = mapped_column(VARCHAR(255))
     picture: Mapped[str] = mapped_column(VARCHAR(255))
-    tg_link: Mapped[str] = mapped_column(VARCHAR(255))
+    tg_tag: Mapped[str] = mapped_column(VARCHAR(255), index=True)
+
+    creator_tg_id: Mapped[int] = mapped_column(BIGINT)
 
     total_coins: Mapped[int] = mapped_column(BIGINT, default=0)
     members: Mapped[list['User']] = relationship(

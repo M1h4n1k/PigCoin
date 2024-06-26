@@ -15,6 +15,10 @@ def get_club(db: Session, club_id: int) -> models.Club | None:
     return db.get(models.Club, club_id)
 
 
+def get_club_by_name(db: Session, name: str) -> models.Club | None:
+    return db.query(models.Club).filter(models.Club.tg_tag == name).first()
+
+
 def get_clubs_within_coins_range(db: Session, min_total_coins: int, max_total_coins: int | None, offset: int, limit: int) -> list:
     qr = db.query(models.Club).filter(models.Club.total_coins >= min_total_coins)
     if max_total_coins:

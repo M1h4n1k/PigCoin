@@ -5,7 +5,7 @@ class Club(BaseModel):
     id: int
     name: str
     picture: str
-    tg_link: str
+    tg_tag: str
     total_coins: int
     league: int
     members_count: int

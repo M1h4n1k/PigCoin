@@ -4,6 +4,11 @@ from sqlalchemy.orm import Session
 from dependencies import get_db, get_tg_data, get_user, validate_tg_data
 import orjson
 from utils import get_user_league_range
+from bot import bot, TOKEN
+import re
+from hashlib import sha1
+import os
+
 
 router = APIRouter(prefix='/user', responses={
     400: {'description': 'No tg_data or invalid hash'},
@@ -23,13 +28,25 @@ async def login(
     if not validate_tg_data(tg_data):
         raise HTTPException(status_code=403, detail='Invalid hash')
     response.set_cookie(key='tg_data', value=tg_data, httponly=True)
-    user = crud.users.get_user(db, orjson.loads(tg_data)['user']['id'])
+    tg_data_dict = orjson.loads(tg_data)['user']['id']
+    user = crud.users.get_user(db, tg_data_dict)
     if not user:
-        tg_data_dict = orjson.loads(tg_data)
+        profile_pictures = await bot.get_user_profile_photos(user.tg_id, limit=1)
+        picture_path = '/pig_ava.png'
+        if profile_pictures.total_count:
+            profile_picture_file = await bot.get_file(profile_pictures.photos[0][0].file_id)
+            extension = profile_picture_file.file_path.split('.')[-1]
+            if re.match(r'[^a-zA-z0-9]', extension):
+                raise Exception('Invalid extension')
+            file_name = sha1(f'{user.tg_id}{TOKEN}'.encode()).hexdigest()
+            await bot.download_file(
+                profile_picture_file.file_path, os.path.join('photos', f'{file_name}.{extension}')
+            )
+            picture_path = f'/api/photos/{file_name}.{extension}'
         crud.users.create_user(db, schemas.UserCreate(
             tg_id=tg_data_dict['user']['id'],
             username=tg_data_dict['user']['first_name'],
-            picture='',
+            picture=picture_path,
         ))
         user = crud.users.get_user(db, tg_data_dict['user']['id'])
     return user

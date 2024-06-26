@@ -12,16 +12,20 @@ const userStore = useUserStore();
 const alertStore = useAlertStore();
 const channelLink = ref("");
 
+const formatChannelLink = (link: string) => {
+  const banWords = ["https://", "http://", "t.me/", "@"];
+  let channelTag = link.trim().toLowerCase();
+  for (const word of banWords) {
+    channelTag = channelTag.replace(word, "");
+  }
+  return channelTag;
+};
+
 const validateChannelLink = computed(() => {
   if (channelLink.value === "") {
     return -1;
   }
-  const banWords = ["https://", "http://", "t.me/", "@"];
-  let channelTag = channelLink.value.trim().toLowerCase();
-  for (const word of banWords) {
-    channelTag = channelTag.replace(word, "");
-  }
-  console.log(channelTag);
+  const channelTag = formatChannelLink(channelLink.value);
   // regex [0-9a-z_]+
   if (/[^0-9a-z_]/.test(channelTag)) {
     return 1;
@@ -36,7 +40,7 @@ const createClub = () => {
   fetch(import.meta.env.VITE_API_URL + "/clubs/", {
     method: "POST",
     credentials: "include",
-    body: channelLink.value,
+    body: formatChannelLink(channelLink.value),
   })
     .then((res) => {
       if (!res.ok) {
