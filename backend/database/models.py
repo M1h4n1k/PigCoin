@@ -177,7 +177,7 @@ class Club(Base):
     id: Mapped[int] = mapped_column(BIGINT, unique=True, primary_key=True)
     name: Mapped[str] = mapped_column(VARCHAR(255))
     picture: Mapped[str] = mapped_column(VARCHAR(255))
-    tg_tag: Mapped[str] = mapped_column(VARCHAR(255), index=True)
+    tg_tag: Mapped[str] = mapped_column(VARCHAR(255), unique=True, index=True)
 
     creator_tg_id: Mapped[int] = mapped_column(BIGINT)
 

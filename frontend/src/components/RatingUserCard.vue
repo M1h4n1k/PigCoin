@@ -37,7 +37,12 @@ defineProps({
       {{ rating }}
     </span>
     <div class="flex items-center">
-      <img class="h-10 w-10 rounded-full" alt="" :src="picture" />
+      <img
+        class="h-10 w-10 rounded-full"
+        draggable="false"
+        alt=""
+        :src="picture"
+      />
       <div class="ml-2">
         <p class="font-medium">{{ name }}</p>
         <p class="flex items-center text-gray-600">

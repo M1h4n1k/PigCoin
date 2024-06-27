@@ -23,15 +23,20 @@ const lastCleanedDirtPosition = ref<{ x: number; y: number }>({ x: 0, y: 0 });
 const coinsCollectedBatch = ref(0);
 
 const touchMove = (e: TouchEvent | MouseEvent) => {
-  bubblesSkipCounter.value++;
-  if (bubblesSkipCounter.value % 2 !== 0) return;
-  bubblesSkipCounter.value %= 2;
-  if (!cleaning.value) return;
   e.preventDefault();
+  if (!cleaning.value) return;
+
+  bubblesSkipCounter.value++;
+  if (bubblesSkipCounter.value % 17 === 0)
+    Telegram.WebApp.HapticFeedback.impactOccurred("light");
+  if (bubblesSkipCounter.value % 2 === 0) return;
+  bubblesSkipCounter.value %= 2 * 17;
 
   // Calculate bubble position relative to cursor
-  const x = e.clientX - container.value!.getBoundingClientRect().left;
-  const y = e.clientY - container.value!.getBoundingClientRect().top;
+  const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
+  const clientY = "touches" in e ? e.touches[0].clientY : e.clientY;
+  const x = clientX - container.value!.getBoundingClientRect().left;
+  const y = clientY - container.value!.getBoundingClientRect().top;
   const bubbleSize = Math.random() * 15 + 15; // Random bubble size (15px - 30px)
   const speed = Math.random() * 0.5 + 0.5; // Random speed (0.5 - 1)
 
@@ -172,8 +177,8 @@ onMounted(() => {
     />
 
     <!-- dirt -->
-    <div
-      class="absolute z-10 flex select-none rounded-full border-black border-opacity-50 transition-opacity duration-500"
+    <img
+      class="absolute z-10 flex h-auto w-full select-none rounded-full border-black border-opacity-50 transition-opacity duration-500"
       v-for="(dirtyBubble, ind) in dirtyBubbles"
       :key="ind"
       @mousedown="(e) => e.preventDefault()"
@@ -189,11 +194,9 @@ onMounted(() => {
         // backgroundColor: dirtyBubble.color,
         // transform: `rotate(${dirtyBubble.rotation}deg)`,
       }"
-    >
-      <div class="relative h-full w-full">
-        <img class="h-auto w-full" src="/mud.webp" alt="" />
-      </div>
-    </div>
+      src="/mud.webp"
+      alt=""
+    />
 
     <!-- If I move it to the bubble component it will inherit the opacity and disappear quite quickly -->
     <span
@@ -221,7 +224,7 @@ onMounted(() => {
 
 <style scoped>
 .bubble {
-  animation: bubble-animation forwards 0.8s ease-in-out; /* Initial animation */
+  animation: bubble-animation forwards 0.8s linear; /* Initial animation */
 }
 /* animation: move 3000ms infinite alternate ease-in-out; */
 @keyframes bubble-animation {
@@ -244,7 +247,7 @@ onMounted(() => {
     0 2px black,
     2px 0 black,
     0 -2px black;
-  animation: number-animation forwards 1s ease-in-out; /* Initial animation */
+  animation: number-animation forwards 1s linear; /* Initial animation */
 }
 
 @keyframes number-animation {

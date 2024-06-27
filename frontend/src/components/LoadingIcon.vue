@@ -5,9 +5,9 @@
     <svg
       aria-hidden="true"
       class="animate-spin"
-      color="#aaa"
+      color="#999999"
       viewBox="0 0 100 100"
-      fill="#ee0000"
+      fill="#40a7e3"
       xmlns="http://www.w3.org/2000/svg"
     >
       <path

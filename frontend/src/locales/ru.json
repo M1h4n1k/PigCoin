@@ -53,5 +53,8 @@
   "boosts.sponge": "Губка",
   "boosts.bottle_capacity": "Вместимость",
   "boosts.refill_rate": "Скорость наполнения",
-  "boosts.herdsman": "Авто-свинопас"
+  "boosts.herdsman": "Авто-свинопас",
+
+  "invite.default": "как первоначальный бонус",
+  "invite.premium": "если у вас есть Telegram Premium"
 }

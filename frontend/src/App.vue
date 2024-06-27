@@ -73,7 +73,8 @@ const spawnCloudInterval = setInterval(() => spawnCloud(), 5000);
       src="/farmbg.svg"
       id="bg"
       alt=""
-      class="fixed top-0 -z-10 object-cover"
+      draggable="false"
+      class="fixed top-0 -z-10 select-none object-cover"
     />
     <div>
       <BgCloud

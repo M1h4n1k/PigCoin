@@ -15,6 +15,18 @@ router = APIRouter(prefix='/user', responses={
 })
 
 
+def parse_start_param(start_param: str | None) -> dict:
+    if start_param is None:
+        return {}
+    if not re.match(r'^[\da-f]+(_[\da-f]+)?$', start_param):
+        raise HTTPException(status_code=400, detail='Invalid start_param')
+    start_param_split = start_param.split('_')
+    return {
+        'userId': int(start_param_split[0], 16),
+        'clubId': int(start_param_split[1], 16) * -1 if len(start_param_split) > 1 else None,
+    }
+
+
 @router.post(
     '/login',
     response_model=schemas.UserPrivate,
@@ -28,8 +40,10 @@ async def login(
     if not validate_tg_data(tg_data):
         raise HTTPException(status_code=403, detail='Invalid hash')
     response.set_cookie(key='tg_data', value=tg_data, httponly=True)
-    tg_data_dict = orjson.loads(tg_data)['user']['id']
-    user = crud.users.get_user(db, tg_data_dict)
+    tg_data_dict = orjson.loads(tg_data)
+    user = crud.users.get_user(db, tg_data_dict['user']['id'])
+    start_param_data = parse_start_param(tg_data_dict.get('start_param'))
+
     if not user:
         profile_pictures = await bot.get_user_profile_photos(user.tg_id, limit=1)
         picture_path = '/pig_ava.png'
@@ -43,12 +57,16 @@ async def login(
                 profile_picture_file.file_path, os.path.join('photos', f'{file_name}.{extension}')
             )
             picture_path = f'/api/photos/{file_name}.{extension}'
+
         crud.users.create_user(db, schemas.UserCreate(
             tg_id=tg_data_dict['user']['id'],
             username=tg_data_dict['user']['first_name'],
             picture=picture_path,
+            referrer_tg_id=start_param_data.get('userId'),
         ))
         user = crud.users.get_user(db, tg_data_dict['user']['id'])
+    if start_param_data.get('clubId'):
+        crud.users.update_user_club(db, user, start_param_data['clubId'])
     return user
 
 

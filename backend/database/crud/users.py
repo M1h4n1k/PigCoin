@@ -60,7 +60,14 @@ def decrease_user_energy(db: Session, user: models.User, energy: int) -> models.
 
 
 def update_user_club(db: Session, user: models.User, club_id: int | None) -> None:
+    from . import clubs
+    if user.club_id:
+        clubs.remove_member_from_club(db, user.club_id)
+        clubs.update_clubs_total_coins(db, user.club_id, user.total_coins * -1)
     user.club_id = club_id
+    if club_id:
+        clubs.add_member_to_club(db, club_id)
+        clubs.update_clubs_total_coins(db, club_id, user.total_coins)
     db.commit()
     return
 

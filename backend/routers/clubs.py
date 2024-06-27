@@ -65,7 +65,8 @@ async def create_club(
             picture_path = f'/api/photos/{file_name}.{extension}'
 
         club = models.Club(
-            name=club_tag,
+            id=channel.id,
+            name=channel.title,
             picture=picture_path,
             tg_tag=club_tag,
             creator_tg_id=user.tg_id,
@@ -75,8 +76,6 @@ async def create_club(
         crud.clubs.create_club(db, club)
 
     crud.users.update_user_club(db, user, club.id)
-    crud.clubs.add_member_to_club(db, club.id)
-    crud.clubs.update_clubs_total_coins(db, club.id, user.total_coins)
 
     return user
 
@@ -95,12 +94,7 @@ async def join_club(
     club = crud.clubs.get_club(db, club_id)
     if not club:
         raise HTTPException(status_code=404, detail='Club not found')
-    if user.club_id:
-        crud.clubs.update_clubs_total_coins(db, user.club_id, user.total_coins * -1)
-        crud.clubs.remove_member_from_club(db, user.club_id)
     crud.users.update_user_club(db, user, club_id)
-    crud.clubs.add_member_to_club(db, club_id)
-    crud.clubs.update_clubs_total_coins(db, club_id, user.total_coins)
 
     return club
 
@@ -117,9 +111,6 @@ async def leave_club(
 ):
     if not user.club_id:
         raise HTTPException(status_code=404, detail='User not in club')
-    club = crud.clubs.get_club(db, user.club_id)
-    crud.clubs.update_clubs_total_coins(db, user.club_id, user.total_coins * -1)
-    crud.clubs.remove_member_from_club(db, user.club_id)
     crud.users.update_user_club(db, user, None)
 
     return user

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import HomeSquadHeader from "@/components/HomeSquadHeader.vue";
 import HomeUserStatsHeader from "@/components/HomeUserStatsHeader.vue";
-import HomePorkSnout from "@/components/HomePorkSnout.vue";
+import HomePorkNose from "@/components/HomePorkNose.vue";
 import HomeFooterActions from "@/components/HomeFooterActions.vue";
 import { ref, Ref, onMounted } from "vue";
 import { useUserStore } from "@/store";
@@ -89,7 +89,7 @@ onMounted(() => {
       <HomeUserStatsHeader class="mt-3" />
     </div>
     <div class="select-none" ref="noseContainer">
-      <HomePorkSnout />
+      <HomePorkNose />
     </div>
     <HomeFooterActions class="z-30 px-3" />
   </div>

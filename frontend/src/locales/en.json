@@ -44,7 +44,6 @@
   "minigame.your_score": "Your score",
   "minigame.ok": "OK",
 
-
   "boosts": "Boosters",
   "boosts.balance": "balance",
   "boosts.available": "available",
@@ -54,5 +53,8 @@
   "boosts.sponge": "Sponge",
   "boosts.bottle_capacity": "Bottle capacity",
   "boosts.refill_rate": "Refill rate",
-  "boosts.herdsman": "herdsman"
+  "boosts.herdsman": "herdsman",
+
+  "invite.default": "as a first time gift",
+  "invite.premium": "if you have Telegram Premium"
 }

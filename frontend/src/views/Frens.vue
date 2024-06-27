@@ -3,6 +3,7 @@ import { ref } from "vue";
 import RatingUserCard from "@/components/RatingUserCard.vue";
 import { useUserStore } from "@/store";
 import LoadingIcon from "@/components/LoadingIcon.vue";
+import { shareInviteLink } from "@/utils.ts";
 
 const userStore = useUserStore();
 const loading = ref(userStore.referrals.length === 0);
@@ -49,6 +50,7 @@ if (userStore.referrals.length === 0) {
     </div>
 
     <button
+      @click="shareInviteLink(userStore.user!.tg_id)"
       class="mt-4 w-full rounded-full bg-[#2481cc] px-5 py-2 font-semibold text-white hover:!bg-[#1a8ad5]"
     >
       {{ $t("frens.invite.cta") }}

@@ -34,11 +34,11 @@ def get_club_league_range(legion: int) -> tuple[int, int | None]:
 def get_locale(msg: str, lang: str) -> str:
     locales = {
         'en': {
-            'start': 'Hello',
+            'start': 'Start playing',
             'open': 'Open',
         },
         'ru': {
-            'start': 'Привет',
+            'start': 'Начать играть',
             'open': 'Открыть',
         }
     }

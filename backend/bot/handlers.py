@@ -12,7 +12,7 @@ async def default_handler(message: Message):
     if message.text is None:
         return await message.answer(__('start', message.from_user.language_code))
     kb = types.InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(
-        text=__('open', message.from_user.language_code) + WEB_LINK,
+        text=__('open', message.from_user.language_code),
         web_app=WebAppInfo(url=WEB_LINK))
     ]])
     await message.answer(

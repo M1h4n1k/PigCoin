@@ -2,7 +2,7 @@
 import { ref, onMounted, onUnmounted } from "vue";
 import RatingUserCard from "@/components/RatingUserCard.vue";
 import { useUserStore } from "@/store.ts";
-import { openLink } from "@/utils.ts";
+import { openLink, shareInviteLink } from "@/utils.ts";
 import RatingRowCard from "@/components/RatingUserCard.vue";
 import LoadingIcon from "@/components/LoadingIcon.vue";
 import { useRouter } from "vue-router";
@@ -77,6 +77,7 @@ onUnmounted(() => {
     <div class="flex w-full gap-4">
       <img
         class="h-32 w-32 rounded-xl"
+        draggable="false"
         :src="userStore.user!.club?.picture"
         alt="club"
       />
@@ -111,7 +112,7 @@ onUnmounted(() => {
 
     <div class="mt-2 flex w-full gap-1">
       <button
-        @click="openLink('https://t.me/' + userStore.user!.club!.tg_tag)"
+        @click="shareInviteLink(userStore.user!.tg_id, userStore.user?.club_id)"
         class="toned-image-bg flex w-1/2 cursor-pointer items-center justify-center rounded-xl !border-2 px-2 py-2 font-medium"
       >
         {{ $t("club.invite") }}
@@ -158,19 +159,19 @@ onUnmounted(() => {
         :is-you="row.tg_id === userStore.user?.tg_id"
       />
 
-      <div v-if="loading" class="flex w-full items-center justify-center p-4">
-        <LoadingIcon />
-      </div>
-
       <RatingRowCard
         v-if="userStore.user!.position_in_club! > userStore.clubMembers.length"
         class="toned-image-bg sticky bottom-0 top-0 rounded-xl p-2"
         :picture="userStore.user!.picture"
-        :rating="userStore.user!.position"
+        :rating="userStore.user!.position_in_club"
         :coins="userStore.user!.total_coins"
         :name="userStore.user!.username"
         :is-you="true"
       />
+
+      <div v-if="loading" class="flex w-full items-center justify-center p-4">
+        <LoadingIcon />
+      </div>
     </div>
   </div>
 </template>
