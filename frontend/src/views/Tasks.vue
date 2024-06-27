@@ -23,20 +23,27 @@ if (tasksStore.tasks.length === 0) {
   <div class="px-3">
     <div class="toned-bg mt-4 pb-3 text-center">
       <p class="text-7xl">
-        <img class="inline h-14 w-14" src="/pigNoseCoin.svg" alt="🐽" />
+        <img
+          class="inline h-14 w-14"
+          draggable="false"
+          src="/pigNoseCoin.svg"
+          alt="🐽"
+        />
       </p>
       <p class="text-4xl">
         {{ $t("tasks.earn") }}
       </p>
     </div>
     <div
-      class="toned-bg mt-8 flex flex-col justify-around gap-4 rounded-xl p-5"
+      class="toned-bg mt-4 flex flex-col justify-around gap-3 rounded-xl p-5"
     >
       <TaskCard
         v-for="t in tasksStore.tasks"
         :key="t"
+        :id="t.id"
         :picture="t.picture"
         :reward="t.reward"
+        :link="t.link"
         :type="t.type"
         :completed="t.completed"
       />

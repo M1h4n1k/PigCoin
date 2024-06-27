@@ -6,6 +6,7 @@ from datetime import datetime
 async def on_pre_process(hdlr, message, data):
     data['db'] = SessionLocal()
     if message and crud.users.get_user(data['db'], message.from_user.id) is None:
+        # TODO add picture loading
         user_create = schemas.UserCreate(
             tg_id=message.from_user.id,
             username=message.from_user.username,

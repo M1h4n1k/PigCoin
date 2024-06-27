@@ -50,7 +50,7 @@ if (userStore.referrals.length === 0) {
     </div>
 
     <button
-      @click="shareInviteLink(userStore.user!.tg_id)"
+      @click="shareInviteLink('user')"
       class="mt-4 w-full rounded-full bg-[#2481cc] px-5 py-2 font-semibold text-white hover:!bg-[#1a8ad5]"
     >
       {{ $t("frens.invite.cta") }}

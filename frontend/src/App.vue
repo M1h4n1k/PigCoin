@@ -98,7 +98,7 @@ const spawnCloudInterval = setInterval(() => spawnCloud(), 5000);
 
 @keyframes cloud-float {
   0% {
-    transform: translateX(150px);
+    transform: translateX(0px);
   }
   100% {
     transform: translateX(calc(-100vw - 150px));

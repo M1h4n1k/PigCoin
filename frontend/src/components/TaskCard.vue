@@ -1,14 +1,48 @@
 <script setup lang="ts">
-defineProps({
-  picture: String,
-  reward: Number,
-  type: String,
-  completed: Boolean,
+import { shareInviteLink } from "@/utils.ts";
+
+const props = defineProps({
+  id: {
+    type: Number,
+    required: true,
+  },
+  picture: {
+    type: String,
+    required: true,
+  },
+  reward: {
+    type: Number,
+    required: true,
+  },
+  link: {
+    type: String,
+    required: true,
+  },
+  type: {
+    type: String,
+    required: true,
+  },
+  completed: {
+    type: Boolean,
+    default: false,
+  },
 });
+
+const completeTask = () => {
+  if (props.completed) return;
+  if (props.type === "invite") shareInviteLink("user");
+  else Telegram.WebApp.openTelegramLink(props.link);
+};
 </script>
 
 <template>
-  <div class="flex w-full cursor-pointer items-center justify-between">
+  <div
+    @click="completeTask"
+    :style="{
+      cursor: completed ? 'auto' : 'pointer',
+    }"
+    class="flex w-full items-center justify-between"
+  >
     <div class="flex items-center">
       <div
         class="toned-image-bg flex h-[70px] w-[70px] items-center justify-center rounded-xl p-4"
@@ -19,7 +53,12 @@ defineProps({
         <p class="text-xl font-medium">{{ $t("tasks." + type) }}</p>
         <p class="text-lg">
           +{{ reward }}
-          <img class="mb-1 inline h-4 w-4" src="/pigNoseCoin.svg" alt="🐽" />
+          <img
+            class="mb-1 inline h-4 w-4"
+            src="/pigNoseCoin.svg"
+            draggable="false"
+            alt="🐽"
+          />
         </p>
       </div>
     </div>

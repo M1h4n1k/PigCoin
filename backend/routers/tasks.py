@@ -3,6 +3,8 @@ from database import crud, schemas, models
 from sqlalchemy.orm import Session
 from dependencies import get_db, get_user
 import orjson
+from bot import bot
+
 
 router = APIRouter(prefix='/tasks', responses={404: {'description': 'User not found'}})
 
@@ -24,7 +26,7 @@ async def all_tasks(
 
 
 @router.post(
-    '/complete',
+    '/{task_id}/complete',
     status_code=200,
     responses={
         400: {'description': 'Task already completed'},

@@ -112,7 +112,7 @@ onUnmounted(() => {
 
     <div class="mt-2 flex w-full gap-1">
       <button
-        @click="shareInviteLink(userStore.user!.tg_id, userStore.user?.club_id)"
+        @click="shareInviteLink('club')"
         class="toned-image-bg flex w-1/2 cursor-pointer items-center justify-center rounded-xl !border-2 px-2 py-2 font-medium"
       >
         {{ $t("club.invite") }}

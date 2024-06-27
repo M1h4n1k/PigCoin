@@ -1,4 +1,5 @@
 import i18n from "@/i18n-setup";
+import { useUserStore } from "@/store.ts";
 
 const { t } = i18n.global;
 
@@ -15,10 +16,12 @@ const getRandomNumber = (
   return random;
 };
 
-const shareInviteLink = (userId: number, clubId?: number) => {
-  let startApp = `${userId.toString(16)}`;
-  if (clubId) {
-    startApp += `_${(clubId * -1).toString(16)}`;
+// Make that I only pass type ("club" | "user") and it will automatically get the userId and clubId
+const shareInviteLink = (type: "user" | "club") => {
+  const userStore = useUserStore();
+  let startApp = `${userStore.user!.tg_id.toString(16)}`;
+  if (type === "club") {
+    startApp += `_${(userStore.user!.club_id! * -1).toString(16)}`;
   }
 
   const inviteText =

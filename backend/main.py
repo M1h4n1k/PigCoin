@@ -10,6 +10,7 @@ import asyncio
 from bot import dp, bot
 import os
 
+
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
     asyncio.create_task(dp.start_polling(bot))
@@ -28,8 +29,6 @@ app.add_middleware(
     allow_methods=['*'],
     allow_headers=['*'],
 )
-
-models.Base.metadata.create_all(bind=engine)
 
 
 if __name__ == '__main__':

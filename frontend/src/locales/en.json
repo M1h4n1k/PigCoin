@@ -21,7 +21,7 @@
   "club.create.invalid": "Invalid channel link",
 
   "error.no_coins": "Not enough coins",
-  "error.no_boost": "No such boosters left",
+  "error.no_boost": "No such boosters left, come tomorrow",
 
   "home.offline_coins": "While you were away you got",
   "home.collect": "Collect",
