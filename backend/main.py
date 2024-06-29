@@ -3,11 +3,12 @@ from routers import router
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from database.initial_population import init
+from database.initialization import init
 from contextlib import asynccontextmanager
 import asyncio
 from bot import dp, bot
 import os
+
 
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
