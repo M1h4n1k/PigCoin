@@ -1,3 +1,9 @@
+from aiogram.types import File
+from hashlib import sha1
+import re
+import os
+
+
 user_league_ranges = {
     0: (0, 499),
     1: (500, 999),
@@ -43,3 +49,17 @@ def get_locale(msg: str, lang: str) -> str:
         }
     }
     return locales.get(lang, locales['en']).get(msg)
+
+
+async def load_image(file_id: str, owner_id: int) -> str:
+    from bot import bot, TOKEN  # otherwise circular import
+
+    picture_file = await bot.get_file(file_id)
+    extension = picture_file.file_path.split('.')[-1]
+    if re.match(r'[^a-zA-z0-9]', extension):
+        raise Exception('Invalid extension')
+    file_name = sha1(f'{owner_id}{TOKEN}'.encode()).hexdigest()
+    await bot.download_file(
+        picture_file.file_path, os.path.join('photos', f'{file_name}.{extension}')
+    )
+    return f'/api/photos/{file_name}.{extension}'

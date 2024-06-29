@@ -5,10 +5,10 @@ from aiogram.types import (
     Message,
     ChatMemberUpdated
 )
-from utils import get_locale as __
-from .loader import WEB_LINK
+from utils import get_locale as __, load_image
+from .loader import WEB_LINK, bot
 from database.loader import SessionLocal
-from database import crud
+from database import crud, schemas
 
 
 async def default_handler(message: Message):
@@ -30,9 +30,20 @@ async def on_user_join(event: ChatMemberUpdated):
     }
     db = SessionLocal()
     user = crud.users.get_user(db, event.from_user.id)
-    # TODO probably it's possible that a user can join the channel without starting the bot
+    # TODO referrer will be empty in this case and it will not be possible to set it again,
+    #  but if a user has already found the channel himself then probably he will not need a referrer
     if user is None:
-        raise Exception('on_user_join (0): Not yet implemented')
+        profile_pictures = await bot.get_user_profile_photos(event.from_user.id, limit=1)
+        picture_path = '/pig_ava.png'
+        if profile_pictures.total_count:
+            picture_path = await load_image(profile_pictures.photos[0][0].file_id, event.from_user.id)
+
+        crud.users.create_user(db, schemas.UserCreate(
+            tg_id=event.from_user.id,
+            username=event.from_user.first_name,
+            picture=picture_path,
+        ))
+        user = crud.users.get_user(db, event.from_user.id)
     if any(task.id == channel_tasks[event.chat.username] for task in user.tasks_completed):
         db.close()
         return

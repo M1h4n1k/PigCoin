@@ -11,7 +11,7 @@ const { user } = storeToRefs(userStore);
   <div class="flex flex-col items-center">
     <div class="flex items-center text-5xl font-semibold">
       <span
-        class="block h-12 w-40 animate-pulse rounded-lg bg-gray-200 p-2"
+        class="block h-12 w-40 animate-pulse rounded-lg bg-slate-200 p-2"
         v-if="user === null"
       ></span>
       <span v-else class="flex items-center">

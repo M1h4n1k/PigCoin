@@ -6,8 +6,12 @@ import BarnIcon from "@/components/BarnIcon.vue";
 </script>
 
 <template>
+  <div
+    v-if="!userStore.user"
+    class="toned-bg h-12 w-full animate-pulse rounded-xl px-5 py-2"
+  />
   <RouterLink
-    v-if="userStore.user?.club"
+    v-else-if="userStore.user?.club"
     to="/club"
     class="toned-bg flex w-full cursor-pointer items-center justify-between rounded-xl px-5 py-2"
   >

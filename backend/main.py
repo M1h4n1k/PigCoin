@@ -3,13 +3,11 @@ from routers import router
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from database import models
-from database.loader import engine
+from database.initial_population import init
 from contextlib import asynccontextmanager
 import asyncio
 from bot import dp, bot
 import os
-
 
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
@@ -21,6 +19,7 @@ app = FastAPI(lifespan=lifespan)
 app.include_router(router)
 os.makedirs('photos', exist_ok=True)
 app.mount('/api/photos', StaticFiles(directory='photos'), name='photos')
+init()
 
 app.add_middleware(
     CORSMiddleware,

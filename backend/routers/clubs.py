@@ -1,14 +1,12 @@
 import re
-
 from fastapi import Request, APIRouter, Depends, HTTPException, Query, Body
 from database import crud, schemas, models
 from sqlalchemy.orm import Session
 from dependencies import get_db, get_user
 from typing import Annotated
 
-import os
-from hashlib import sha1
-from bot import bot, TOKEN
+from bot import bot
+from utils import load_image
 
 
 router = APIRouter(prefix='/clubs')
@@ -41,7 +39,6 @@ async def create_club(
     user: models.User = Depends(get_user),
 ):
     if re.match(r'[^a-zA-Z0-9_]', club_tag):
-        print(repr(club_tag))
         raise HTTPException(status_code=400, detail='Invalid club tag')
     if user.club_id:
         raise HTTPException(status_code=400, detail='User already in club')
@@ -54,15 +51,7 @@ async def create_club(
 
         picture_path = '/pig_ava.png'
         if channel.photo:
-            profile_picture_file = await bot.get_file(channel.photo.small_file_id)
-            extension = profile_picture_file.file_path.split('.')[-1]
-            if re.match(r'[^a-zA-z0-9]', extension):
-                raise Exception('Invalid extension')
-            file_name = sha1(f'{channel.id}{TOKEN}'.encode()).hexdigest()
-            await bot.download_file(
-                profile_picture_file.file_path, os.path.join('photos', f'{file_name}.{extension}')
-            )
-            picture_path = f'/api/photos/{file_name}.{extension}'
+            picture_path = await load_image(channel.photo.small_file_id, channel.id)
 
         club = models.Club(
             id=channel.id,
