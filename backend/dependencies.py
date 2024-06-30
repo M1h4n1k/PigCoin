@@ -15,7 +15,7 @@ def get_db():
         db.close()
 
 
-def validate_tg_data(tg_data: str):
+def validate_tg_data(tg_data: str) -> bool:
     secret_key = hmac.new(b'WebAppData', msg=TOKEN.replace('/test', '').encode(), digestmod=sha256).digest()
     if not tg_data:
         return False

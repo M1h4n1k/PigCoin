@@ -62,7 +62,7 @@ async def create_club(
             total_coins=0,
             members_count=0,
         )
-        crud.clubs.create_club(db, club)
+        club = crud.clubs.create_club(db, club)
 
     crud.users.update_user_club(db, user, club.id)
 

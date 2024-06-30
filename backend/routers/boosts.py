@@ -53,8 +53,7 @@ async def buy_boost(
         raise HTTPException(status_code=400, detail='Not enough coins')
 
     crud.boosts.buy_boost(db, user.tg_id, boost_id, boost.type)
-    crud.users.update_user_money(db, user, -(boost.base_price + added_price))
-    db.refresh(user)
+    user = crud.users.update_user_money(db, user, -(boost.base_price + added_price))
     return user
 
 
