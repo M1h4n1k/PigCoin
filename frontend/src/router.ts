@@ -29,6 +29,7 @@ router.beforeEach((to, _, next) => {
   if (to.path === "/") {
     Telegram.WebApp.BackButton.hide();
   } else {
+    document.body.style.overflow = "scroll";
     Telegram.WebApp.BackButton.show();
   }
   Telegram.WebApp.BackButton.onClick(() => {

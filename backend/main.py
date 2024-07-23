@@ -8,6 +8,7 @@ from contextlib import asynccontextmanager
 import asyncio
 from bot import dp, bot
 import os
+from bot.loader import WEB_LINK
 
 
 @asynccontextmanager
@@ -24,7 +25,7 @@ init()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=['http://127.0.0.1:5173', 'http://84.249.17.76:5173'],
+    allow_origins=['http://127.0.0.1:5173', 'http://84.249.17.76:5173', WEB_LINK],
     allow_credentials=True,
     allow_methods=['*'],
     allow_headers=['*'],

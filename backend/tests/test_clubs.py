@@ -21,14 +21,10 @@ def test_create_join_club(mocker, dummy_user):
 
 @pytest.mark.asyncio
 async def test_create_club(mocker):
-    patch_crud_club_get = mocker.patch('routers.clubs.crud.clubs.get_club_by_name', Mock())
-    patch_crud_club_get.return_value = None
-    patch_crud_user = mocker.patch('routers.clubs.crud.users.update_user_club', Mock())
-    patch_crud_user.return_value = None
-    patch_crud_club_create = mocker.patch('routers.clubs.crud.clubs.create_club', Mock())
-    patch_crud_club_create.return_value = Mock(id=1)
-    patch_bot_get_chat = mocker.patch('routers.clubs.bot.get_chat', AsyncMock())
-    patch_bot_get_chat.return_value = Mock(photo=None)
+    patch_crud_club_get = mocker.patch('routers.clubs.crud.clubs.get_club_by_name', Mock(return_value=None))
+    patch_crud_user = mocker.patch('routers.clubs.crud.users.update_user_club', Mock(return_value=None))
+    patch_crud_club_create = mocker.patch('routers.clubs.crud.clubs.create_club', Mock(return_value=Mock(id=1)))
+    patch_bot_get_chat = mocker.patch('routers.clubs.bot.get_chat', AsyncMock(return_value=Mock(photo=None)))
 
     response = client.post('/api/clubs/', json='test')
     assert response.status_code == 201
@@ -49,8 +45,7 @@ def test_join_club(mocker):
         league=1,
         members_count=0,
     )
-    patch_crud_user = mocker.patch('routers.clubs.crud.users.update_user_club', Mock())
-    patch_crud_user.return_value = None
+    patch_crud_user = mocker.patch('routers.clubs.crud.users.update_user_club', Mock(return_value=None))
 
     response = client.post('/api/clubs/1/join')
     assert response.status_code == 200

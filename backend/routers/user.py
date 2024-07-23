@@ -43,20 +43,25 @@ async def login(
     start_param_data = parse_start_param(tg_data_dict.get('start_param'))
 
     if not user:
-        profile_pictures = await bot.get_user_profile_photos(user.tg_id, limit=1)
+        profile_pictures = await bot.get_user_profile_photos(tg_data_dict['user']['id'], limit=1)
         picture_path = '/pig_ava.png'
         if profile_pictures.total_count:
             picture_path = await load_image(profile_pictures.photos[0][0].file_id, user.tg_id)
 
-        crud.users.create_user(db, schemas.UserCreate(
+        user = crud.users.create_user(db, schemas.UserCreate(
             tg_id=tg_data_dict['user']['id'],
             username=tg_data_dict['user']['first_name'],
             picture=picture_path,
             referrer_tg_id=start_param_data.get('userId'),
         ))
-        user = crud.users.get_user(db, tg_data_dict['user']['id'])
+        if start_param_data.get('userId'):  # TODO test
+            referrer = crud.users.get_user(db, start_param_data['userId'])
+            crud.users.update_user_money(db, user, 25000 if tg_data_dict['user'].get('is_premium') else 5000)
+            crud.users.update_user_money(db, referrer, 25000 if tg_data_dict['user'].get('is_premium') else 5000)
+
     if start_param_data.get('clubId'):
         crud.users.update_user_club(db, user, start_param_data['clubId'])
+
     return user
 
 

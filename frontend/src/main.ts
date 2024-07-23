@@ -20,6 +20,9 @@ const userStore = useUserStore();
 
 app.mount("#app");
 
+document.documentElement.style.overflow = "hidden";
+document.documentElement.style.height = "100dvh";
+
 fetch(import.meta.env.VITE_API_URL + "/user/login", {
   method: "POST",
   headers: {
@@ -36,6 +39,10 @@ fetch(import.meta.env.VITE_API_URL + "/user/login", {
   .then((response) => response.json())
   .then((data) => {
     userStore.user = data;
+    Telegram.WebApp.expand();
+    Telegram.WebApp.enableClosingConfirmation();
+    // Telegram.WebApp.MainButton.show();
+    // Telegram.WebApp.MainButton.hide();
   })
   .catch((error) => {
     const alertStore = useAlertStore();

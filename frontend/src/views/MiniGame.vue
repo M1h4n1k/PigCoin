@@ -97,7 +97,7 @@ const exitGame = () => {
 </script>
 
 <template>
-  <div class="relative h-screen w-full p-2">
+  <div class="h-tg-screen relative w-full p-2">
     <div
       v-if="game.timer === 0"
       class="toned-image-bg absolute left-1/2 top-1/2 z-10 flex h-48 w-80 max-w-full -translate-x-1/2 -translate-y-1/2 transform flex-col items-center justify-center rounded-xl px-10"

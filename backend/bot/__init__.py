@@ -1,4 +1,4 @@
-from .middlewares import on_pre_process
+from .middlewares import create_user
 from .handlers import *
 from .loader import dp, TOKEN, bot
 from aiogram.filters import IS_MEMBER, IS_NOT_MEMBER, ChatMemberUpdatedFilter
@@ -6,7 +6,7 @@ from aiogram.filters import IS_MEMBER, IS_NOT_MEMBER, ChatMemberUpdatedFilter
 
 
 def register_handlers():
-    dp.message.middleware(on_pre_process)
+    dp.message.middleware(create_user)
     dp.message.register(default_handler)
     dp.chat_member.register(on_user_join, ChatMemberUpdatedFilter(IS_NOT_MEMBER >> IS_MEMBER))
 

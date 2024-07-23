@@ -23,13 +23,10 @@ const lastCleanedDirtPosition = ref<{ x: number; y: number }>({ x: 0, y: 0 });
 const coinsCollectedBatch = ref(0);
 
 const touchMove = (e: TouchEvent | MouseEvent) => {
-  e.preventDefault();
   if (!cleaning.value) return;
 
   bubblesSkipCounter.value++;
-  if (bubblesSkipCounter.value % 17 === 0)
-    Telegram.WebApp.HapticFeedback.impactOccurred("light");
-  if (bubblesSkipCounter.value % 2 === 0) return;
+  // if (bubblesSkipCounter.value % 2 === 0) return;
   bubblesSkipCounter.value %= 2 * 17;
 
   // Calculate bubble position relative to cursor
@@ -56,6 +53,19 @@ const touchMove = (e: TouchEvent | MouseEvent) => {
     direction: `ray(${Math.random() * 360}deg at ${x}px ${y}px)`, // Initial direction
     speed,
   };
+
+  for (let i = 0; i < dirtyBubbles.value.length; i++) {
+    if (dirtyBubbles.value[i].hidden) {
+      continue;
+    }
+    const dx = dirtyBubbles.value[i].x - x;
+    const dy = dirtyBubbles.value[i].y - y;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    if (distance < dirtyBubbles.value[i].size / 2) {
+      cleanDirtyBubble(i);
+    }
+  }
+
   bubblesI.value++;
 };
 
@@ -66,6 +76,7 @@ const cleanDirtyBubble = (index: number) => {
   if (collectCoin()) {
     dirtyBubbles.value[index].price = userStore.user!.click_price;
   }
+  Telegram.WebApp.HapticFeedback.impactOccurred("light");
   dirtyBubbles.value[index].hidden = true;
   setTimeout(
     () => {
@@ -87,7 +98,7 @@ const cleanDirtyBubble = (index: number) => {
       dirtyBubbles.value[index] = {
         x: lastCleanedDirtPosition.value.x,
         y: lastCleanedDirtPosition.value.y,
-        size: Math.random() * 20 + 20, // Random bubble size (20px - 40px)
+        size: 100, // Random bubble size (20px - 40px)
         color: dirtyColors[Math.floor(Math.random() * dirtyColors.length)],
         hidden: false,
         price: 0,
@@ -154,10 +165,10 @@ onMounted(() => {
     ref="container"
     class="relative overflow-y-visible px-4 py-8"
     @mousedown="cleaning = true"
-    @mousemove="touchMove"
+    @mousemove.prevent="touchMove"
     @mouseup="cleaning = false"
     @touchstart="cleaning = true"
-    @touchmove="touchMove"
+    @touchmove.prevent="touchMove"
     @touchend="cleaning = false"
   >
     <!-- soap -->
@@ -178,12 +189,10 @@ onMounted(() => {
 
     <!-- dirt -->
     <img
-      class="absolute z-10 flex h-auto w-full select-none rounded-full border-black border-opacity-50 transition-opacity duration-500"
+      class="absolute z-10 flex h-auto w-full select-none rounded-full transition-opacity duration-500"
       v-for="(dirtyBubble, ind) in dirtyBubbles"
       :key="ind"
-      @mousedown="(e) => e.preventDefault()"
       @mouseover="cleanDirtyBubble(ind)"
-      @touchmove="cleanDirtyBubble(ind)"
       :style="{
         left: dirtyBubble.x - dirtyBubble.size / 2 + 'px',
         top: dirtyBubble.y - dirtyBubble.size / 2 + 'px',

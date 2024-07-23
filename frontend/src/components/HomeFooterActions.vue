@@ -6,7 +6,7 @@ const userStore = useUserStore();
 
 <template>
   <div class="flex items-center justify-between">
-    <div class="toned-bg flex h-full items-center rounded-xl px-2 pl-3">
+    <div class="toned-bg flex h-16 items-center rounded-xl px-2 pl-3">
       <img alt="🧼" class="-ml-3 h-11 w-11" src="/bottle.png" />
       <div class="flex flex-col">
         <span
