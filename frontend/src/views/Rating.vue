@@ -9,6 +9,7 @@ import { Club, UserPublic } from "@/types.ts";
 import { useRouter } from "vue-router";
 import { openLink } from "@/utils.ts";
 import LoadingIcon from "@/components/LoadingIcon.vue";
+import IconArrowRight from "@/components/IconArrowRight.vue";
 
 const router = useRouter();
 
@@ -19,7 +20,6 @@ const activeTab = ref(0);
 const league = ref(userStore.user?.league ?? 0);
 const tabNames: ["users", "clubs"] = ["users", "clubs"];
 
-const rowsContainer: Ref<Element | null> = ref(null);
 const loading = ref(false);
 
 const preloadRating = (offset = 0, limit = 20) => {
@@ -110,13 +110,13 @@ preloadRating();
 </script>
 
 <template>
-  <div ref="rowsContainer" class="flex flex-col items-center px-3 py-6">
+  <div class="flex flex-col items-center px-3 py-6">
     <div class="flex flex-col items-center">
       <div class="toned-bg flex w-fit cursor-pointer rounded-2xl">
         <div
           class="rounded-xl px-3 py-2 font-medium"
           :class="{
-            'bg-yellow-300': activeTab === 0,
+            'toned-image-bg': activeTab === 0,
           }"
           @click="activeTab = 0"
         >
@@ -125,7 +125,7 @@ preloadRating();
         <div
           class="rounded-xl px-3 py-2 font-medium"
           :class="{
-            'bg-yellow-300': activeTab === 1,
+            'toned-image-bg': activeTab === 1,
           }"
           @click="activeTab = 1"
         >
@@ -133,17 +133,12 @@ preloadRating();
         </div>
       </div>
       <div class="mb-6 mt-5 flex items-center">
-        <svg
-          class="-right-[22px] rotate-180 cursor-pointer"
+        <IconArrowRight
           height="70px"
           width="70px"
-          viewBox="0 0 100 100"
           @click="league = (league - 1 + 3) % 3"
-        >
-          <path
-            d="M40.0 21.7L65.3 47.0Q66.7 48.3 66.7 49.8Q66.7 51.3 65.7 52.7L65.7 52.7L40.3 78Q39.3 79 37.7 79.2Q36.0 79.3 34.7 78.2Q33.3 77 33.3 75.3Q33.3 73.7 34.3 72.3L34.3 72.3L56.7 50.0L34.7 28.0Q33.3 27.0 33.3 25.3Q33.3 23.7 34.3 22.3L34.3 22.3L34.7 22.0Q35.7 21.0 37.2 20.8Q38.7 20.7 40.0 21.7L40.0 21.7Z"
-          ></path>
-        </svg>
+          class="-right-[22px] rotate-180"
+        />
         <div class="relative">
           <FarmerIcon
             v-if="activeTab === 0"
@@ -160,17 +155,12 @@ preloadRating();
             {{ $t("rating.leagues", league) }}
           </span>
         </div>
-        <svg
-          class="-right-[22px] cursor-pointer"
+        <IconArrowRight
           height="70px"
           width="70px"
-          viewBox="0 0 100 100"
           @click="league = (league + 1) % 3"
-        >
-          <path
-            d="M40.0 21.7L65.3 47.0Q66.7 48.3 66.7 49.8Q66.7 51.3 65.7 52.7L65.7 52.7L40.3 78Q39.3 79 37.7 79.2Q36.0 79.3 34.7 78.2Q33.3 77 33.3 75.3Q33.3 73.7 34.3 72.3L34.3 72.3L56.7 50.0L34.7 28.0Q33.3 27.0 33.3 25.3Q33.3 23.7 34.3 22.3L34.3 22.3L34.7 22.0Q35.7 21.0 37.2 20.8Q38.7 20.7 40.0 21.7L40.0 21.7Z"
-          ></path>
-        </svg>
+          class="-right-[22px]"
+        />
       </div>
     </div>
 
@@ -201,6 +191,7 @@ preloadRating();
         :name="(row as UserPublic).username ?? (row as Club).name"
         :is-you="(row as UserPublic).tg_id === userStore.user?.tg_id"
       />
+
       <div v-if="loading" class="flex w-full items-center justify-center p-4">
         <LoadingIcon />
       </div>
