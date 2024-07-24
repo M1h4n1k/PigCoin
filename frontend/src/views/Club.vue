@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted, watchEffect } from "vue";
 import RatingUserCard from "@/components/RatingUserCard.vue";
 import { useUserStore } from "@/store.ts";
 import { openLink, shareInviteLink } from "@/utils.ts";
@@ -53,8 +53,14 @@ const leaveClub = () => {
     });
 };
 
-if (userStore.clubMembers.length === 0) {
+if (userStore.clubMembers.length === 0 && userStore.user?.club_id) {
   loadMembers();
+} else {
+  watchEffect(() => {
+    if (userStore.user && userStore.user.club_id) {
+      loadMembers();
+    }
+  });
 }
 
 const windowScroller = () => {
@@ -89,7 +95,7 @@ onUnmounted(() => {
           </p>
           <p class="text-center">
             {{ userStore.user!.club?.members_count }}
-            {{ $t("common.members", userStore.user!.club?.members_count) }}
+            {{ $t("common.members", userStore.user!.club?.members_count!) }}
           </p>
           <p class="text-center">
             {{ userStore.user!.club?.total_coins.toLocaleString() }}
@@ -163,7 +169,7 @@ onUnmounted(() => {
         v-if="userStore.user!.position_in_club! > userStore.clubMembers.length"
         class="toned-image-bg sticky bottom-0 top-0 rounded-xl p-2"
         :picture="userStore.user!.picture"
-        :rating="userStore.user!.position_in_club"
+        :rating="userStore.user!.position_in_club!"
         :coins="userStore.user!.total_coins"
         :name="userStore.user!.username"
         :is-you="true"

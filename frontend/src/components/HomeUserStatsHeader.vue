@@ -23,7 +23,11 @@ const { user } = storeToRefs(userStore);
       <span class="text-lg font-semibold">#{{ userStore.user?.position }}</span>
       <span class="mx-5 text-3xl font-semibold">·</span>
       <div class="flex items-center">
-        <FarmerIcon class="h-8 w-8" :league="userStore.user?.league" />
+        <FarmerIcon
+          v-if="userStore?.user?.league"
+          class="h-8 w-8"
+          :league="userStore.user.league"
+        />
       </div>
       <svg
         class="absolute -right-[24px]"

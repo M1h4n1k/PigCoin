@@ -215,7 +215,7 @@ preloadRating();
         "
         class="toned-image-bg sticky bottom-0 top-0 rounded-xl p-2"
         :picture="userStore.user!.picture"
-        :rating="userStore.user!.position"
+        :rating="userStore.user!.position!"
         :coins="userStore.user!.total_coins"
         :name="userStore.user!.username"
         :is-you="true"

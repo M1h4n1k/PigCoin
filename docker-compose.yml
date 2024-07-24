@@ -1,0 +1,47 @@
+services:
+  mysql:
+    image: mysql:8.0
+    restart: always
+    env_file:
+      - ./backend/.env
+    volumes:
+      - mysql-volume:/var/lib/mysql
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u root --password=$$MYSQL_PASSWORD
+      start_period: 5s
+      interval: 5s
+      timeout: 5s
+      retries: 55
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+  backend:
+    restart: always
+    build:
+      context: ./backend
+      dockerfile: ./Dockerfile
+    ports:
+      - "3001:80"
+    env_file:
+      - ./backend/.env
+    depends_on:
+      mysql:
+        condition: service_healthy
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+  frontend:
+    restart: always
+    build:
+      context: ./frontend
+      dockerfile: ./Dockerfile
+    ports:
+      - "3000:80"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+volumes:
+  mysql-volume:

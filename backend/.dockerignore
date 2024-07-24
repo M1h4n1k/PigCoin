@@ -1,0 +1,11 @@
+**/*.pyc
+**/*.pyo
+**/*.mo
+.gitignore
+.idea
+.git/
+**/__pycache__/
+Dockerfile
+.env
+**/*.md
+photos/*

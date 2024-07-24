@@ -3,7 +3,6 @@ import { ref, computed } from "vue";
 import { useUserStore, useAlertStore } from "@/store";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
-import LoadingIcon from "@/components/LoadingIcon.vue";
 
 const { t } = useI18n();
 const router = useRouter();

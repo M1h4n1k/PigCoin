@@ -39,7 +39,7 @@ if (tasksStore.tasks.length === 0) {
     >
       <TaskCard
         v-for="t in tasksStore.tasks"
-        :key="t"
+        :key="t.id"
         :id="t.id"
         :picture="t.picture"
         :reward="t.reward"

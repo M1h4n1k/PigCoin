@@ -190,6 +190,7 @@ onMounted(() => {
     <!-- dirt -->
     <img
       class="absolute z-10 flex h-auto w-full select-none rounded-full transition-opacity duration-500"
+      draggable="false"
       v-for="(dirtyBubble, ind) in dirtyBubbles"
       :key="ind"
       @mouseover="cleanDirtyBubble(ind)"
