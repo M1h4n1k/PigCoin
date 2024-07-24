@@ -97,7 +97,7 @@ const exitGame = () => {
 </script>
 
 <template>
-  <div class="h-tg-screen relative w-full p-2">
+  <div class="relative h-tg-screen w-full p-2">
     <div
       v-if="game.timer === 0"
       class="toned-image-bg absolute left-1/2 top-1/2 z-10 flex h-48 w-80 max-w-full -translate-x-1/2 -translate-y-1/2 transform flex-col items-center justify-center rounded-xl px-10"
@@ -128,6 +128,7 @@ const exitGame = () => {
         }}<img src="/pigNoseCoin.svg" alt="🐽" class="ml-1 inline h-5 w-5" />
       </p>
     </div>
+
     <img
       draggable="false"
       v-for="(coin, index) in game.coins"
