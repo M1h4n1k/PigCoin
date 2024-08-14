@@ -1,0 +1,47 @@
+name: Run Tests
+
+on:
+  push:
+    branches: [ '*' ]
+  pull_request:
+      branches: [ '*' ]
+
+jobs:
+  test-frontend:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./frontend
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setting up env
+        run: echo "${{ secrets.TEST_ENV }}" > .env
+
+      - name: Building frontend container
+        run: docker compose up --build -d frontend
+
+      - name: Stop and remove Docker containers
+        if: always()
+        run: docker compose down
+
+  test-backend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Create .env file and add environment variables
+        run: echo "${{ secrets.TEST_ENV }}" > .env
+
+      - name: Build and start Docker containers
+        run: docker compose up --build -d mysql backend
+
+      - name: Run FastAPI tests
+        run: docker compose exec backend pytest
+
+      - name: Stop and remove Docker containers
+        if: always()
+        run: docker compose down

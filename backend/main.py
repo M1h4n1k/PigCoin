@@ -25,7 +25,7 @@ init()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=['http://127.0.0.1:5173', 'http://84.249.17.76:5173', WEB_LINK],
+    allow_origins=['http://127.0.0.1:3000', 'http://84.249.17.76:3000', WEB_LINK],
     allow_credentials=True,
     allow_methods=['*'],
     allow_headers=['*'],
@@ -33,4 +33,4 @@ app.add_middleware(
 
 
 if __name__ == '__main__':
-    uvicorn.run("main:app", port=84, host='0.0.0.0', reload=True, forwarded_allow_ips='*')
+    uvicorn.run("main:app", port=3001, host='0.0.0.0', reload=True, forwarded_allow_ips='*')
