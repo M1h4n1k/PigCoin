@@ -46,7 +46,7 @@ async def login(
         profile_pictures = await bot.get_user_profile_photos(tg_data_dict['user']['id'], limit=1)
         picture_path = '/pig_ava.png'
         if profile_pictures.total_count:
-            picture_path = await load_image(profile_pictures.photos[0][0].file_id, user.tg_id)
+            picture_path = await load_image(profile_pictures.photos[0][0].file_id, tg_data_dict['user']['id'])
 
         user = crud.users.create_user(db, schemas.UserCreate(
             tg_id=tg_data_dict['user']['id'],
