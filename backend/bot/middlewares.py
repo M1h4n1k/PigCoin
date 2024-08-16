@@ -6,7 +6,7 @@ from .loader import bot
 
 async def create_user(hdlr, message, data):
     data['db'] = SessionLocal()
-    if message and crud.users.get_user(data['db'], message.from_user.id) is None:
+    if message and message.text and crud.users.get_user(data['db'], message.from_user.id) is None:
         # TODO test
         profile_pictures = await bot.get_user_profile_photos(message.from_user.id, limit=1)
         picture_path = '/pig_ava.png'
