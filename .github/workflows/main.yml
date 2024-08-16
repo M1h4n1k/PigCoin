@@ -15,9 +15,10 @@ jobs:
         working-directory: ./frontend
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-      - name: Setting up env
+
+      - name: Create .env file and add environment variables
         run: echo "${{ secrets.TEST_ENV }}" > .env
 
       - name: Building frontend container
@@ -35,7 +36,7 @@ jobs:
         working-directory: ./backend
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Create .env file and add environment variables
         run: echo "${{ secrets.TEST_ENV }}" > .env
