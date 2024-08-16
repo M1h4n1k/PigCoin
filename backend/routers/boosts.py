@@ -18,13 +18,13 @@ async def get_user_boosts(
     boosts_all = crud.boosts.get_boosts(db)
     boosts = []
     for ub in user.boosts:
-        boosts.append(schemas.Boost.from_orm(ub.boost))
+        boosts.append(schemas.Boost.model_validate(ub.boost))
         boosts[-1].count = ub.count
         boosts[-1].price = ub.boost.base_price + 100 * ub.count
 
     for b in boosts_all:
         if b.id not in list(map(lambda x: x.id, boosts)):
-            boosts.append(schemas.Boost.from_orm(b))
+            boosts.append(schemas.Boost.model_validate(b))
             boosts[-1].count = 0
             boosts[-1].price = b.base_price
 

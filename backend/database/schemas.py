@@ -1,7 +1,9 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 
 
 class Club(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     name: str
     picture: str
@@ -10,14 +12,9 @@ class Club(BaseModel):
     league: int
     members_count: int
 
-    class Config:
-        from_attributes = True
-
 
 class User(BaseModel):
-
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class UserPublic(User):
@@ -58,6 +55,8 @@ class UserCreate(User):
 
 
 class Task(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     picture: str
     reward: int
@@ -65,19 +64,15 @@ class Task(BaseModel):
     type: str
     completed: bool = False
 
-    class Config:
-        from_attributes = True
-
 
 class Boost(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     title: str
     picture: str
     count: int = -1
     price: int = -1
-
-    class Config:
-        from_attributes = True
 
 
 class CollectCoins(BaseModel):
