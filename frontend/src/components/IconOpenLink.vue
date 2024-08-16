@@ -5,8 +5,3 @@
     ></path>
   </svg>
 </template>
-<script>
-export default {
-  name: "IconOpenLink",
-};
-</script>
