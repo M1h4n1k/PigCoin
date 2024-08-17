@@ -11,7 +11,7 @@ def create_tasks(db):
             id=len(tasks) + 1,
             title='Join the channel',
             picture='/telegram.svg',
-            reward=120,
+            reward=500,
             link='https://t.me/' + channel,
             type='subscribe'
         ))
@@ -20,7 +20,7 @@ def create_tasks(db):
         id=len(tasks) + 1,
         title='Invite a fren',
         picture='/addFren.svg',
-        reward=240,
+        reward=1000,
         link='',
         type='invite'
     ))
@@ -30,7 +30,7 @@ def create_tasks(db):
             id=len(tasks) + 1,
             title='Open bot',
             picture='/bot.svg',
-            reward=240,
+            reward=1500,
             link='https://t.me/' + bot,
             type='bot'
         ))
@@ -44,32 +44,32 @@ def create_boosts(db):
             id=1,
             title='Sponge',
             picture='/sponge.png',
-            base_price=10,
-            coins=10,
+            base_price=100,
+            coins=100,
             type='click_price'
         ),
         Boost(
             id=2,
             title='Bottle capacity',
             picture='/bottle.png',
-            base_price=10,
-            coins=10,
+            base_price=100,
+            coins=100,
             type='capacity'
         ),
         Boost(
             id=3,
             title='Refill rate',
             picture='/refill.png',
-            base_price=10,
-            coins=10,
+            base_price=100,
+            coins=100,
             type='refill_rate'
         ),
         Boost(
             id=4,
             title='Herdsman',
             picture='/farmer.png',
-            base_price=100,
-            coins=100,
+            base_price=1000,
+            coins=1000,
             type='auto'
         ),
     ])

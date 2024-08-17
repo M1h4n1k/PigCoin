@@ -45,5 +45,6 @@ jobs:
 
       - name: Run FastAPI tests
         run: |
+          echo "STARTING"
           docker compose exec backend pytest -v
           echo "ALL GOOD"

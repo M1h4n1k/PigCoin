@@ -1,3 +1,5 @@
+import os
+
 from aiogram import types, exceptions
 from aiogram.types.web_app_info import WebAppInfo
 from aiogram.types import (
@@ -24,7 +26,7 @@ async def default_handler(message: Message):
 
 async def on_user_join(event: ChatMemberUpdated):
     channel_tasks = {
-        'M1h4n1k_sub_task1': 1,
+        name: i + 1 for i, name in enumerate(os.getenv('PROMO_CHANNELS').split(','))
     }
     db = SessionLocal()
     user = crud.users.get_user(db, event.from_user.id)
