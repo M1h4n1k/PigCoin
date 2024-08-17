@@ -15,9 +15,11 @@ def get_task(db: Session, task_id: int) -> models.Task | None:
 
 def complete_task(db: Session, task_id: int, user_tg_id: int) -> None:
     task = db.get(models.Task, task_id)
+    if task is None:
+        raise ValueError('Task not found')
     user = db.get(models.User, user_tg_id)
-    if user is None or task is None:
-        raise ValueError('User or Task not found')
+    if user is None:
+        raise ValueError('User not found')
     update_user_money(db, user, task.reward)
     db.add(models.UserTask(user_tg_id=user_tg_id, task_id=task_id))
     db.commit()

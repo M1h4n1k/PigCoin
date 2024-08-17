@@ -49,6 +49,7 @@ async def test_user_login_create_referral(mocker, dummy_user):
     patch_bot_get_photos.return_value = Mock(total_count=0)
     patch_crud_create_user = mocker.patch('routers.user.crud.users.create_user', Mock(return_value=dummy_user))
     patch_update_user_money = mocker.patch('routers.user.crud.users.update_user_money', Mock())
+    patch_complete_task = mocker.patch('routers.user.crud.tasks.complete_task', Mock())
 
     testing_user_c = deepcopy(testing_user)
     testing_user_c['start_param'] = '1f'
@@ -63,6 +64,9 @@ async def test_user_login_create_referral(mocker, dummy_user):
     assert calls[0].args[2] == 5000
     assert calls[1].args[1].tg_id == 0x1f
     assert calls[1].args[2] == 5000
+    patch_complete_task.assert_called_once()
+    assert patch_complete_task.mock_calls[0].args[1] == 3
+    assert patch_complete_task.mock_calls[0].args[2] == 0x1f
     patch_validate_data.assert_called_once()
 
 
@@ -80,6 +84,7 @@ async def test_user_login_create_referral_premium(mocker, dummy_user):
     patch_bot_get_photos.return_value = Mock(total_count=0)
     patch_crud_create_user = mocker.patch('routers.user.crud.users.create_user', Mock(return_value=dummy_user))
     patch_update_user_money = mocker.patch('routers.user.crud.users.update_user_money', Mock())
+    patch_complete_task = mocker.patch('routers.user.crud.tasks.complete_task', Mock())
 
     testing_user_c = deepcopy(testing_user)
     testing_user_c['start_param'] = '1f'
@@ -95,6 +100,9 @@ async def test_user_login_create_referral_premium(mocker, dummy_user):
     assert calls[0].args[2] == 25000
     assert calls[1].args[1].tg_id == 0x1f
     assert calls[1].args[2] == 25000
+    patch_complete_task.assert_called_once()
+    assert patch_complete_task.mock_calls[0].args[1] == 3
+    assert patch_complete_task.mock_calls[0].args[2] == 0x1f
     patch_validate_data.assert_called_once()
 
 
