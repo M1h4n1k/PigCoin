@@ -32,7 +32,6 @@ def dummy_user():
     )
 
 
-
 def create_hash(data):
     secret_key = hmac.new(b'WebAppData', msg=bot.TOKEN.replace('/test', '').encode(), digestmod=sha256).digest()
     payload = f"auth_date={data['auth_date']}\n" \

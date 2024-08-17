@@ -10,7 +10,7 @@ def get_user(db: Session, user_tg_id: int) -> models.User | None:
 
 
 def create_user(db: Session, user: schemas.UserCreate) -> models.User:
-    db_user = models.User(**user.dict())
+    db_user = models.User(**user.model_dump())
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
