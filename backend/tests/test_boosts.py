@@ -27,7 +27,7 @@ def test_buy_boost(mocker, dummy_user):
     response = client_l.post('/api/boosts/buy/1')
     assert response.status_code == 200
     assert patch_crud_boost_get.called
-    patch_crud_user.assert_called_with(ANY, ANY, -200)
+    patch_crud_user.assert_called_with(ANY, ANY, -100)
     patch_crud_boost_buy.assert_called_with(ANY, ANY, 1, 'test')
 
 
@@ -45,7 +45,7 @@ def test_buy_boost_fail(mocker, dummy_user):
     patch_crud_boost_buy = mocker.patch('routers.boosts.crud.boosts.buy_boost', Mock(return_value=None))
 
     response = client_l.post('/api/boosts/buy/1')
-    assert response.status_code == 400
+    assert response.status_code == 402
     assert patch_crud_boost_get.called
     assert not patch_crud_user.called
     assert not patch_crud_boost_buy.called

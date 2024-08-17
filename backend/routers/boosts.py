@@ -48,7 +48,7 @@ async def buy_boost(
         raise HTTPException(status_code=404, detail='Boost not found')
 
     user_boost = next((x for x in user.boosts if x.boost_id == boost_id), None)
-    total_price = boost.base_price + (100 * user_boost.count) if user_boost else 0
+    total_price = boost.base_price + (100 * user_boost.count if user_boost else 0)
     if user.current_coins < total_price:
         raise HTTPException(status_code=402, detail='Not enough coins')
 
