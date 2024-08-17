@@ -178,7 +178,7 @@ def test_collect_turbo_cheated(mocker, dummy_user):
     patch_crud_update_free_turbo = mocker.patch('routers.boosts.crud.users.update_user_turbo', Mock())
     patch_crud_update_cheated_count = mocker.patch('routers.boosts.crud.users.update_cheated_count', Mock())
 
-    response = client_l.post('/api/game/collectTurboCoins', json={'coins': 300})
+    response = client_l.post('/api/game/collectTurboCoins', json={'coins': 2001})
     assert response.status_code == 400
     patch_crud_decrease_energy.assert_not_called()
     patch_crud_update_money.assert_not_called()
