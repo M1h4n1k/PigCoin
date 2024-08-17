@@ -44,4 +44,6 @@ jobs:
         run: docker compose up --build -d mysql backend
 
       - name: Run FastAPI tests
-        run: docker compose exec backend pytest -v
+        run: |
+          docker compose exec backend pytest -v
+          echo "ALL GOOD"

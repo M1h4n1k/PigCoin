@@ -20,7 +20,7 @@ if (tasksStore.tasks.length === 0) {
 </script>
 
 <template>
-  <div class="px-3">
+  <div class="px-3 pb-4">
     <div class="toned-bg mt-4 pb-3 text-center">
       <p class="text-7xl">
         <img
