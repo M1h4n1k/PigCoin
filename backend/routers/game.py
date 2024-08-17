@@ -62,7 +62,7 @@ async def collect_turbo_coins(
     coins = coins.coins
     if coins < 0:
         raise HTTPException(status_code=400, detail='Coins should be positive')
-    if coins > 200:
+    if coins > 2000:
         crud.users.update_cheated_count(db, user, 1)
         raise HTTPException(status_code=400, detail='Too many coins')
 

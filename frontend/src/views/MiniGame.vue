@@ -22,15 +22,15 @@ const game = ref({
 const coinTypes = [
   {
     picture: "/pigNose.png",
-    coins: 1,
+    coins: 10,
   },
   {
     picture: "/pigsHead.png",
-    coins: 5,
+    coins: 50,
   },
   {
     picture: "/pig.png",
-    coins: 10,
+    coins: 100,
   },
 ];
 

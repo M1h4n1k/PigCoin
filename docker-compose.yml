@@ -25,6 +25,8 @@ services:
       - "3001:80"
     env_file:
       - ./backend/.env
+    volumes:
+      - backend-images:/backend/photos
     depends_on:
       mysql:
         condition: service_healthy
@@ -43,5 +45,7 @@ services:
       driver: "json-file"
       options:
         max-size: "10m"
+
 volumes:
   mysql-volume:
+  backend-images:

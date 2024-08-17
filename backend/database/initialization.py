@@ -1,43 +1,41 @@
+import os
 from database.models import Base, Task, Boost
 from sqlalchemy import event
 from database.loader import engine, SessionLocal
 
 
 def create_tasks(db):
-    db.add_all([
-        Task(
-            id=1,
+    tasks = []
+    for channel in os.getenv('PROMO_CHANNELS').split(','):
+        tasks.append(Task(
+            id=len(tasks) + 1,
             title='Join the channel',
             picture='/telegram.svg',
             reward=120,
-            link='https://t.me/M1h4n1k_sub_task1',
+            link='https://t.me/' + channel,
             type='subscribe'
-        ),
-        Task(
-            id=2,
-            title='Join the channel',
-            picture='/telegram.svg',
-            reward=120,
-            link='https://t.me/M1h4n1k_sub_task2',
-            type='subscribe'
-        ),
-        Task(
-            id=3,
-            title='Invite a fren',
-            picture='/addFren.svg',
-            reward=240,
-            link='',
-            type='invite'
-        ),
-        Task(
-            id=4,
-            title='Check the music bot',
+        ))
+
+    tasks.append(Task(
+        id=len(tasks) + 1,
+        title='Invite a fren',
+        picture='/addFren.svg',
+        reward=240,
+        link='',
+        type='invite'
+    ))
+
+    for bot in os.getenv('PROMO_BOTS').split(','):
+        tasks.append(Task(
+            id=len(tasks) + 1,
+            title='Open bot',
             picture='/bot.svg',
             reward=240,
-            link='https://t.me/M1h4n1kStageBot',
+            link='https://t.me/' + bot,
             type='bot'
-        ),
-    ])
+        ))
+
+    db.add_all(tasks)
 
 
 def create_boosts(db):
