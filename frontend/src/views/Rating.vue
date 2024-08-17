@@ -30,10 +30,12 @@ const preloadRating = (offset = 0, limit = 20) => {
   if (leagueRows !== undefined && offset < leagueRows.data.length) return;
   if (loading.value) return;
   loading.value = true;
+  const tabName = tabNames[activeTab.value];
+  const leagueValue = league.value;
 
   fetch(
     import.meta.env.VITE_API_URL +
-      `/rating/${tabNames[activeTab.value]}?league=${league.value}&offset=${offset}&limit=${limit}`,
+      `/rating/${tabName}?league=${leagueValue}&offset=${offset}&limit=${limit}`,
     {
       credentials: "include",
     },
@@ -41,14 +43,14 @@ const preloadRating = (offset = 0, limit = 20) => {
     .then((res) => res.json())
     .then((data) => {
       if (leagueRows === undefined) {
-        ratingStore[tabNames[activeTab.value]][league.value] = {
+        ratingStore[tabName][leagueValue] = {
           data: [],
           loaded: false,
         };
       }
       if (data.length === 0 || data.length < limit)
-        ratingStore[tabNames[activeTab.value]][league.value].loaded = true;
-      ratingStore[tabNames[activeTab.value]][league.value].data.push(...data);
+        ratingStore[tabName][leagueValue].loaded = true;
+      ratingStore[tabName][leagueValue].data.push(...data);
       loading.value = false;
     })
     .catch((err) => {
