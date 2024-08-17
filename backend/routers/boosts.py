@@ -48,12 +48,12 @@ async def buy_boost(
         raise HTTPException(status_code=404, detail='Boost not found')
 
     user_boost = next((x for x in user.boosts if x.boost_id == boost_id), None)
-    added_price = boost.base_price + 100 * user_boost.count if user_boost else boost.base_price
-    if user.current_coins < boost.base_price + added_price:
-        raise HTTPException(status_code=400, detail='Not enough coins')
+    total_price = boost.base_price + (100 * user_boost.count) if user_boost else 0
+    if user.current_coins < total_price:
+        raise HTTPException(status_code=402, detail='Not enough coins')
 
     crud.boosts.buy_boost(db, user.tg_id, boost_id, boost.type)
-    user = crud.users.update_user_money(db, user, -(boost.base_price + added_price))
+    user = crud.users.update_user_money(db, user, -total_price)
     return user
 
 

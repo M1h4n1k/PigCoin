@@ -39,7 +39,12 @@ const buyBoost = (boostId: number) => {
     method: "POST",
     credentials: "include",
   })
-    .then((res) => res.json())
+    .then((res) => {
+      if (res.status === 402) {
+        throw new Error("Not enough coins");
+      }
+      return res.json();
+    })
     .then((data) => {
       userStore.user = data;
       boostsStore.boosts = boostsStore.boosts.map((b) => {
@@ -49,6 +54,9 @@ const buyBoost = (boostId: number) => {
         }
         return b;
       });
+    })
+    .catch((err) => {
+      console.log(err);
     });
 };
 
