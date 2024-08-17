@@ -17,7 +17,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-
       - name: Create .env file and add environment variables
         run: echo "${{ secrets.TEST_ENV }}" > ../backend/.env
 
@@ -45,8 +44,4 @@ jobs:
         run: docker compose up --build -d mysql backend
 
       - name: Run FastAPI tests
-        run: docker compose exec backend pytest
-
-      - name: Stop and remove Docker containers
-        if: always()
-        run: docker compose down
+        run: docker compose exec backend pytest -v
