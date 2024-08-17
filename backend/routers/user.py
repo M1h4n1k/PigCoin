@@ -54,7 +54,7 @@ async def login(
             picture=picture_path,
             referrer_tg_id=start_param_data.get('userId'),
         ))
-        if start_param_data.get('userId'):  # TODO test
+        if start_param_data.get('userId') and user.tg_id != start_param_data['userId']:
             referrer = crud.users.get_user(db, start_param_data['userId'])
             crud.users.update_user_money(db, user, 25000 if tg_data_dict['user'].get('is_premium') else 5000)
             crud.users.update_user_money(db, referrer, 25000 if tg_data_dict['user'].get('is_premium') else 5000)
