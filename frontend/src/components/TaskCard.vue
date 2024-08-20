@@ -18,7 +18,7 @@ const props = defineProps({
   },
   link: {
     type: String,
-    required: true,
+    required: false,
   },
   type: {
     type: String,
@@ -33,7 +33,7 @@ const props = defineProps({
 const completeTask = () => {
   if (props.completed) return;
   if (props.type === "invite") shareInviteLink("user");
-  else Telegram.WebApp.openTelegramLink(props.link);
+  else if (props.link) Telegram.WebApp.openTelegramLink(props.link);
 };
 </script>
 

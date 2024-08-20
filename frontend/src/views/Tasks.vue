@@ -3,9 +3,20 @@ import { ref } from "vue";
 import TaskCard from "@/components/TaskCard.vue";
 import { useTasksStore } from "@/store.ts";
 import LoadingIcon from "@/components/LoadingIcon.vue";
+import { useAdsgram } from "@/useAdsgram.vue";
 
 const tasksStore = useTasksStore();
 const loading = ref(tasksStore.tasks.length === 0);
+
+const { showAd } = useAdsgram({
+  blockId: "2029",
+  onReward: () => {
+    console.log("reward");
+  },
+  onError: (error) => {
+    console.log(error);
+  },
+});
 
 if (tasksStore.tasks.length === 0) {
   fetch(import.meta.env.VITE_API_URL + "/tasks/", {
@@ -37,6 +48,14 @@ if (tasksStore.tasks.length === 0) {
     <div
       class="toned-bg mt-4 flex flex-col justify-around gap-3 rounded-xl p-5"
     >
+      <TaskCard
+        :id="-1"
+        picture="/playAd.svg"
+        :reward="500"
+        type="ad"
+        :completed="false"
+        @click="showAd"
+      />
       <TaskCard
         v-for="t in tasksStore.tasks"
         :key="t.id"

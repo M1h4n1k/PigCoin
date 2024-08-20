@@ -37,7 +37,7 @@ app.mount("#app");
 document.documentElement.style.overflow = "hidden";
 document.documentElement.style.height = "100dvh";
 
-// const AdController = window.Adsgram.init({ blockId: "1129", debug: true });
+// let AdController =
 
 fetch(import.meta.env.VITE_API_URL + "/user/login", {
   method: "POST",
@@ -58,15 +58,15 @@ fetch(import.meta.env.VITE_API_URL + "/user/login", {
     Telegram.WebApp.expand();
     Telegram.WebApp.enableClosingConfirmation();
 
-    // AdController.show()
+    // window.AdController.show()
     //   .then((result) => {
-    //     user watch ad till the end
-    //     your code to reward user
-    // })
-    // .catch((result) => {
-    //   user get error during playing ad or skip ad
-    //   do nothing or whatever you want
-    // });
+    //     // user watch ad till the end
+    //     // your code to reward user
+    //   })
+    //   .catch((result) => {
+    //     // user get error during playing ad or skip ad
+    //     // do nothing or whatever you want
+    //   });
     // Telegram.WebApp.MainButton.show();
     // Telegram.WebApp.MainButton.hide();
   })
