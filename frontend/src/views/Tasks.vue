@@ -3,7 +3,7 @@ import { ref } from "vue";
 import TaskCard from "@/components/TaskCard.vue";
 import { useTasksStore } from "@/store.ts";
 import LoadingIcon from "@/components/LoadingIcon.vue";
-import { useAdsgram } from "@/useAdsgram.vue";
+import { useAdsgram } from "@/useAdsgram.ts";
 
 const tasksStore = useTasksStore();
 const loading = ref(tasksStore.tasks.length === 0);

@@ -6,6 +6,13 @@ import i18n from "./i18n-setup";
 import { createPinia } from "pinia";
 import { useUserStore, useAlertStore } from "./store";
 import VueGtag from "vue-gtag-next";
+import { Adsgram } from "@/types.ts";
+
+declare global {
+  interface Window {
+    Adsgram: Adsgram;
+  }
+}
 
 const pinia = createPinia();
 
@@ -37,8 +44,6 @@ app.mount("#app");
 document.documentElement.style.overflow = "hidden";
 document.documentElement.style.height = "100dvh";
 
-// let AdController =
-
 fetch(import.meta.env.VITE_API_URL + "/user/login", {
   method: "POST",
   headers: {
@@ -57,18 +62,6 @@ fetch(import.meta.env.VITE_API_URL + "/user/login", {
     userStore.user = data;
     Telegram.WebApp.expand();
     Telegram.WebApp.enableClosingConfirmation();
-
-    // window.AdController.show()
-    //   .then((result) => {
-    //     // user watch ad till the end
-    //     // your code to reward user
-    //   })
-    //   .catch((result) => {
-    //     // user get error during playing ad or skip ad
-    //     // do nothing or whatever you want
-    //   });
-    // Telegram.WebApp.MainButton.show();
-    // Telegram.WebApp.MainButton.hide();
   })
   .catch((error) => {
     const alertStore = useAlertStore();

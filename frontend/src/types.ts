@@ -69,4 +69,22 @@ type DirtyBubble = BubbleBase & {
   rotation: number;
 };
 
-export type { User, UserPublic, Boost, Task, Bubble, DirtyBubble, Club };
+type AdsgramController = {
+  show: () => Promise<void>;
+};
+
+type Adsgram = {
+  init: (options: { blockId: string; debug?: boolean }) => AdsgramController;
+};
+
+export type {
+  User,
+  UserPublic,
+  Boost,
+  Task,
+  Bubble,
+  DirtyBubble,
+  Club,
+  Adsgram,
+  AdsgramController,
+};

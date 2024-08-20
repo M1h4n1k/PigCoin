@@ -1,13 +1,21 @@
-<script lang="ts">
 import { ref } from "vue";
+import { AdsgramController } from "@/types.ts";
 
-export function useAdsgram({ blockId, onReward, onError }) {
-  const AdControllerRef = ref(null);
-
-  AdControllerRef.value = window.Adsgram.init({
-    blockId: blockId,
-    debug: true,
-  });
+export function useAdsgram({
+  blockId,
+  onReward,
+  onError,
+}: {
+  blockId: string;
+  onReward: () => void;
+  onError: (result: any) => void;
+}) {
+  const AdControllerRef = ref<AdsgramController>(
+    window.Adsgram.init({
+      blockId: blockId,
+      debug: true,
+    }),
+  );
 
   const showAd = () => {
     if (AdControllerRef.value) {
@@ -16,7 +24,7 @@ export function useAdsgram({ blockId, onReward, onError }) {
         .then(() => {
           onReward();
         })
-        .catch((result) => {
+        .catch((result: any) => {
           onError?.(result);
         });
     } else {
@@ -31,4 +39,3 @@ export function useAdsgram({ blockId, onReward, onError }) {
 
   return { showAd };
 }
-</script>
