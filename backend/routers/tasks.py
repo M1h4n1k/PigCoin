@@ -44,8 +44,6 @@ async def complete_task(
         raise HTTPException(status_code=404, detail='Task not found')
     if any(tc.id == task_id for tc in user.tasks_completed):
         raise HTTPException(status_code=400, detail='Task already completed')
-    crud.users.update_user_money(db, user, task.reward)
-    crud.clubs.update_clubs_total_coins(db, user.club_id, task.reward)
     crud.tasks.complete_task(db, task_id, user.tg_id)
     return Response(status_code=200)
 
