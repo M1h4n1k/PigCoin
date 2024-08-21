@@ -32,8 +32,20 @@ const props = defineProps({
 
 const completeTask = () => {
   if (props.completed) return;
-  if (props.type === "invite") shareInviteLink("user");
-  else if (props.link) Telegram.WebApp.openTelegramLink(props.link);
+
+  if (props.type === "invite") {
+    shareInviteLink("user");
+  } else if (props.link) {
+    fetch(import.meta.env.VITE_API_URL + `/tasks/${props.id}/complete`, {
+      method: "POST",
+      credentials: "include",
+    }).then((res) => {
+      if (res.ok) {
+        window.location.reload(); // easiest option, instead of manually updating the store. Manual changes may become inconsistent
+      }
+    });
+    Telegram.WebApp.openTelegramLink(props.link);
+  }
 };
 </script>
 

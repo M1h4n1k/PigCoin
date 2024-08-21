@@ -38,13 +38,18 @@ async def complete_task(
     task_id: int,
     db: Session = Depends(get_db),
     user: models.User = Depends(get_user)
-) -> Response:
+):
     task = crud.tasks.get_task(db, task_id)
     if task is None:
         raise HTTPException(status_code=404, detail='Task not found')
     if any(tc.id == task_id for tc in user.tasks_completed):
         raise HTTPException(status_code=400, detail='Task already completed')
-    crud.tasks.complete_task(db, task_id, user.tg_id)
+
+    if task.type == 'subscribe':
+        user_channel_status = await bot.get_chat_member(chat_id='@' + task.link.split('/')[-1], user_id=user.tg_id)
+        if user_channel_status.status in ['creator', 'administrator', 'member']:
+            crud.tasks.complete_task(db, task_id, user.tg_id)
+
     return Response(status_code=200)
 
 
