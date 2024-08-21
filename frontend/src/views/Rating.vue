@@ -113,7 +113,7 @@ preloadRating();
 </script>
 
 <template>
-  <div class="flex flex-col items-center px-3 py-6">
+  <div class="flex select-none flex-col items-center px-3 py-6">
     <div class="flex flex-col items-center">
       <div class="toned-bg flex w-fit cursor-pointer rounded-2xl">
         <div

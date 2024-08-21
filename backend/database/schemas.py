@@ -30,6 +30,8 @@ class UserPrivate(UserPublic):
     max_energy: int
     turbo_available: bool
 
+    can_collect_ad: bool
+
     click_price: int
     refill_rate: int
     total_coins: int

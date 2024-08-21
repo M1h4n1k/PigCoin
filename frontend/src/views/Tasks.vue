@@ -1,22 +1,43 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import TaskCard from "@/components/TaskCard.vue";
-import { useTasksStore } from "@/store.ts";
+import { useTasksStore, useAlertStore, useUserStore } from "@/store.ts";
 import LoadingIcon from "@/components/LoadingIcon.vue";
 import { useAdsgram } from "@/useAdsgram.ts";
 
+const alertStore = useAlertStore();
+const userStore = useUserStore();
 const tasksStore = useTasksStore();
 const loading = ref(tasksStore.tasks.length === 0);
 
 const { showAd } = useAdsgram({
   blockId: "2029",
   onReward: () => {
-    console.log("reward");
+    alertStore.displayAlert("You earned 500 coins!", "info");
+    fetch(import.meta.env.VITE_API_URL + "/tasks/ad", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        userStore.user = data;
+      });
   },
   onError: (error) => {
-    console.log(error);
+    alertStore.displayAlert(error.description, "error");
   },
 });
+
+const showAdWrapper = () => {
+  if (!userStore.user!.can_collect_ad) {
+    alertStore.displayAlert("You can watch an ad every 1.2 hours", "error");
+    return;
+  }
+  showAd();
+};
 
 if (tasksStore.tasks.length === 0) {
   fetch(import.meta.env.VITE_API_URL + "/tasks/", {
@@ -54,7 +75,7 @@ if (tasksStore.tasks.length === 0) {
         :reward="500"
         type="ad"
         :completed="false"
-        @click="showAd"
+        @click="showAdWrapper"
       />
       <TaskCard
         v-for="t in tasksStore.tasks"

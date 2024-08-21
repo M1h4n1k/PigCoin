@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from dependencies import get_db, get_user
 import orjson
 from bot import bot
+from datetime import datetime
 
 
 router = APIRouter(prefix='/tasks', responses={404: {'description': 'User not found'}})
@@ -48,3 +49,27 @@ async def complete_task(
     crud.tasks.complete_task(db, task_id, user.tg_id)
     return Response(status_code=200)
 
+
+@router.post(
+    '/ad',
+    status_code=200,
+    responses={
+        400: {'description': 'Task already completed'},
+        404: {'description': 'Task or user not found'},
+        425: {'description': 'You can watch ads only once in 1.2 hours'},
+    },
+    response_model=schemas.UserPrivate
+)
+async def complete_ad_task(
+    db: Session = Depends(get_db),
+    user: models.User = Depends(get_user)
+):
+    if not user.can_collect_ad:
+        raise HTTPException(status_code=425, detail='You can watch ads only once in 1.2 hours')
+    crud.users.update_user_money(db, user, 500)
+    if user.club_id:
+        crud.clubs.update_clubs_total_coins(db, user.club_id, 500)
+    user.last_ad_collected = datetime.now()
+    db.commit()
+    db.refresh(user)
+    return user

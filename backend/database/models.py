@@ -30,6 +30,12 @@ class User(Base):
     _current_energy: Mapped[int] = mapped_column(BIGINT, default=1000)
     energy_last_used: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
 
+    last_ad_collected: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=datetime(2021, 1, 1))
+
+    @property
+    def can_collect_ad(self) -> bool:
+        return (datetime.now() - self.last_ad_collected).seconds >= 60 * 72  # 20 times a day
+
     last_coin_collected: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
 
     @property
