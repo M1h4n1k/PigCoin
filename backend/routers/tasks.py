@@ -54,7 +54,6 @@ async def complete_task(
     '/ad',
     status_code=200,
     responses={
-        400: {'description': 'Task already completed'},
         404: {'description': 'Task or user not found'},
         425: {'description': 'You can watch ads only once in 1.2 hours'},
     },
@@ -66,10 +65,5 @@ async def complete_ad_task(
 ):
     if not user.can_collect_ad:
         raise HTTPException(status_code=425, detail='You can watch ads only once in 1.2 hours')
-    crud.users.update_user_money(db, user, 500)
-    if user.club_id:
-        crud.clubs.update_clubs_total_coins(db, user.club_id, 500)
-    user.last_ad_collected = datetime.now()
-    db.commit()
-    db.refresh(user)
+    user = crud.tasks.watch_ad(db, user.tg_id)
     return user
