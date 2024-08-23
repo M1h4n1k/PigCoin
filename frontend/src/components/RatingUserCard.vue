@@ -44,7 +44,7 @@ defineProps({
         :src="picture"
       />
       <div class="ml-2">
-        <p class="font-medium">{{ name }}</p>
+        <p class="max-w-36 truncate font-medium">{{ name }}</p>
         <p class="flex items-center text-gray-600">
           {{ coins.toLocaleString() }}
           <img
