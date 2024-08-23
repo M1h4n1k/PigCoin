@@ -1,3 +1,4 @@
+import aiohttp
 from fastapi import Request, Response, APIRouter, Depends, HTTPException
 from database import crud, schemas, models
 from sqlalchemy.orm import Session
@@ -49,6 +50,11 @@ async def complete_task(
         user_channel_status = await bot.get_chat_member(chat_id='@' + task.link.split('/')[-1], user_id=user.tg_id)
         if user_channel_status.status in ['creator', 'administrator', 'member']:
             crud.tasks.complete_task(db, task_id, user.tg_id)
+    elif task.type == 'bot':
+        async with aiohttp.ClientSession() as session:
+            async with session.get(f'https://music.evicon.fun/api/is_user?user_id={user.tg_id}&key=1AaBMuMKda2Jcbrt') as resp:
+                if await resp.text() == 'true':
+                    crud.tasks.complete_task(db, task_id, user.tg_id)
 
     return Response(status_code=200)
 
