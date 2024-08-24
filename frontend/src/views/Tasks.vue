@@ -4,7 +4,9 @@ import TaskCard from "@/components/TaskCard.vue";
 import { useTasksStore, useAlertStore, useUserStore } from "@/store.ts";
 import LoadingIcon from "@/components/LoadingIcon.vue";
 import { useAdsgram } from "@/useAdsgram.ts";
+import { useI18n } from "vue-i18n";
 
+const { t } = useI18n();
 const alertStore = useAlertStore();
 const userStore = useUserStore();
 const tasksStore = useTasksStore();
@@ -22,7 +24,7 @@ onUnmounted(() => {
 const { showAd } = useAdsgram({
   blockId: "2029",
   onReward: () => {
-    alertStore.displayAlert("You earned 500 coins!", "info");
+    alertStore.displayAlert(t("tasks.ad.success"), "info");
     fetch(import.meta.env.VITE_API_URL + "/tasks/ad", {
       method: "POST",
       credentials: "include",
@@ -45,7 +47,7 @@ const showAdWrapper = () => {
     currentDate.value - Date.parse(userStore.user!.last_ad_collected) <
     60 * 72 * 1000
   ) {
-    alertStore.displayAlert("You can watch an ad every 1.2 hours", "error");
+    alertStore.displayAlert(t("tasks.ad.time"), "error");
     return;
   }
   showAd();

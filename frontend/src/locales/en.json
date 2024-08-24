@@ -31,6 +31,8 @@
   "tasks.invite": "Invite a fren",
   "tasks.bot": "Open bot",
   "tasks.ad": "Watch ad",
+  "tasks.ad.success": "You earned 500 coins!",
+  "tasks.ad.time": "You can watch an ad every 1.2 hours",
 
   "frens.earn": "Invite Frens, get coins",
   "frens.invite": "Invite fren",

@@ -102,7 +102,7 @@ onUnmounted(() => {
           </p>
           <p class="text-center">
             {{ userStore.user!.club?.total_coins.toLocaleString() }}
-            {{ $t("common.coins") }}
+            {{ $t("common.coins", userStore.user!.club?.total_coins) }}
           </p>
         </div>
         <button
