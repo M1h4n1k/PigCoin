@@ -77,7 +77,9 @@ const completeTask = () => {
       </div>
     </div>
     <IconDoneTick v-if="completed" class="h-6 w-6" />
-    <IconArrowRight v-else height="25px" width="25px" />
+    <slot v-else>
+      <IconArrowRight height="25px" width="25px" />
+    </slot>
   </div>
 </template>
 

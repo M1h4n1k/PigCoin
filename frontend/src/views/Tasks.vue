@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onUnmounted, computed } from "vue";
 import TaskCard from "@/components/TaskCard.vue";
 import { useTasksStore, useAlertStore, useUserStore } from "@/store.ts";
 import LoadingIcon from "@/components/LoadingIcon.vue";
@@ -9,6 +9,15 @@ const alertStore = useAlertStore();
 const userStore = useUserStore();
 const tasksStore = useTasksStore();
 const loading = ref(tasksStore.tasks.length === 0);
+const currentDate = ref(Date.now());
+
+const timerInterval = setInterval(() => {
+  currentDate.value = Date.now();
+}, 1000);
+
+onUnmounted(() => {
+  clearInterval(timerInterval);
+});
 
 const { showAd } = useAdsgram({
   blockId: "2029",
@@ -32,11 +41,34 @@ const { showAd } = useAdsgram({
 });
 
 const showAdWrapper = () => {
-  if (!userStore.user!.can_collect_ad) {
+  if (
+    currentDate.value - Date.parse(userStore.user!.last_ad_collected) <
+    60 * 72 * 1000
+  ) {
     alertStore.displayAlert("You can watch an ad every 1.2 hours", "error");
     return;
   }
   showAd();
+};
+
+const timeLeft = computed(() => {
+  return (
+    (60 * 72 * 1000 -
+      (currentDate.value - Date.parse(userStore.user!.last_ad_collected))) /
+    1000
+  );
+});
+
+const adTimer = () => {
+  return (
+    Math.round(timeLeft.value / 60)
+      .toString()
+      .padStart(2, "0") +
+    ":" +
+    Math.round(timeLeft.value % 60)
+      .toString()
+      .padStart(2, "0")
+  );
 };
 
 if (tasksStore.tasks.length === 0) {
@@ -76,7 +108,10 @@ if (tasksStore.tasks.length === 0) {
         type="ad"
         :completed="false"
         @click="showAdWrapper"
-      />
+        ><span class="text-gray-500" v-if="timeLeft > 0">{{
+          adTimer()
+        }}</span></TaskCard
+      >
       <TaskCard
         v-for="t in tasksStore.tasks"
         :key="t.id"

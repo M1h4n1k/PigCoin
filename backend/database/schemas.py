@@ -1,4 +1,5 @@
 from pydantic import BaseModel, Field, ConfigDict
+from datetime import datetime
 
 
 class Club(BaseModel):
@@ -30,7 +31,7 @@ class UserPrivate(UserPublic):
     max_energy: int
     turbo_available: bool
 
-    can_collect_ad: bool
+    last_ad_collected: datetime
 
     click_price: int
     refill_rate: int
