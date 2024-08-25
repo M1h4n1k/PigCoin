@@ -22,7 +22,7 @@ type User = UserPublic & {
   refill_rate: number;
   current_coins: number;
   current_energy: number;
-  last_ad_collected: string;
+  last_ad_collected: number;
   max_energy: number;
   turbo_available: boolean;
   free_turbo: number;

@@ -34,7 +34,7 @@ class User(Base):
 
     @property
     def can_collect_ad(self) -> bool:
-        return (datetime.now() - self.last_ad_collected).seconds >= 60 * 72  # 20 times a day
+        return (datetime.now() - self.last_ad_collected).seconds >= 60 * 60 * 1.2  # 20 times a day
 
     last_coin_collected: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
 

@@ -48,6 +48,11 @@ class UserPrivate(UserPublic):
     position_in_club: int | None = None
     position: int | None = None
 
+    class Config:
+        json_encoders = {
+            datetime: lambda v: v.timestamp(),  # timezone is difficult to handle
+        }
+
 
 class UserCreate(User):
     tg_id: int

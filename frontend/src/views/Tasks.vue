@@ -11,10 +11,10 @@ const alertStore = useAlertStore();
 const userStore = useUserStore();
 const tasksStore = useTasksStore();
 const loading = ref(tasksStore.tasks.length === 0);
-const currentDate = ref(Date.now());
+const currentDate = ref(Date.now() / 1000);
 
 const timerInterval = setInterval(() => {
-  currentDate.value = Date.now();
+  currentDate.value = Date.now() / 1000;
 }, 1000);
 
 onUnmounted(() => {
@@ -43,10 +43,7 @@ const { showAd } = useAdsgram({
 });
 
 const showAdWrapper = () => {
-  if (
-    currentDate.value - Date.parse(userStore.user!.last_ad_collected) <
-    60 * 72 * 1000
-  ) {
+  if (currentDate.value - userStore.user!.last_ad_collected < 60 * 60 * 1.2) {
     alertStore.displayAlert(t("tasks.ad.time"), "error");
     return;
   }
@@ -55,24 +52,20 @@ const showAdWrapper = () => {
 
 const timeLeft = computed(() => {
   if (!userStore.user?.last_ad_collected) return 0;
-  return (
-    (60 * 72 * 1000 -
-      (currentDate.value - Date.parse(userStore.user!.last_ad_collected))) /
-    1000
-  );
+  return 60 * 60 * 1.2 - (currentDate.value - userStore.user.last_ad_collected);
 });
 
 const adTimer = () => {
   return (
-    Math.round(timeLeft.value / 60 / 60)
+    Math.floor(timeLeft.value / 60 / 60)
       .toString()
       .padStart(2, "0") +
     ":" +
-    Math.round((timeLeft.value / 60) % 60)
+    Math.floor((timeLeft.value % 3600) / 60)
       .toString()
       .padStart(2, "0") +
     ":" +
-    Math.round(timeLeft.value % 60)
+    Math.floor(timeLeft.value % 60)
       .toString()
       .padStart(2, "0")
   );
