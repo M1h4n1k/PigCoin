@@ -1,3 +1,5 @@
+import datetime
+
 import bot
 from fastapi.testclient import TestClient
 import json
@@ -28,7 +30,7 @@ def dummy_user():
         picture='test',         username='test',  total_coins=0,  current_energy=0,       max_energy=0,
         turbo_available=False,  click_price=0,    refill_rate=0,  league=0,               free_turbo=0,
         free_refills=0,         club_id=None,     club=None,      position_in_club=None,  position=None,
-        current_coins=300,      boosts=[],        tg_id=1,        can_collect_ad=False,
+        current_coins=300,      boosts=[],        tg_id=1,        last_ad_collected=datetime.datetime.now(),
     )
 
 
