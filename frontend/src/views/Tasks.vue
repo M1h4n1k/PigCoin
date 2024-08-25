@@ -54,6 +54,7 @@ const showAdWrapper = () => {
 };
 
 const timeLeft = computed(() => {
+  if (!userStore.user?.last_ad_collected) return 0;
   return (
     (60 * 72 * 1000 -
       (currentDate.value - Date.parse(userStore.user!.last_ad_collected))) /
@@ -113,7 +114,7 @@ if (tasksStore.tasks.length === 0) {
         :reward="500"
         type="ad"
         :completed="false"
-        @click="showAdWrapper"
+        @click="() => showAdWrapper()"
         ><span class="text-sm text-gray-500" v-if="timeLeft > 0">{{
           adTimer()
         }}</span></TaskCard
