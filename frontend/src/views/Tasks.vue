@@ -63,7 +63,11 @@ const timeLeft = computed(() => {
 
 const adTimer = () => {
   return (
-    Math.round(timeLeft.value / 60)
+    Math.round(timeLeft.value / 60 / 60)
+      .toString()
+      .padStart(2, "0") +
+    ":" +
+    Math.round((timeLeft.value / 60) % 60)
       .toString()
       .padStart(2, "0") +
     ":" +
@@ -110,7 +114,7 @@ if (tasksStore.tasks.length === 0) {
         type="ad"
         :completed="false"
         @click="showAdWrapper"
-        ><span class="text-gray-500" v-if="timeLeft > 0">{{
+        ><span class="text-sm text-gray-500" v-if="timeLeft > 0">{{
           adTimer()
         }}</span></TaskCard
       >
