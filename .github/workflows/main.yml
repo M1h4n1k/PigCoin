@@ -46,4 +46,29 @@ jobs:
       - name: Run FastAPI tests
         run: |
           docker compose exec backend pytest -v
-          echo "ALL GOOD"
+
+  deploy:
+    needs: [ test-frontend, test-backend ]
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan 188.130.206.99 >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+
+      - name: Deploy to server
+        run: ssh root@188.130.206.99 "
+          cd ~/PigCoin &&
+          git pull &&
+          echo '${{ secrets.PROD_BACK_ENV }}' > ./backend/.env &&
+          echo '${{ secrets.PROD_FRONT_ENV }}' > ./frontend/.env &&
+          docker compose up --build -d
+          "
