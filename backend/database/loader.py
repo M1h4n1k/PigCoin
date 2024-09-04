@@ -9,7 +9,7 @@ SQLALCHEMY_DATABASE_URL = (f'mysql+pymysql://'
                            f'{os.getenv("MYSQL_DATABASE", "coin")}?charset=utf8mb4')
 
 
-engine = create_engine(SQLALCHEMY_DATABASE_URL, pool_recycle=3600, pool_size=1, max_overflow=3, pool_pre_ping=True)
+engine = create_engine(SQLALCHEMY_DATABASE_URL, pool_recycle=3600, pool_size=2, max_overflow=10, pool_pre_ping=True)
 if not database_exists(engine.url):
     create_database(engine.url)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
