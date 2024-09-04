@@ -34,6 +34,20 @@ services:
       driver: "json-file"
       options:
         max-size: "10m"
+  bot:
+    restart: always
+    build:
+      context: ./backend
+      dockerfile: ./DockerfileBot
+    env_file:
+      - ./backend/.env
+    depends_on:
+      mysql:
+        condition: service_healthy
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
   frontend:
     restart: always
     build:

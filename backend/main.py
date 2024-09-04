@@ -13,7 +13,7 @@ from bot.loader import WEB_LINK
 
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
-    asyncio.create_task(dp.start_polling(bot))
+    # asyncio.create_task(dp.start_polling(bot))
     yield
 
 

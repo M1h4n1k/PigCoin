@@ -7,3 +7,16 @@ ADMINS = [1044949157, 5000204712]
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
+
+
+async def main():
+    from bot import register_handlers
+    import logging
+    register_handlers(dp)
+    logging.basicConfig(level=logging.INFO)
+    await dp.start_polling(bot)
+
+
+if __name__ == '__main__':
+    import asyncio
+    asyncio.run(main())
