@@ -70,5 +70,6 @@ jobs:
           git pull &&
           echo '${{ secrets.PROD_BACK_ENV }}' > ./backend/.env &&
           echo '${{ secrets.PROD_FRONT_ENV }}' > ./frontend/.env &&
+          cd frontend && npm i && npm run build && cp -r dist/* /var/www/pigcoin.evicon.fun/html/ && cd .. &&
           docker compose up --build -d
           "

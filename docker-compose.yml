@@ -48,17 +48,17 @@ services:
       driver: "json-file"
       options:
         max-size: "10m"
-  frontend:
-    restart: always
-    build:
-      context: ./frontend
-      dockerfile: ./Dockerfile
-    ports:
-      - "3000:80"
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
+#  frontend:
+#    restart: always
+#    build:
+#      context: ./frontend
+#      dockerfile: ./Dockerfile
+#    ports:
+#      - "3000:80"
+#    logging:
+#      driver: "json-file"
+#      options:
+#        max-size: "10m"
 
 volumes:
   mysql-volume:
