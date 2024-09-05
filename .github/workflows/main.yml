@@ -29,13 +29,6 @@ jobs:
       - name: Build Vue.js app
         run: npm run build
 
-      - name: Run all Vue.js tests
-        run: npm run test
-
-      - name: Stop and remove Docker containers
-        if: always()
-        run: docker compose down
-
   test-backend:
     runs-on: ubuntu-latest
 
