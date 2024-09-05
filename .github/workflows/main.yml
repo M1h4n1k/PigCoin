@@ -20,8 +20,17 @@ jobs:
       - name: Create .env file and add environment variables
         run: echo "${{ secrets.TEST_ENV }}" > ../backend/.env
 
-      - name: Building frontend container
-        run: docker compose up --build -d frontend
+      - name: Install dependencies for Vue.js app
+        run: npm i
+
+      - name: check linting
+        run: npm run lint
+
+      - name: Build Vue.js app
+        run: npm run build
+
+      - name: Run all Vue.js tests
+        run: npm run test
 
       - name: Stop and remove Docker containers
         if: always()

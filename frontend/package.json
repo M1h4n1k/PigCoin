@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint": "npx prettier --check src && npx eslint src --ext .js,.vue"
   },
   "dependencies": {
     "pinia": "^2.1.7",

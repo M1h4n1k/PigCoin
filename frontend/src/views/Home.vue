@@ -65,7 +65,7 @@ onMounted(() => {
 <template>
   <div
     id="container"
-    class="h-tg-screen flex flex-col justify-between pb-8 pt-2"
+    class="flex h-tg-screen flex-col justify-between pb-8 pt-2"
   >
     <div
       v-if="userStore.autoCoins !== null && userStore.autoCoins > 0"
