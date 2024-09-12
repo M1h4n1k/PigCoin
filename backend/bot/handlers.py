@@ -33,17 +33,19 @@ async def on_user_join(event: ChatMemberUpdated):
     # TODO referrer will be empty in this case and it will not be possible to set it again,
     #  but if a user has already found the channel himself then probably he will not need a referrer
     if user is None:
-        profile_pictures = await bot.get_user_profile_photos(event.from_user.id, limit=1)
-        picture_path = '/pig_ava.png'
-        if profile_pictures.total_count:
-            picture_path = await load_image(profile_pictures.photos[0][0].file_id, event.from_user.id)
-
-        crud.users.create_user(db, schemas.UserCreate(
-            tg_id=event.from_user.id,
-            username=event.from_user.first_name,
-            picture=picture_path,
-        ))
-        user = crud.users.get_user(db, event.from_user.id)
+        db.close()
+        return
+        # profile_pictures = await bot.get_user_profile_photos(event.from_user.id, limit=1)
+        # picture_path = '/pig_ava.png'
+        # if profile_pictures.total_count:
+        #     picture_path = await load_image(profile_pictures.photos[0][0].file_id, event.from_user.id)
+        #
+        # crud.users.create_user(db, schemas.UserCreate(
+        #     tg_id=event.from_user.id,
+        #     username=event.from_user.first_name,
+        #     picture=picture_path,
+        # ))
+        # user = crud.users.get_user(db, event.from_user.id)
     if any(task.id == channel_tasks[event.chat.username] for task in user.tasks_completed):
         db.close()
         return
