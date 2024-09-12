@@ -60,6 +60,8 @@ async def login(
             crud.users.update_user_money(db, referrer, 25000 if tg_data_dict['user'].get('is_premium') else 5000)
             tasks = crud.tasks.get_tasks(db)
             task_id = next(filter(lambda x: x.type == 'invite', tasks)).id
+            if not any(task.id == task_id for task in referrer.tasks_completed):
+                crud.tasks.complete_task(db, task_id, referrer.tg_id)
             crud.tasks.complete_task(db, task_id, referrer.tg_id)
 
     if start_param_data.get('clubId'):
