@@ -48,6 +48,8 @@ services:
       driver: "json-file"
       options:
         max-size: "10m"
+    volumes:
+      - backend-images:/backend/photos
 #  frontend:
 #    restart: always
 #    build:
