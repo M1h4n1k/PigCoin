@@ -42,6 +42,7 @@ async def test_user_login_create_referral(mocker, dummy_user):
             return None
         ddummy_user = deepcopy(dummy_user)
         ddummy_user.tg_id = tg_id
+        ddummy_user.tasks_completed = []
         return ddummy_user
     patch_validate_data = mocker.patch('routers.user.validate_tg_data', Mock(return_value=True))
     mocker.patch('routers.user.crud.users.get_user', Mock(side_effect=ret_user))
@@ -77,6 +78,7 @@ async def test_user_login_create_referral_premium(mocker, dummy_user):
             return None
         ddummy_user = deepcopy(dummy_user)
         ddummy_user.tg_id = tg_id
+        ddummy_user.tasks_completed = []
         return ddummy_user
     patch_validate_data = mocker.patch('routers.user.validate_tg_data', Mock(return_value=True))
     mocker.patch('routers.user.crud.users.get_user', Mock(side_effect=ret_user))

@@ -62,7 +62,6 @@ async def login(
             task_id = next(filter(lambda x: x.type == 'invite', tasks)).id
             if not any(task.id == task_id for task in referrer.tasks_completed):
                 crud.tasks.complete_task(db, task_id, referrer.tg_id)
-            crud.tasks.complete_task(db, task_id, referrer.tg_id)
 
     if start_param_data.get('clubId'):
         crud.users.update_user_club(db, user, start_param_data['clubId'])
