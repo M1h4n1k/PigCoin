@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
+import logging
 from .. import models, schemas
-from sqlalchemy import desc, asc, func, and_
+from sqlalchemy import desc, asc, func, and_, exc
 from sqlalchemy.orm import Session, query
 
 
@@ -21,7 +22,10 @@ def buy_boost(db: Session, user_tg_id: int, boost_id: int, boost_type: str) -> N
         user_boost.count += 1
     else:
         db.add(models.UserBoost(user_tg_id=user_tg_id, boost_id=boost_id, boost_type=boost_type, count=1))
-    db.commit()
+    try:
+        db.commit()
+    except exc.IntegrityError:
+        logging.error(f'Failed to buy boost {boost_id} for user {user_tg_id}')
     return
 
 

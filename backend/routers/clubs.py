@@ -45,7 +45,10 @@ async def create_club(
     club = crud.clubs.get_club_by_name(db, club_tag)
 
     if not club:
-        channel = await bot.get_chat('@' + club_tag)
+        try:
+            channel = await bot.get_chat('@' + club_tag)
+        except Exception:
+            raise HTTPException(status_code=404, detail='Channel not found')
         if not channel:
             raise HTTPException(status_code=404, detail='Channel not found')
 

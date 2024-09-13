@@ -1,3 +1,5 @@
+import logging
+from aiogram import exceptions
 from fastapi import Request, Response, APIRouter, Depends, HTTPException, Body
 from database import crud, schemas, models
 from sqlalchemy.orm import Session
@@ -43,7 +45,11 @@ async def login(
     start_param_data = parse_start_param(tg_data_dict.get('start_param'))
 
     if not user:
-        profile_pictures = await bot.get_user_profile_photos(tg_data_dict['user']['id'], limit=1)
+        try:
+            profile_pictures = await bot.get_user_profile_photos(tg_data_dict['user']['id'], limit=1)
+        except exceptions.TelegramBadRequest:
+            logging.error(f'user not found: {tg_data_dict}')
+            return HTTPException(status_code=404, detail='User not found')
         picture_path = '/pig_ava.png'
         if profile_pictures.total_count:
             picture_path = await load_image(profile_pictures.photos[0][0].file_id, tg_data_dict['user']['id'])
