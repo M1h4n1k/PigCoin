@@ -111,7 +111,7 @@ const useFreeBooster = (type: number) => {
               >/3 {{ $t("boosts.available") }}
             </p>
           </div>
-          <img height="40" width="40" src="/pigFall.svg" alt="refill" />
+          <img height="32" width="32" src="/pigFall.svg" alt="refill" />
         </div>
 
         <div
@@ -125,7 +125,7 @@ const useFreeBooster = (type: number) => {
               >/3 {{ $t("boosts.available") }}
             </p>
           </div>
-          <img height="45" width="45" src="/refill.png" alt="refill" />
+          <img height="40" width="40" src="/refill.png" alt="refill" />
         </div>
       </div>
     </div>
