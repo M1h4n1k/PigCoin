@@ -16,7 +16,7 @@
   "club.create.title": "Создай или присоединись к клубу",
   "club.create.compete": "Соревнуйтесь в рейтинге",
   "club.create.prizes": "Выигрывайте призы",
-  "club.create.input_placeholder": "Ссылка на канал",
+  "club.create.input_placeholder": "Ссылка на телеграм канал",
   "club.create.button": "Создать",
   "club.create.invalid": "Неверная ссылка на канал",
 

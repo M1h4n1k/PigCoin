@@ -16,7 +16,7 @@
   "club.create.title": "Create or join a club",
   "club.create.compete": "Compete in ratings",
   "club.create.prizes": "Win prizes",
-  "club.create.input_placeholder": "Channel link",
+  "club.create.input_placeholder": "Telegram channel link",
   "club.create.button": "Create",
   "club.create.invalid": "Invalid channel link",
 
