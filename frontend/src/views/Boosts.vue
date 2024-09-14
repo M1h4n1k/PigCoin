@@ -35,6 +35,15 @@ const buyBoost = (boostId: number) => {
     return;
   }
 
+  boostsStore.boosts = boostsStore.boosts.map((b) => {
+    if (b.id === boostId) {
+      userStore.user!.current_coins -= b.price;
+      b.count++;
+      b.price += 100;
+    }
+    return b;
+  });
+
   fetch(import.meta.env.VITE_API_URL + `/boosts/buy/${boostId}`, {
     method: "POST",
     credentials: "include",
@@ -45,17 +54,15 @@ const buyBoost = (boostId: number) => {
       }
       return res.json();
     })
-    .then((data) => {
-      userStore.user = data;
+    .catch((err) => {
       boostsStore.boosts = boostsStore.boosts.map((b) => {
         if (b.id === boostId) {
-          b.count++;
-          b.price += 100;
+          b.count--;
+          b.price -= 100;
+          userStore.user!.current_coins += b.price;
         }
         return b;
       });
-    })
-    .catch((err) => {
       console.log(err);
     });
 };
