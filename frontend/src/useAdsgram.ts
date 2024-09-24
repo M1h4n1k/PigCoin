@@ -13,7 +13,7 @@ export function useAdsgram({
   const AdControllerRef = ref<AdsgramController>(
     window.Adsgram.init({
       blockId: blockId,
-      debug: true,
+      // debug: true,
     }),
   );
 
