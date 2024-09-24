@@ -57,7 +57,12 @@ fetch(import.meta.env.VITE_API_URL + "/user/login", {
     '"',
   credentials: "include",
 })
-  .then((response) => response.json())
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+    return response.json();
+  })
   .then((data) => {
     userStore.user = data;
     Telegram.WebApp.expand();

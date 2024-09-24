@@ -61,7 +61,7 @@ const touchMove = (e: TouchEvent | MouseEvent) => {
     const dx = dirtyBubbles.value[i].x - x;
     const dy = dirtyBubbles.value[i].y - y;
     const distance = Math.sqrt(dx * dx + dy * dy);
-    if (distance < dirtyBubbles.value[i].size / 2) {
+    if (distance < dirtyBubbles.value[i].size / 2 && userStore.user !== null) {
       cleanDirtyBubble(i);
     }
   }

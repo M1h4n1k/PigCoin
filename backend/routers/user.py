@@ -45,14 +45,14 @@ async def login(
     start_param_data = parse_start_param(tg_data_dict.get('start_param'))
 
     if not user:
+        picture_path = '/pig_ava.png'
         try:
             profile_pictures = await bot.get_user_profile_photos(tg_data_dict['user']['id'], limit=1)
+            if profile_pictures.total_count:
+                picture_path = await load_image(profile_pictures.photos[0][0].file_id, tg_data_dict['user']['id'])
         except exceptions.TelegramBadRequest:
             logging.error(f'user not found: {tg_data_dict}')
-            return HTTPException(status_code=404, detail='User not found')
-        picture_path = '/pig_ava.png'
-        if profile_pictures.total_count:
-            picture_path = await load_image(profile_pictures.photos[0][0].file_id, tg_data_dict['user']['id'])
+            # raise HTTPException(status_code=404, detail='User not found')
 
         user = crud.users.create_user(db, schemas.UserCreate(
             tg_id=tg_data_dict['user']['id'],
