@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, onMounted, onBeforeUnmount, onUnmounted } from "vue";
+import { ref, watch, onMounted, onUnmounted } from "vue";
 import RatingRowCard from "@/components/RatingUserCard.vue";
 import BarnIcon from "@/components/BarnIcon.vue";
 import FarmerIcon from "@/components/FarmerIcon.vue";
@@ -108,7 +108,7 @@ onMounted(() => {
   document.body.addEventListener("scroll", windowScroller);
 });
 
-onBeforeUnmount(() => {
+onUnmounted(() => {
   document.body.removeEventListener("scroll", windowScroller);
 });
 
