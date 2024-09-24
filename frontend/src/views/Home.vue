@@ -3,7 +3,7 @@ import HomeSquadHeader from "@/components/HomeSquadHeader.vue";
 import HomeUserStatsHeader from "@/components/HomeUserStatsHeader.vue";
 import HomePorkNose from "@/components/HomePorkNose.vue";
 import HomeFooterActions from "@/components/HomeFooterActions.vue";
-import { ref, Ref, onMounted } from "vue";
+import { ref, Ref, onMounted, watchEffect } from "vue";
 import { useUserStore } from "@/store";
 
 const userStore = useUserStore();
@@ -24,7 +24,7 @@ const squeezeWithRandomTimeout = () => {
   setTimeout(squeezeWithRandomTimeout, randomTimeout);
 };
 
-if (userStore.autoCoins === null) {
+const getAutoCoins = () => {
   fetch(import.meta.env.VITE_API_URL + "/user/autoCoins", {
     credentials: "include",
   })
@@ -35,7 +35,13 @@ if (userStore.autoCoins === null) {
     .catch((err) => {
       console.log(err);
     });
-}
+};
+
+watchEffect(() => {
+  if (userStore.user && userStore.autoCoins === null) {
+    getAutoCoins();
+  }
+});
 
 const collectAutoCoins = () => {
   userStore.autoCoins = 0;

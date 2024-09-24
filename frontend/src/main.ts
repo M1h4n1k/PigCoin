@@ -42,7 +42,7 @@ const userStore = useUserStore();
 app.mount("#app");
 
 document.documentElement.style.overflow = "hidden";
-document.documentElement.style.height = "100dvh";
+document.documentElement.style.height = "100vh";
 
 fetch(import.meta.env.VITE_API_URL + "/user/login", {
   method: "POST",
