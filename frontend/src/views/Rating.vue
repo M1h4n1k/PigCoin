@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, onMounted, onUnmounted } from "vue";
+import { ref, watch, onMounted, onBeforeUnmount, onUnmounted } from "vue";
 import RatingRowCard from "@/components/RatingUserCard.vue";
 import BarnIcon from "@/components/BarnIcon.vue";
 import FarmerIcon from "@/components/FarmerIcon.vue";
@@ -16,6 +16,8 @@ const router = useRouter();
 
 const userStore = useUserStore();
 const ratingStore = useRatingStore();
+
+const container = ref<HTMLElement | null>(null);
 
 const activeTab = ref(0);
 const league = ref(userStore.user?.league ?? 0);
@@ -92,7 +94,10 @@ const showClub = (club: Club) => {
 };
 
 const windowScroller = () => {
-  if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
+  if (
+    document.body.scrollTop + window.innerHeight >=
+    container.value!.clientHeight - 100
+  ) {
     preloadRating(
       ratingStore[tabNames[activeTab.value]][league.value]?.data.length ?? 0,
     );
@@ -100,11 +105,11 @@ const windowScroller = () => {
 };
 
 onMounted(() => {
-  window.addEventListener("scroll", windowScroller);
+  document.body.addEventListener("scroll", windowScroller);
 });
 
-onUnmounted(() => {
-  window.removeEventListener("scroll", windowScroller);
+onBeforeUnmount(() => {
+  document.body.removeEventListener("scroll", windowScroller);
 });
 
 watch(league, () => preloadRating());
@@ -113,7 +118,7 @@ preloadRating();
 </script>
 
 <template>
-  <div class="flex select-none flex-col items-center px-3 py-6">
+  <div ref="container" class="flex select-none flex-col items-center px-3 py-6">
     <div class="flex flex-col items-center">
       <div class="toned-bg flex w-fit cursor-pointer rounded-2xl">
         <div

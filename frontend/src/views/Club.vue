@@ -13,6 +13,7 @@ import IconOpenLink from "@/components/IconOpenLink.vue";
 const router = useRouter();
 const userStore = useUserStore();
 const loading = ref(false);
+const container = ref<HTMLElement | null>(null);
 
 const loadMembers = (offset = 0, limit = 20) => {
   if (userStore.clubMembersLoaded) return;
@@ -67,22 +68,29 @@ if (userStore.clubMembers.length === 0 && userStore.user?.club_id) {
 }
 
 const windowScroller = () => {
-  if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
+  if (
+    document.body.scrollTop + window.innerHeight >=
+    container.value!.clientHeight - 100
+  ) {
     loadMembers(userStore.clubMembers.length);
   }
 };
 
 onMounted(() => {
-  window.addEventListener("scroll", windowScroller);
+  document.body.addEventListener("scroll", windowScroller);
 });
 
 onUnmounted(() => {
-  window.removeEventListener("scroll", windowScroller);
+  document.body.removeEventListener("scroll", windowScroller);
 });
 </script>
 
 <template>
-  <div id="container" class="flex flex-col items-center px-3 py-6">
+  <div
+    ref="container"
+    id="container"
+    class="flex flex-col items-center px-3 py-6"
+  >
     <div class="flex w-full gap-4">
       <img
         class="h-32 w-32 rounded-xl"
