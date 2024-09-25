@@ -40,8 +40,8 @@ async def create_club(
 ):
     if re.match(r'[^a-zA-Z0-9_]', club_tag):
         raise HTTPException(status_code=400, detail='Invalid club tag')
-    if user.club_id:
-        raise HTTPException(status_code=400, detail='User already in club')
+    # if user.club_id:
+    #     raise HTTPException(status_code=400, detail='User already in club')
     club = crud.clubs.get_club_by_name(db, club_tag)
 
     if not club:
