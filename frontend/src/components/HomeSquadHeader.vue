@@ -22,7 +22,9 @@ import BarnIcon from "@/components/BarnIcon.vue";
         alt=""
       />
       <div class="ml-2 flex flex-col items-start justify-center">
-        <span class="text-lg font-bold">{{ userStore.user!.club!.name }}</span>
+        <span class="max-w-44 truncate text-lg font-bold">{{
+          userStore.user!.club!.name
+        }}</span>
         <span
           >{{ userStore.user!.club!.members_count }}
           {{ $t("common.members", userStore.user!.club!.members_count) }}</span
