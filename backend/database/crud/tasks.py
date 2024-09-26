@@ -4,6 +4,7 @@ from .users import update_user_money
 from .clubs import update_clubs_total_coins
 from sqlalchemy import desc, asc, func, and_
 from sqlalchemy.orm import Session, query
+from math import floor
 
 
 def get_tasks(db: Session) -> list:
@@ -35,7 +36,7 @@ def watch_ad(db: Session, user_tg_id: int):
         raise ValueError('User not found')
     if not user.can_collect_ad:
         raise ValueError('You can watch ads only once in 1.2 hours')
-    update_user_money(db, user, 500)
+    update_user_money(db, user, floor(user.total_coins * 0.03))
     if user.club_id:
         update_clubs_total_coins(db, user.club_id, 500)
     user.last_ad_collected = datetime.now()

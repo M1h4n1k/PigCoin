@@ -104,7 +104,7 @@ if (tasksStore.tasks.length === 0) {
       <TaskCard
         :id="-1"
         picture="/playAd.svg"
-        :reward="500"
+        :reward="Math.floor((userStore.user?.total_coins ?? 500) * 0.03)"
         type="ad"
         :completed="false"
         @click="() => showAdWrapper()"
