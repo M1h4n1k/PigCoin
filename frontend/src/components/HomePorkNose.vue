@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, Ref, onMounted } from "vue";
+import { ref, Ref, onMounted, watchEffect } from "vue";
 import { useUserStore } from "@/store";
 import { Bubble, DirtyBubble } from "@/types";
 import { getRandomNumber } from "@/utils";
@@ -148,8 +148,19 @@ const collectCoinsBatch = () => {
     });
 };
 
+const collectInterval = ref<number | null>(null);
+// create interval to collect coins only if auto coins is zero
+watchEffect(() => {
+  if (
+    userStore.user &&
+    userStore.autoCoins === 0 &&
+    collectInterval.value === null
+  ) {
+    collectInterval.value = setInterval(collectCoinsBatch, 5000);
+  }
+});
+
 onMounted(() => {
-  setInterval(collectCoinsBatch, 5000);
   let x = 0;
   let y = 0;
   for (let i = 0; i < 10; i++) {
