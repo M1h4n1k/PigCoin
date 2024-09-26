@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, Ref, onMounted, watchEffect } from "vue";
+import { ref, Ref, onMounted, watchEffect, onBeforeUnmount } from "vue";
 import { useUserStore } from "@/store";
 import { Bubble, DirtyBubble } from "@/types";
 import { getRandomNumber } from "@/utils";
@@ -176,6 +176,13 @@ onMounted(() => {
       rotation: Math.random() * 360,
     });
   }
+});
+
+onBeforeUnmount(() => {
+  if (collectInterval.value !== null) {
+    clearInterval(collectInterval.value);
+  }
+  collectCoinsBatch();
 });
 </script>
 
