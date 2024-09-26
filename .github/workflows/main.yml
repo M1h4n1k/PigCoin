@@ -66,12 +66,24 @@ jobs:
           ssh-keyscan 188.130.206.99 >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
 
+      - name: Install and Build Frontend
+        working-directory: ./frontend
+        run: |
+          echo '${{ secrets.PROD_FRONT_ENV }}' > .env
+          npm install
+          npm run build
+
+      - name: Archive Build Artifacts
+        run: tar -czf frontend-build.tar.gz -C frontend/dist .
+
+      - name: Transfer Build to Server
+        run: scp frontend-build.tar.gz root@188.130.206.99:/tmp/frontend-build.tar.gz
+
       - name: Deploy to server
         run: ssh root@188.130.206.99 "
           cd ~/PigCoin &&
           git pull &&
           echo '${{ secrets.PROD_BACK_ENV }}' > ./backend/.env &&
-          echo '${{ secrets.PROD_FRONT_ENV }}' > ./frontend/.env &&
-          cd frontend && npm i && npm run build && cp -r dist/* /var/www/pigcoin.evicon.fun/html/ && cd .. &&
+          tar -xzf /tmp/frontend-build.tar.gz -C /var/www/pigcoin.evicon.fun/html/ &&
           docker compose up --build -d
           "

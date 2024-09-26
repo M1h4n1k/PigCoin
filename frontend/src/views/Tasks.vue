@@ -24,7 +24,12 @@ onUnmounted(() => {
 const { showAd } = useAdsgram({
   blockId: "2029",
   onReward: () => {
-    alertStore.displayAlert(t("tasks.ad.success"), "info");
+    alertStore.displayAlert(
+      t("tasks.ad.success", {
+        coins: Math.floor((userStore.user?.total_coins ?? 500) * 0.03),
+      }),
+      "info",
+    );
     fetch(import.meta.env.VITE_API_URL + "/tasks/ad", {
       method: "POST",
       credentials: "include",
