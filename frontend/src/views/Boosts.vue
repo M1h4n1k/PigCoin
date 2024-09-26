@@ -67,7 +67,10 @@ const buyBoost = (boostId: number) => {
     });
 };
 
+const usedFreeBooster = ref(false);
+
 const useFreeBooster = (type: number) => {
+  if (usedFreeBooster.value) return;
   if (type === 0 && userStore.user!.free_turbo === 0) {
     Telegram.WebApp.HapticFeedback.notificationOccurred("error");
     alertStore.displayAlert(t("error.no_boost"), "error");
@@ -78,6 +81,7 @@ const useFreeBooster = (type: number) => {
     alertStore.displayAlert(t("error.no_boost"), "error");
     return;
   }
+  usedFreeBooster.value = true;
   fetch(import.meta.env.VITE_API_URL + `/boosts/use/${type}`, {
     method: "POST",
     credentials: "include",
