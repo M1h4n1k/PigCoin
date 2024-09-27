@@ -45,10 +45,11 @@ class User(Base):
 
         # TODO change that every second is counted except for the first 10 mins
         hours_passed = min(
-            (datetime.now() - self.last_coin_collected).seconds // 3600,
-            self.boosts.filter(UserBoost.boost_type == 'auto').first().count
+            (datetime.now() - self.last_coin_collected).seconds / 3600,
+            5
         )
-        return hours_passed * 1000
+
+        return int(hours_passed * self.boosts.filter(UserBoost.boost_type == 'auto').first().count * 500)
 
     @hybrid_property
     def current_energy(self) -> int:

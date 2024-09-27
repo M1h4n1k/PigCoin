@@ -25,48 +25,6 @@ if (boostsStore.boosts.length === 0) {
     });
 }
 
-const buyBoost = (boostId: number) => {
-  if (
-    userStore.user!.current_coins <
-    boostsStore.boosts.find((b) => b.id === boostId)!.price
-  ) {
-    Telegram.WebApp.HapticFeedback.notificationOccurred("error");
-    alertStore.displayAlert(t("error.no_coins"), "error");
-    return;
-  }
-
-  boostsStore.boosts = boostsStore.boosts.map((b) => {
-    if (b.id === boostId) {
-      userStore.user!.current_coins -= b.price;
-      b.count++;
-      b.price += 100;
-    }
-    return b;
-  });
-
-  fetch(import.meta.env.VITE_API_URL + `/boosts/buy/${boostId}`, {
-    method: "POST",
-    credentials: "include",
-  })
-    .then((res) => {
-      if (res.status === 402) {
-        throw new Error("Not enough coins");
-      }
-      return res.json();
-    })
-    .catch((err) => {
-      boostsStore.boosts = boostsStore.boosts.map((b) => {
-        if (b.id === boostId) {
-          b.count--;
-          b.price -= 100;
-          userStore.user!.current_coins += b.price;
-        }
-        return b;
-      });
-      console.log(err);
-    });
-};
-
 const usedFreeBooster = ref(false);
 
 const useFreeBooster = (type: number) => {
@@ -141,7 +99,7 @@ const useFreeBooster = (type: number) => {
       </div>
     </div>
 
-    <div class="mt-5">
+    <div class="mt-5 pb-[178px]">
       <div
         class="toned-bg mt-2 flex flex-col justify-around gap-4 rounded-xl p-3"
       >
@@ -153,7 +111,11 @@ const useFreeBooster = (type: number) => {
           :picture="b.picture"
           :title="$t('boosts.' + b.title.toLowerCase().replace(' ', '_'))"
           :price="b.price"
-          @click="buyBoost(b.id)"
+          :count="b.count"
+          :description="
+            $t('boosts.' + b.title.toLowerCase().replace(' ', '_') + '.desc')
+          "
+          :id="b.id"
         />
 
         <div v-if="loading" class="flex w-full items-center justify-center p-2">
