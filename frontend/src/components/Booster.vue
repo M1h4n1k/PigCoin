@@ -97,7 +97,7 @@ const selected = ref(false);
         transform: selected ? 'translateY(0)' : 'translateY(100%)',
       }"
       class="fixed left-0"
-      :header="title"
+      :header="title ?? ''"
       @close="() => (selected = false)"
     >
       <div class="flex">
