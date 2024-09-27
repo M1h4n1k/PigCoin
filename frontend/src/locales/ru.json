@@ -42,7 +42,10 @@
 
   "rating.option.1": "Свинопасы",
   "rating.option.2": "Хлева",
-  "rating.leagues": "Бронза | Золото | Алмаз",
+  "rating.league.0": "Бронза",
+  "rating.league.1": "Серебро",
+  "rating.league.2": "Золото",
+  "rating.league.3": "Алмаз",
 
   "minigame.game_over": "Время вышло!",
   "minigame.your_score": "Ваш счет",

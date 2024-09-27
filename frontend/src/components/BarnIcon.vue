@@ -5,8 +5,8 @@ defineProps({
     required: true,
   },
 });
-const colors = ["#e07f1f", "#e8b923", "#b0f7ff"];
-const darkColors = ["#986634", "#c4a747", "#71d8ef"];
+const colors = ["#e07f1f", "#C0C0C0", "#e8b923", "#b0f7ff"];
+const darkColors = ["#986634", "#9a9a9a", "#c4a747", "#71d8ef"];
 </script>
 
 <template>

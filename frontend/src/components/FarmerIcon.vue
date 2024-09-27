@@ -5,7 +5,7 @@ defineProps({
     required: true,
   },
 });
-const colors = ["#986634", "#e8b923", "#71d8ef"];
+const colors = ["#e07f1f", "#C0C0C0", "#e8b923", "#b0f7ff"];
 </script>
 
 <template>

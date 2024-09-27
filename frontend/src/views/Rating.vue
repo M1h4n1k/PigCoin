@@ -144,7 +144,7 @@ preloadRating();
         <IconArrowRight
           height="70px"
           width="70px"
-          @click="league = (league - 1 + 3) % 3"
+          @click="league = (league - 1 + 4) % 4"
           class="-right-[22px] rotate-180"
         />
         <div class="relative">
@@ -160,13 +160,13 @@ preloadRating();
           />
 
           <span class="absolute mt-2 w-full text-center font-medium">
-            {{ $t("rating.leagues", league) }}
+            {{ $t("rating.league." + league) }}
           </span>
         </div>
         <IconArrowRight
           height="70px"
           width="70px"
-          @click="league = (league + 1) % 3"
+          @click="league = (league + 1) % 4"
           class="-right-[22px]"
         />
       </div>

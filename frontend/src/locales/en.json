@@ -42,7 +42,10 @@
 
   "rating.option.1": "Swineherds",
   "rating.option.2": "Barns",
-  "rating.leagues": "Bronze | Gold | Diamond",
+  "rating.league.0": "Bronze",
+  "rating.league.1": "Silver",
+  "rating.league.2": "Gold",
+  "rating.league.3": "Diamond",
 
   "minigame.game_over": "Time's up!",
   "minigame.your_score": "Your score",
