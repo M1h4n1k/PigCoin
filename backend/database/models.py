@@ -48,7 +48,8 @@ class User(Base):
             (datetime.now() - self.last_coin_collected).seconds / 3600,
             5
         )
-
+        if hours_passed < 0.3:
+            return 0
         return int(hours_passed * self.boosts.filter(UserBoost.boost_type == 'auto').first().count * 500)
 
     @hybrid_property

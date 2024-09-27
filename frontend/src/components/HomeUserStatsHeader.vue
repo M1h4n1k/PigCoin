@@ -25,7 +25,7 @@ const { user } = storeToRefs(userStore);
       <span class="mx-5 text-3xl font-semibold">·</span>
       <div class="flex items-center">
         <FarmerIcon
-          v-if="userStore?.user?.league"
+          v-if="userStore?.user?.league != null"
           class="h-8 w-8"
           :league="userStore.user.league"
         />
