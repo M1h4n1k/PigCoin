@@ -65,7 +65,7 @@
   "boosts.refill_rate": "Refill rate",
   "tasks.refill_rate.desc": "Increases refill rate",
   "boosts.herdsman": "herdsman",
-  "tasks.herdsman.desc": "Gains 200 coins per herdsman per hour up to 5 hours",
+  "tasks.herdsman.desc": "Gains 300 coins per herdsman per hour up to 5 hours",
 
   "invite.default": "as a first time gift",
   "invite.premium": "if you have Telegram Premium"

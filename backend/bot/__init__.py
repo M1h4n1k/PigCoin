@@ -13,4 +13,4 @@ def register_handlers(_dp):
 
 register_handlers(dp)
 
-__all__ = ['TOKEN', 'dp', 'bot', 'register_handlers']
+__all__ = ['TOKEN', 'dp', 'bot', 'register_handlers', 'WEB_LINK']

@@ -50,6 +50,16 @@ services:
         max-size: "10m"
     volumes:
       - backend-images:/backend/photos
+  notifier:
+    restart: always
+    build:
+      context: ./backend
+      dockerfile: ./DockerfileCronjobs
+    env_file:
+      - ./backend/.env
+    depends_on:
+      mysql:
+        condition: service_healthy
 #  frontend:
 #    restart: always
 #    build:

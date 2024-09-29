@@ -2,6 +2,7 @@ import logging
 from aiogram import exceptions
 from fastapi import Request, Response, APIRouter, Depends, HTTPException, Body
 from database import crud, schemas, models
+from datetime import datetime
 from sqlalchemy.orm import Session
 from dependencies import get_db, get_tg_data, get_user, validate_tg_data
 import orjson
@@ -119,5 +120,6 @@ async def collect_auto_coins(
     user: models.User = Depends(get_user),
     db: Session = Depends(get_db),
 ):
+    user.energy_last_used = datetime.now()
     user = crud.users.update_user_money(db, user, user.auto_coins)
     return user

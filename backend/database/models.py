@@ -1,7 +1,7 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from sqlalchemy.ext.hybrid import hybrid_property
-from sqlalchemy import ForeignKey, DateTime, Text, Boolean, func, BIGINT, VARCHAR, Double, text, select, and_
-from sqlalchemy.orm import relationship, DeclarativeBase, mapped_column, Mapped, column_property
+from sqlalchemy import ForeignKey, DateTime, Text, Boolean, func, BIGINT, VARCHAR, and_
+from sqlalchemy.orm import relationship, DeclarativeBase, mapped_column, Mapped
 from utils import get_user_league, get_club_league, get_user_league_range
 
 from sqlalchemy.orm import object_session
@@ -34,23 +34,24 @@ class User(Base):
 
     @property
     def can_collect_ad(self) -> bool:
-        return (datetime.now() - self.last_ad_collected).seconds >= 60 * 60 * 1.2  # 20 times a day
+        return (datetime.now() - self.last_ad_collected) >= timedelta(hours=1, minutes=12)  # roughly 20 times a day
 
+    # no idea why I've created this column
     last_coin_collected: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
 
     @property
     def auto_coins(self) -> int:
-        if self.boosts.filter(UserBoost.boost_type == 'auto').first() is None:
+        auto_collect_boosts = self.boosts.filter(UserBoost.boost_type == 'auto').first()
+        if auto_collect_boosts is None:
             return 0
 
-        # TODO change that every second is counted except for the first 10 mins
         hours_passed = min(
-            (datetime.now() - self.last_coin_collected).seconds / 3600,
+            (datetime.now() - self.energy_last_used).seconds / 3600,
             5
         )
         if hours_passed < 0.3:
             return 0
-        return int(hours_passed * self.boosts.filter(UserBoost.boost_type == 'auto').first().count * 500)
+        return int(hours_passed * auto_collect_boosts.count * 300)
 
     @hybrid_property
     def current_energy(self) -> int:
@@ -122,24 +123,24 @@ class User(Base):
 
     @hybrid_property
     def max_energy(self) -> int:
-        if self.boosts.filter(UserBoost.boost_type == 'capacity').first() is None:
+        capacity_boosts = self.boosts.filter(UserBoost.boost_type == 'capacity').first()
+        if capacity_boosts is None:
             return 1000
-
-        return 1000 + self.boosts.filter(UserBoost.boost_type == 'capacity').first().count * 100
+        return 1000 + capacity_boosts.count * 100
 
     @hybrid_property
     def click_price(self) -> int:
-        if self.boosts.filter(UserBoost.boost_type == 'click_price').first() is None:
+        click_boosts = self.boosts.filter(UserBoost.boost_type == 'click_price').first()
+        if click_boosts is None:
             return 1
-
-        return 1 + self.boosts.filter(UserBoost.boost_type == 'click_price').first().count
+        return 1 + click_boosts.count
 
     @hybrid_property
     def refill_rate(self) -> int:
-        if self.boosts.filter(UserBoost.boost_type == 'refill_rate').first() is None:
+        refill_boosts = self.boosts.filter(UserBoost.boost_type == 'refill_rate').first()
+        if refill_boosts is None:
             return 1
-
-        return 1 + self.boosts.filter(UserBoost.boost_type == 'refill_rate').first().count
+        return 1 + refill_boosts.count
 
     boosts: Mapped[list['UserBoost']] = relationship(
         'UserBoost', order_by='UserBoost.boost_id.asc()', lazy='dynamic'
