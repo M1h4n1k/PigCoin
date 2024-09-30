@@ -59,13 +59,13 @@
   "boosts.pigfall": "Pigfall",
   "boosts.refill": "Refill",
   "boosts.sponge": "Sponge",
-  "tasks.sponge.desc": "Increase price per dirt",
+  "boosts.sponge.desc": "Increase price per dirt",
   "boosts.bottle_capacity": "Bottle capacity",
-  "tasks.bottle_capacity.desc": "Increases soap capacity",
+  "boosts.bottle_capacity.desc": "Increases soap capacity",
   "boosts.refill_rate": "Refill rate",
-  "tasks.refill_rate.desc": "Increases refill rate",
+  "boosts.refill_rate.desc": "Increases refill rate",
   "boosts.herdsman": "herdsman",
-  "tasks.herdsman.desc": "Gains 300 coins per herdsman per hour up to 5 hours",
+  "boosts.herdsman.desc": "Gains 300 coins per herdsman per hour up to 5 hours",
 
   "invite.default": "as a first time gift",
   "invite.premium": "if you have Telegram Premium"
