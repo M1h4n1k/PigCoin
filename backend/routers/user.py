@@ -124,8 +124,10 @@ async def collect_auto_coins(
     user: models.User = Depends(get_user),
     db: Session = Depends(get_db),
 ):
-    user.energy_last_used = datetime.now()
     if user.club_id:
         crud.clubs.update_clubs_total_coins(db, user.club_id, user.auto_coins)
     user = crud.users.update_user_money(db, user, user.auto_coins)
+    user.energy_last_used = datetime.now()
+    db.commit()
+    db.refresh(user)
     return user
