@@ -110,7 +110,7 @@ const selected = ref(false);
         />
         <div class="ml-5">
           <p>{{ description }}</p>
-          <p class="font-bold">Кол-во: {{ count }}</p>
+          <p class="font-bold">{{ $t("boosts.count") }}: {{ count }}</p>
         </div>
       </div>
       <button

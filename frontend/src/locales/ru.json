@@ -66,6 +66,7 @@
   "boosts.refill_rate.desc": "Увеличивает запас мыла",
   "boosts.herdsman": "Авто-свинопас",
   "boosts.herdsman.desc": "Получает 300 монет за каждого свинопаса в час до 5 часов",
+  "boosts.count": "Количество",
 
   "invite.default": "как первоначальный бонус",
   "invite.premium": "если у вас есть Telegram Premium"
