@@ -63,8 +63,14 @@ async def login(
         ))
         if start_param_data.get('userId') and user.tg_id != start_param_data['userId']:
             referrer = crud.users.get_user(db, start_param_data['userId'])
-            crud.users.update_user_money(db, user, 25000 if tg_data_dict['user'].get('is_premium') else 5000)
-            crud.users.update_user_money(db, referrer, 25000 if tg_data_dict['user'].get('is_premium') else 5000)
+            coins_gained = 25000 if tg_data_dict['user'].get('is_premium') else 5000
+            crud.users.update_user_money(db, user, coins_gained)
+            if user.club_id:
+                crud.clubs.update_clubs_total_coins(db, user.club_id, coins_gained)
+            crud.users.update_user_money(db, referrer, coins_gained)
+            if referrer.club_id:
+                crud.clubs.update_clubs_total_coins(db, referrer.club_id, coins_gained)
+
             tasks = crud.tasks.get_tasks(db)
             task_id = next(filter(lambda x: x.type == 'invite', tasks)).id
             if not any(task.id == task_id for task in referrer.tasks_completed):
@@ -121,5 +127,7 @@ async def collect_auto_coins(
     db: Session = Depends(get_db),
 ):
     user.energy_last_used = datetime.now()
+    if user.club_id:
+        crud.clubs.update_clubs_total_coins(db, user.club_id, user.auto_coins)
     user = crud.users.update_user_money(db, user, user.auto_coins)
     return user
