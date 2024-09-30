@@ -127,6 +127,7 @@ async def collect_auto_coins(
     if user.club_id:
         crud.clubs.update_clubs_total_coins(db, user.club_id, user.auto_coins)
     user = crud.users.update_user_money(db, user, user.auto_coins)
+    user._current_energy = user.current_energy
     user.energy_last_used = datetime.now()
     db.commit()
     db.refresh(user)
