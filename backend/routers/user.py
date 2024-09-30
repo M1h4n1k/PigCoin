@@ -65,8 +65,6 @@ async def login(
             referrer = crud.users.get_user(db, start_param_data['userId'])
             coins_gained = 25000 if tg_data_dict['user'].get('is_premium') else 5000
             crud.users.update_user_money(db, user, coins_gained)
-            if user.club_id:
-                crud.clubs.update_clubs_total_coins(db, user.club_id, coins_gained)
             crud.users.update_user_money(db, referrer, coins_gained)
             if referrer.club_id:
                 crud.clubs.update_clubs_total_coins(db, referrer.club_id, coins_gained)
