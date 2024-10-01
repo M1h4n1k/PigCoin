@@ -35,6 +35,7 @@ async def notify_auto_coins():
             return 'ов'
     ge = get_ending
     for user in users:
+        print(user.tg_id, user.auto_coins)
         try:
             await bot.send_message(
                 user.tg_id,

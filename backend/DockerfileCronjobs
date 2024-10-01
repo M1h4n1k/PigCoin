@@ -1,10 +1,11 @@
 FROM python:3.12-slim
 WORKDIR /backend
 COPY ./requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
 RUN apt-get update && apt-get install -y cron
+RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
-RUN echo "0 * * * * . /root/.profile; /usr/local/bin/python /backend/notifier.py" > /etc/cron.d/notify-herdsman-done
+RUN printenv >> /etc/environment
+RUN echo "0 * * * * /usr/local/bin/python /backend/notifier.py" > /etc/cron.d/notify-herdsman-done
 RUN chmod 0644 /etc/cron.d/notify-herdsman-done
 RUN crontab /etc/cron.d/notify-herdsman-done
 RUN touch /var/log/cron.log
