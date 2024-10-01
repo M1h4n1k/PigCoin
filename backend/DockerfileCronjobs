@@ -4,9 +4,8 @@ COPY ./requirements.txt .
 RUN apt-get update && apt-get install -y cron
 RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
-RUN printenv >> /etc/environment
 RUN echo "0 * * * * /usr/local/bin/python /backend/notifier.py" > /etc/cron.d/notify-herdsman-done
 RUN chmod 0644 /etc/cron.d/notify-herdsman-done
 RUN crontab /etc/cron.d/notify-herdsman-done
 RUN touch /var/log/cron.log
-CMD cron && tail -f /var/log/cron.log
+CMD printenv >> /etc/environment && cron -f
