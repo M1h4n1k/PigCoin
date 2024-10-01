@@ -4,7 +4,7 @@ COPY ./requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 RUN apt-get update && apt-get install -y cron
 COPY . .
-RUN echo "0 * * * * /usr/bin/python /backend/notifier.py" > /etc/cron.d/notify-herdsman-done
+RUN echo "0 * * * * /usr/local/bin/python /backend/notifier.py" > /etc/cron.d/notify-herdsman-done
 RUN chmod 0644 /etc/cron.d/notify-herdsman-done
 RUN crontab /etc/cron.d/notify-herdsman-done
 RUN touch /var/log/cron.log
