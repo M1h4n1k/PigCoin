@@ -29,8 +29,6 @@ async def collect_coin(
         raise HTTPException(status_code=400, detail='Not enough energy')
     user = crud.users.update_user_money(db, user, coins)
     crud.users.decrease_user_energy(db, user, coins)
-    if user.club_id:
-        crud.clubs.update_clubs_total_coins(db, user.club_id, coins)
     return user
 
 
@@ -67,8 +65,6 @@ async def collect_turbo_coins(
         raise HTTPException(status_code=400, detail='Too many coins')
 
     crud.users.update_user_money(db, user, coins)
-    if user.club_id:
-        crud.clubs.update_clubs_total_coins(db, user.club_id, coins)
     user = crud.users.update_user_turbo(db, user, False)
 
     return user

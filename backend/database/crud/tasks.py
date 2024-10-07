@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta
 from .. import models, schemas
 from .users import update_user_money
-from .clubs import update_clubs_total_coins
 from sqlalchemy import desc, asc, func, and_
 from sqlalchemy.orm import Session, query
 from math import floor
@@ -23,8 +22,6 @@ def complete_task(db: Session, task_id: int, user_tg_id: int) -> None:
     if user is None:
         raise ValueError('User not found')
     update_user_money(db, user, task.reward)
-    if user.club_id:
-        update_clubs_total_coins(db, user.club_id, task.reward)
     db.add(models.UserTask(user_tg_id=user_tg_id, task_id=task_id))
     db.commit()
     return
@@ -37,8 +34,6 @@ def watch_ad(db: Session, user_tg_id: int):
     if not user.can_collect_ad:
         raise ValueError('You can watch ads only once in 1.2 hours')
     update_user_money(db, user, floor(user.total_coins * 0.03))
-    if user.club_id:
-        update_clubs_total_coins(db, user.club_id, 500)
     user.last_ad_collected = datetime.now()
     db.commit()
     db.refresh(user)

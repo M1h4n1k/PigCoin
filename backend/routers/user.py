@@ -66,8 +66,6 @@ async def login(
             coins_gained = 25000 if tg_data_dict['user'].get('is_premium') else 5000
             crud.users.update_user_money(db, user, coins_gained)
             crud.users.update_user_money(db, referrer, coins_gained)
-            if referrer.club_id:
-                crud.clubs.update_clubs_total_coins(db, referrer.club_id, coins_gained)
 
             tasks = crud.tasks.get_tasks(db)
             task_id = next(filter(lambda x: x.type == 'invite', tasks)).id
@@ -124,8 +122,6 @@ async def collect_auto_coins(
     user: models.User = Depends(get_user),
     db: Session = Depends(get_db),
 ):
-    if user.club_id:
-        crud.clubs.update_clubs_total_coins(db, user.club_id, user.auto_coins)
     user = crud.users.update_user_money(db, user, user.auto_coins)
     user._current_energy = user.current_energy
     user.energy_last_used = datetime.now()

@@ -1,9 +1,8 @@
 from datetime import datetime, timedelta
 from sqlalchemy.ext.hybrid import hybrid_property
-from sqlalchemy import ForeignKey, DateTime, Text, Boolean, func, BIGINT, VARCHAR, and_
+from sqlalchemy import ForeignKey, DateTime, Text, Boolean, func, BIGINT, VARCHAR, and_, SQLColumnExpression, select
 from sqlalchemy.orm import relationship, DeclarativeBase, mapped_column, Mapped
 from utils import get_user_league, get_club_league, get_user_league_range
-
 from sqlalchemy.orm import object_session
 
 
@@ -190,7 +189,21 @@ class Club(Base):
 
     creator_tg_id: Mapped[int] = mapped_column(BIGINT)
 
-    total_coins: Mapped[int] = mapped_column(BIGINT, default=0)
+    @hybrid_property
+    def total_coins(self):
+        db = object_session(self)
+        total_coins = db.query(func.sum(User.total_coins)).filter(User.club_id == self.id).scalar()
+        return total_coins or 0
+
+    @total_coins.expression
+    @classmethod
+    def total_coins(cls) -> SQLColumnExpression[int]:
+        return (
+            select(func.sum(User.total_coins))
+            .where(User.club_id == cls.id)
+            .label("total_coins")
+        )
+
     members: Mapped[list['User']] = relationship(
         'User',
         back_populates='club',
