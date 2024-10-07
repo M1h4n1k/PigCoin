@@ -23,13 +23,11 @@ def test_collect_coins(mocker, dummy_user):
     dummy_user.club_id = 1
     patch_crud_update_money.return_value = dummy_user
     patch_crud_decrease_energy = mocker.patch('routers.boosts.crud.users.decrease_user_energy', Mock())
-    patch_crud_clubs_update_money = mocker.patch('routers.boosts.crud.clubs.update_clubs_total_coins', Mock())
 
     response = client_l.post('/api/game/collectCoins', json={'coins': 100})
     assert response.status_code == 200
     patch_crud_decrease_energy.assert_called_with(ANY, ANY, 100)
     patch_crud_update_money.assert_called_with(ANY, ANY, 100)
-    patch_crud_clubs_update_money.assert_called_with(ANY, 1, 100)
 
 
 def test_collect_coins_negative(mocker, dummy_user):
@@ -41,13 +39,11 @@ def test_collect_coins_negative(mocker, dummy_user):
     patch_crud_update_money = mocker.patch('routers.boosts.crud.users.update_user_money', Mock())
     patch_crud_update_money.return_value = dummy_user
     patch_crud_decrease_energy = mocker.patch('routers.boosts.crud.users.decrease_user_energy', Mock())
-    patch_crud_clubs_update_money = mocker.patch('routers.boosts.crud.clubs.update_clubs_total_coins', Mock())
 
     response = client_l.post('/api/game/collectCoins', json={'coins': -100})
     assert response.status_code == 400
     patch_crud_decrease_energy.assert_not_called()
     patch_crud_update_money.assert_not_called()
-    patch_crud_clubs_update_money.assert_not_called()
 
 
 def test_collect_coins_low_energy(mocker, dummy_user):
@@ -59,13 +55,11 @@ def test_collect_coins_low_energy(mocker, dummy_user):
     patch_crud_update_money = mocker.patch('routers.boosts.crud.users.update_user_money', Mock())
     patch_crud_update_money.return_value = dummy_user
     patch_crud_decrease_energy = mocker.patch('routers.boosts.crud.users.decrease_user_energy', Mock())
-    patch_crud_clubs_update_money = mocker.patch('routers.boosts.crud.clubs.update_clubs_total_coins', Mock())
 
     response = client_l.post('/api/game/collectCoins', json={'coins': 100})
     assert response.status_code == 400
     patch_crud_decrease_energy.assert_not_called()
     patch_crud_update_money.assert_not_called()
-    patch_crud_clubs_update_money.assert_not_called()
 
 
 def test_get_turbo(mocker, dummy_user):
@@ -99,7 +93,6 @@ def test_collect_turbo(mocker, dummy_user):
     client_l = get_client_with_dep(patch_get_user)
     patch_crud_update_money = mocker.patch('routers.boosts.crud.users.update_user_money', Mock())
     patch_crud_decrease_energy = mocker.patch('routers.boosts.crud.users.decrease_user_energy', Mock())
-    patch_crud_clubs_update_money = mocker.patch('routers.boosts.crud.clubs.update_clubs_total_coins', Mock())
     patch_crud_update_free_turbo = mocker.patch('routers.boosts.crud.users.update_user_turbo', Mock())
     dummy_user.club_id = 1
     patch_crud_update_free_turbo.return_value = dummy_user
@@ -108,7 +101,6 @@ def test_collect_turbo(mocker, dummy_user):
     assert response.status_code == 200
     patch_crud_decrease_energy.assert_not_called()
     patch_crud_update_money.assert_called_with(ANY, ANY, 100)
-    patch_crud_clubs_update_money.assert_called_with(ANY, 1, 100)
     patch_crud_update_free_turbo.assert_called_with(ANY, ANY, False)
 
 
@@ -122,14 +114,12 @@ def test_collect_turbo_unavailable(mocker, dummy_user):
     client_l = get_client_with_dep(patch_get_user)
     patch_crud_update_money = mocker.patch('routers.boosts.crud.users.update_user_money', Mock())
     patch_crud_decrease_energy = mocker.patch('routers.boosts.crud.users.decrease_user_energy', Mock())
-    patch_crud_clubs_update_money = mocker.patch('routers.boosts.crud.clubs.update_clubs_total_coins', Mock())
     patch_crud_update_free_turbo = mocker.patch('routers.boosts.crud.users.update_user_turbo', Mock())
 
     response = client_l.post('/api/game/collectTurboCoins', json={'coins': 100})
     assert response.status_code == 400
     patch_crud_decrease_energy.assert_not_called()
     patch_crud_update_money.assert_not_called()
-    patch_crud_clubs_update_money.assert_not_called()
     patch_crud_update_free_turbo.assert_not_called()
 
 
@@ -143,14 +133,12 @@ def test_collect_turbo_negative(mocker, dummy_user):
     client_l = get_client_with_dep(patch_get_user)
     patch_crud_update_money = mocker.patch('routers.boosts.crud.users.update_user_money', Mock())
     patch_crud_decrease_energy = mocker.patch('routers.boosts.crud.users.decrease_user_energy', Mock())
-    patch_crud_clubs_update_money = mocker.patch('routers.boosts.crud.clubs.update_clubs_total_coins', Mock())
     patch_crud_update_free_turbo = mocker.patch('routers.boosts.crud.users.update_user_turbo', Mock())
 
     response = client_l.post('/api/game/collectTurboCoins', json={'coins': -100})
     assert response.status_code == 400
     patch_crud_decrease_energy.assert_not_called()
     patch_crud_update_money.assert_not_called()
-    patch_crud_clubs_update_money.assert_not_called()
     patch_crud_update_free_turbo.assert_not_called()
 
 
@@ -164,7 +152,6 @@ def test_collect_turbo_cheated(mocker, dummy_user):
     client_l = get_client_with_dep(patch_get_user)
     patch_crud_update_money = mocker.patch('routers.boosts.crud.users.update_user_money', Mock())
     patch_crud_decrease_energy = mocker.patch('routers.boosts.crud.users.decrease_user_energy', Mock())
-    patch_crud_clubs_update_money = mocker.patch('routers.boosts.crud.clubs.update_clubs_total_coins', Mock())
     patch_crud_update_free_turbo = mocker.patch('routers.boosts.crud.users.update_user_turbo', Mock())
     patch_crud_update_cheated_count = mocker.patch('routers.boosts.crud.users.update_cheated_count', Mock())
 
@@ -172,6 +159,5 @@ def test_collect_turbo_cheated(mocker, dummy_user):
     assert response.status_code == 400
     patch_crud_decrease_energy.assert_not_called()
     patch_crud_update_money.assert_not_called()
-    patch_crud_clubs_update_money.assert_not_called()
     patch_crud_update_free_turbo.assert_not_called()
     patch_crud_update_cheated_count.assert_called_with(ANY, ANY, 1)

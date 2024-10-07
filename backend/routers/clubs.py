@@ -62,7 +62,6 @@ async def create_club(
             picture=picture_path,
             tg_tag=club_tag,
             creator_tg_id=user.tg_id,
-            total_coins=0,
             members_count=0,
         )
         club = crud.clubs.create_club(db, club)
