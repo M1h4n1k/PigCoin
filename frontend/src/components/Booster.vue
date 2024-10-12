@@ -62,20 +62,11 @@ const buyBoost = () => {
 };
 
 const selected = ref(false);
-
-const opennn = () => {
-  console.log("open");
-  selected.value = true;
-};
-const closee = () => {
-  console.log("closee");
-  selected.value = false;
-};
 </script>
 
 <template>
   <div
-    @click="opennn"
+    @click="() => (selected = true)"
     class="flex w-full cursor-pointer items-center justify-between rounded-2xl"
   >
     <div class="flex items-center justify-center">
@@ -106,9 +97,8 @@ const closee = () => {
       transform: selected ? 'translateY(0)' : 'translateY(100%)',
     }"
     :header="title ?? ''"
-    @close="closee"
+    @close="() => (selected = false)"
   >
-    {{ selected }}
     <div class="flex">
       <img
         class="h-[60px] w-[60px]"
