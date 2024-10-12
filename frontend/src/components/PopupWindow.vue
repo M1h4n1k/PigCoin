@@ -64,11 +64,13 @@ const slideModal = (e: TouchEvent) => {
 
 <template>
   <div
-    @touchstart.prevent.stop="slideModal"
     ref="modalContainerRef"
     class="fixed bottom-0 left-0 w-full rounded-t-xl border-2 bg-white pb-4 opacity-100 shadow-2xl transition-all duration-150 ease-in-out"
   >
-    <p class="border-b-2 px-4 py-2 text-center text-2xl font-bold">
+    <p
+      @touchstart.prevent.stop="slideModal"
+      class="border-b-2 px-4 py-2 text-center text-2xl font-bold"
+    >
       {{ header }}
     </p>
     <div class="px-4 py-2">
