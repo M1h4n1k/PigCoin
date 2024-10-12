@@ -109,11 +109,19 @@ async def test_user_login_create_referral_premium(mocker, dummy_user):
 
 
 def test_user_referrals():
+    users_referrals_mock = Mock()
+    users_referrals_mock.offset = Mock(return_value=users_referrals_mock)
+    users_referrals_mock.limit = Mock(return_value=users_referrals_mock)
+    users_referrals_mock.all = Mock(return_value=[])
+
     def patch_get_user():
         return Mock(
-            referrals=[],
+            referrals=users_referrals_mock,
             tg_id=1,
         )
     client_l = get_client_with_dep(patch_get_user)
-    response = client_l.get('/api/user/referrals')
+    response = client_l.get('/api/user/referrals?offset=10&limit=15')
+    assert users_referrals_mock.offset.mock_calls == [call(10)]
+    assert users_referrals_mock.limit.mock_calls == [call(15)]
+    assert users_referrals_mock.all.mock_calls == [call()]
     assert response.status_code == 200
