@@ -2,7 +2,7 @@
 import { useUserStore } from "@/store.ts";
 const userStore = useUserStore();
 
-import BarnIcon from "@/components/BarnIcon.vue";
+import LeagueBarn from "@/components/LeagueBarn.vue";
 </script>
 
 <template>
@@ -32,7 +32,7 @@ import BarnIcon from "@/components/BarnIcon.vue";
       </div>
     </div>
     <div class="flex flex-col items-center">
-      <BarnIcon :league="userStore.user.club.league" class="h-12 w-12" />
+      <LeagueBarn :league="userStore.user.club.league" class="h-12 w-12" />
     </div>
   </RouterLink>
 

@@ -9,10 +9,13 @@ defineProps({
 });
 const emit = defineEmits(["close"]);
 
-const modalEl: Ref<HTMLElement | null> = ref(null);
+const modalContainerRef: Ref<HTMLElement | null> = ref(null);
 
 const closePopup = (e: MouseEvent) => {
-  if (modalEl.value && !modalEl.value.contains(e.target as Node)) {
+  if (
+    modalContainerRef.value &&
+    !modalContainerRef.value.contains(e.target as Node)
+  ) {
     emit("close");
   }
 };
@@ -24,12 +27,46 @@ onMounted(() => {
 onUnmounted(() => {
   document.removeEventListener("mouseup", closePopup);
 });
+
+const slideModal = (e: TouchEvent) => {
+  const currentPos = {
+    y: e.touches[0].clientY,
+  };
+
+  modalContainerRef.value!.style.transitionDuration = "0s";
+  modalContainerRef.value!.style.transitionTimingFunction = "linear";
+
+  const moveCard = (e: TouchEvent) => {
+    if (e.touches[0].clientY - currentPos.y < 0) return;
+    modalContainerRef.value!.style.transform = `translate3d(0, ${e.touches[0].clientY - currentPos.y}px, 0)`;
+  };
+
+  document.body.addEventListener("touchmove", moveCard);
+  document.body.addEventListener(
+    "touchend",
+    () => {
+      document.body.removeEventListener("touchmove", moveCard);
+      if (!modalContainerRef.value) return;
+      const style = window.getComputedStyle(modalContainerRef.value);
+      const matrix = new DOMMatrixReadOnly(style.transform);
+      if (matrix.m42 > 50) {
+        modalContainerRef.value.style.removeProperty("transition-duration");
+        modalContainerRef.value.style.removeProperty(
+          "transition-timing-function",
+        );
+        emit("close");
+      }
+    },
+    { once: true },
+  );
+};
 </script>
 
 <template>
   <div
-    ref="modalEl"
-    class="fixed bottom-0 w-full rounded-t-xl border-2 bg-white opacity-100 shadow-2xl transition-all duration-150 ease-in-out"
+    @touchstart.prevent.stop="slideModal"
+    ref="modalContainerRef"
+    class="fixed bottom-0 left-0 w-full rounded-t-xl border-2 bg-white opacity-100 shadow-2xl transition-all duration-150 ease-in-out"
   >
     <p class="border-b-2 px-4 py-2 text-center text-2xl font-bold">
       {{ header }}

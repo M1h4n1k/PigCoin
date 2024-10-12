@@ -69,10 +69,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div
-    id="container"
-    class="flex h-tg-screen flex-col justify-between pb-8 pt-2"
-  >
+  <div class="flex h-tg-screen flex-col justify-between pb-8 pt-2">
     <div
       v-if="userStore.autoCoins !== null && userStore.autoCoins > 0"
       class="absolute left-1/2 top-1/2 z-30 flex h-48 w-80 max-w-full -translate-x-1/2 -translate-y-1/2 transform flex-col items-center justify-center rounded-xl !border-2 bg-white px-10 shadow-2xl"

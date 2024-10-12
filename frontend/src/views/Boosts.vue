@@ -99,7 +99,7 @@ const useFreeBooster = (type: number) => {
       </div>
     </div>
 
-    <div class="mt-5 pb-[178px]">
+    <div class="mt-5">
       <div
         class="toned-bg mt-2 flex flex-col justify-around gap-4 rounded-xl p-3"
       >

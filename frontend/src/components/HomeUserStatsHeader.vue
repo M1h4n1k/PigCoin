@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useUserStore } from "@/store";
 import { storeToRefs } from "pinia";
-import FarmerIcon from "@/components/FarmerIcon.vue";
+import LeagueFarmer from "@/components/LeagueFarmer.vue";
 import IconArrowRight from "@/components/IconArrowRight.vue";
 
 const userStore = useUserStore();
@@ -24,7 +24,7 @@ const { user } = storeToRefs(userStore);
       <span class="text-lg font-semibold">#{{ userStore.user?.position }}</span>
       <span class="mx-5 text-3xl font-semibold">·</span>
       <div class="flex items-center">
-        <FarmerIcon
+        <LeagueFarmer
           v-if="userStore?.user?.league != null"
           class="h-8 w-8"
           :league="userStore.user.league"

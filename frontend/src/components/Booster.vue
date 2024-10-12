@@ -62,12 +62,21 @@ const buyBoost = () => {
 };
 
 const selected = ref(false);
+
+const opennn = () => {
+  console.log("open");
+  selected.value = true;
+};
+const closee = () => {
+  console.log("closee");
+  selected.value = false;
+};
 </script>
 
 <template>
   <div
-    @click="() => (selected = true)"
-    class="flex w-full items-center justify-between rounded-2xl"
+    @click="opennn"
+    class="flex w-full cursor-pointer items-center justify-between rounded-2xl"
   >
     <div class="flex items-center justify-center">
       <div
@@ -91,36 +100,35 @@ const selected = ref(false);
     </div>
 
     <IconArrowRight height="25px" width="25px" />
-
-    <PopupWindow
-      :style="{
-        transform: selected ? 'translateY(0)' : 'translateY(100%)',
-      }"
-      class="fixed left-0"
-      :header="title ?? ''"
-      @close="() => (selected = false)"
-    >
-      <div class="flex">
-        <img
-          class="h-[60px] w-[60px]"
-          height="60"
-          width="60"
-          :src="picture"
-          alt="refill"
-        />
-        <div class="ml-5">
-          <p>{{ description }}</p>
-          <p class="font-bold">{{ $t("boosts.count") }}: {{ count }}</p>
-        </div>
-      </div>
-      <button
-        @click="buyBoost"
-        class="mt-2 w-full rounded-xl border px-4 py-2 font-semibold"
-      >
-        {{ $t("boosts.buy") }}
-      </button>
-    </PopupWindow>
   </div>
+  <PopupWindow
+    :style="{
+      transform: selected ? 'translateY(0)' : 'translateY(100%)',
+    }"
+    :header="title ?? ''"
+    @close="closee"
+  >
+    {{ selected }}
+    <div class="flex">
+      <img
+        class="h-[60px] w-[60px]"
+        height="60"
+        width="60"
+        :src="picture"
+        alt="refill"
+      />
+      <div class="ml-5">
+        <p>{{ description }}</p>
+        <p class="font-bold">{{ $t("boosts.count") }}: {{ count }}</p>
+      </div>
+    </div>
+    <button
+      @click="buyBoost"
+      class="mt-2 w-full rounded-xl border px-4 py-2 font-semibold"
+    >
+      {{ $t("boosts.buy") }}
+    </button>
+  </PopupWindow>
 </template>
 
 <style scoped></style>

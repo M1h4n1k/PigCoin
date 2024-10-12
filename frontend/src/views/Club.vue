@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref, watchEffect } from "vue";
+import { ref, watchEffect } from "vue";
 import RatingUserCard from "@/components/RatingUserCard.vue";
 import RatingRowCard from "@/components/RatingUserCard.vue";
 import { useUserStore } from "@/store.ts";
@@ -9,11 +9,11 @@ import { useRouter } from "vue-router";
 import IconLeave from "@/components/IconLeave.vue";
 import IconInvite from "@/components/IconInvite.vue";
 import IconOpenLink from "@/components/IconOpenLink.vue";
+import { vInfiniteScroll } from "@/directives";
 
 const router = useRouter();
 const userStore = useUserStore();
 const loading = ref(false);
-const container = ref<HTMLElement | null>(null);
 
 const loadMembers = (offset = 0, limit = 20) => {
   if (userStore.clubMembersLoaded) return;
@@ -66,29 +66,11 @@ if (userStore.clubMembers.length === 0 && userStore.user?.club_id) {
     }
   });
 }
-
-const windowScroller = () => {
-  if (
-    document.body.scrollTop + window.innerHeight >=
-    container.value!.clientHeight - 100
-  ) {
-    loadMembers(userStore.clubMembers.length);
-  }
-};
-
-onMounted(() => {
-  document.body.addEventListener("scroll", windowScroller);
-});
-
-onUnmounted(() => {
-  document.body.removeEventListener("scroll", windowScroller);
-});
 </script>
 
 <template>
   <div
-    ref="container"
-    id="container"
+    v-infinite-scroll="() => loadMembers(userStore.clubMembers.length)"
     class="flex flex-col items-center px-3 py-6"
   >
     <div class="flex w-full gap-4">

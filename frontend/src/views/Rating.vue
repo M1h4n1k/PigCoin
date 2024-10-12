@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { ref, watch, onMounted, onUnmounted } from "vue";
+import { ref, watch } from "vue";
 import RatingRowCard from "@/components/RatingUserCard.vue";
-import BarnIcon from "@/components/BarnIcon.vue";
-import FarmerIcon from "@/components/FarmerIcon.vue";
+import LeagueBarn from "@/components/LeagueBarn.vue";
+import LeagueFarmer from "@/components/LeagueFarmer.vue";
 import PopupWindow from "@/components/PopupWindow.vue";
 import { useUserStore, useRatingStore } from "@/store.ts";
 import { Club, UserPublic } from "@/types.ts";
 import { useRouter } from "vue-router";
 import { openLink } from "@/utils.ts";
+import { vInfiniteScroll } from "@/directives";
 import LoadingIcon from "@/components/LoadingIcon.vue";
 import IconArrowRight from "@/components/IconArrowRight.vue";
 import IconOpenLink from "@/components/IconOpenLink.vue";
@@ -16,8 +17,6 @@ const router = useRouter();
 
 const userStore = useUserStore();
 const ratingStore = useRatingStore();
-
-const container = ref<HTMLElement | null>(null);
 
 const activeTab = ref(0);
 const league = ref(userStore.user?.league ?? 0);
@@ -93,32 +92,21 @@ const showClub = (club: Club) => {
   selectedClub.value.isDisplayed = true;
 };
 
-const windowScroller = () => {
-  if (
-    document.body.scrollTop + window.innerHeight >=
-    container.value!.clientHeight - 100
-  ) {
-    preloadRating(
-      ratingStore[tabNames[activeTab.value]][league.value]?.data.length ?? 0,
-    );
-  }
-};
-
-onMounted(() => {
-  document.body.addEventListener("scroll", windowScroller);
-});
-
-onUnmounted(() => {
-  document.body.removeEventListener("scroll", windowScroller);
-});
-
 watch(league, () => preloadRating());
 watch(activeTab, () => preloadRating());
 preloadRating();
 </script>
 
 <template>
-  <div ref="container" class="flex select-none flex-col items-center px-3 py-6">
+  <div
+    v-infinite-scroll="
+      () =>
+        preloadRating(
+          ratingStore[tabNames[activeTab]][league]?.data.length ?? 0,
+        )
+    "
+    class="flex select-none flex-col items-center px-3 py-6"
+  >
     <div class="flex flex-col items-center">
       <div class="toned-bg flex w-fit cursor-pointer rounded-2xl">
         <div
@@ -148,12 +136,12 @@ preloadRating();
           class="-right-[22px] rotate-180"
         />
         <div class="relative">
-          <FarmerIcon
+          <LeagueFarmer
             v-if="activeTab === 0"
             class="h-24 w-24"
             :league="league"
           />
-          <BarnIcon
+          <LeagueBarn
             v-else-if="activeTab === 1"
             class="h-24 w-24"
             :league="league"
