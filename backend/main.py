@@ -1,23 +1,15 @@
-import uvicorn
-from routers import router
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from database.initialization import init
-from contextlib import asynccontextmanager
-import asyncio
-from bot import dp, bot
+import uvicorn
 import os
+
 from bot.loader import WEB_LINK
+from database.initialization import init
+from routers import router
 
 
-@asynccontextmanager
-async def lifespan(_app: FastAPI):
-    # asyncio.create_task(dp.start_polling(bot))
-    yield
-
-
-app = FastAPI(lifespan=lifespan)
+app = FastAPI()
 app.include_router(router)
 os.makedirs('photos', exist_ok=True)
 app.mount('/api/photos', StaticFiles(directory='photos'), name='photos')
@@ -33,4 +25,4 @@ app.add_middleware(
 
 
 if __name__ == '__main__':
-    uvicorn.run("main:app", port=3001, host='0.0.0.0', reload=True, forwarded_allow_ips='*')
+    uvicorn.run("main:app", port=3001, host='0.0.0.0', reload=False, forwarded_allow_ips='*')
