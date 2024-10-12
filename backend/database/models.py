@@ -146,7 +146,7 @@ class User(Base):
     )
 
     referrals: Mapped[list['User']] = relationship(
-        'User', remote_side=[referrer_tg_id], order_by='User.total_coins.desc()'
+        'User', remote_side=[referrer_tg_id], order_by='User.total_coins.desc()', lazy='dynamic'
     )
     tasks_completed: Mapped[list['Task']] = relationship('Task', secondary='user_tasks')
 

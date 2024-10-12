@@ -1,14 +1,15 @@
-import logging
 from aiogram import exceptions
-from fastapi import Request, Response, APIRouter, Depends, HTTPException, Body
+from bot import bot
 from database import crud, schemas, models
 from datetime import datetime
-from sqlalchemy.orm import Session
-from dependencies import get_db, get_tg_data, get_user, validate_tg_data
+from dependencies import get_db, validate_tg_data, get_user
+from fastapi import Query, Response, APIRouter, Depends, HTTPException, Body
 import orjson
-from utils import get_user_league_range, load_image
-from bot import bot
+import logging
 import re
+from sqlalchemy.orm import Session
+from typing import Annotated
+from utils import get_user_league_range, load_image
 
 
 router = APIRouter(prefix='/user', responses={
@@ -86,8 +87,12 @@ async def login(
         404: {'description': 'User not found'},
     }
 )
-async def get_referrals(user: models.User = Depends(get_user)):
-    return user.referrals
+async def get_referrals(
+    offset: int = 0,
+    limit: Annotated[int, Query(..., le=100)] = 10,
+    user: models.User = Depends(get_user),
+):
+    return user.referrals.offset(offset).limit(limit).all()
 
 
 @router.get(

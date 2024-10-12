@@ -4,21 +4,36 @@ import RatingUserCard from "@/components/RatingUserCard.vue";
 import { useUserStore } from "@/store";
 import LoadingIcon from "@/components/LoadingIcon.vue";
 import { shareInviteLink } from "@/utils.ts";
+import { vInfiniteScroll } from "@/directives.ts";
 
 const userStore = useUserStore();
-const loading = ref(userStore.referrals.length === 0);
-if (userStore.referrals.length === 0) {
-  fetch(import.meta.env.VITE_API_URL + "/user/referrals", {
-    credentials: "include",
-  })
+const loading = ref(false);
+const isFullyLoaded = ref(false);
+
+const loadReferrals = (offset = 0, limit = 20) => {
+  if (loading.value || isFullyLoaded.value) return;
+  loading.value = true;
+
+  fetch(
+    import.meta.env.VITE_API_URL +
+      `/user/referrals?offset=${offset}&limit=${limit}`,
+    {
+      credentials: "include",
+    },
+  )
     .then((res) => res.json())
     .then((data) => {
-      userStore.referrals = data;
+      if (data.length === 0 || data.length < limit) isFullyLoaded.value = true;
+      userStore.referrals.push(...data);
       loading.value = false;
     })
     .catch((err) => {
       console.log(err);
     });
+};
+
+if (userStore.referrals.length === 0) {
+  loadReferrals();
 }
 </script>
 
@@ -56,7 +71,10 @@ if (userStore.referrals.length === 0) {
       {{ $t("frens.invite.cta") }}
     </button>
 
-    <div class="toned-bg mt-10 w-full rounded-xl py-3">
+    <div
+      v-infinite-scroll="() => loadReferrals(userStore.referrals.length)"
+      class="toned-bg mt-10 w-full rounded-xl py-3"
+    >
       <h3 class="px-5 text-start text-2xl font-medium">
         {{ $t("common.frens") }}
       </h3>
@@ -72,7 +90,7 @@ if (userStore.referrals.length === 0) {
         <LoadingIcon />
       </div>
       <div
-        v-if="userStore.referrals.length === 0"
+        v-if="userStore.referrals.length === 0 && !loading"
         class="block w-full text-center text-lg"
       >
         {{ $t("common.no_data") }}
