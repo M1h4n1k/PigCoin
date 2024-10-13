@@ -1,15 +1,14 @@
-from datetime import datetime, timedelta
 import logging
 from .. import models, schemas
 from sqlalchemy import desc, asc, func, and_, exc
 from sqlalchemy.orm import Session, query
 
 
-def get_boost(db: Session, boost_id) -> models.Boost | None:
+def get_boost(db: Session, boost_id: int) -> models.Boost | None:
     return db.get(models.Boost, boost_id)
 
 
-def get_boosts(db: Session) -> list[models.Boost]:
+def get_boosts(db: Session) -> list[type[models.Boost]]:
     return db.query(models.Boost).all()
 
 

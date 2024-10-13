@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { User, UserPublic, Boost, Task, Club } from "@/types.ts";
+import { User, UserPublic, Boost, Task, Club, Transaction } from "@/types.ts";
 import { Ref, ref } from "vue";
 
 export const useAlertStore = defineStore("alert", () => {
@@ -30,10 +30,19 @@ export const useAlertStore = defineStore("alert", () => {
 export const useUserStore = defineStore("user", () => {
   const user: Ref<User | null> = ref(null);
   const referrals: Ref<UserPublic[]> = ref([]);
+  const transactions: Ref<Transaction[]> = ref([]);
   const clubMembers: Ref<UserPublic[]> = ref([]);
   const clubMembersLoaded: Ref<boolean> = ref(false);
   const autoCoins: Ref<number | null> = ref(null);
-  return { user, referrals, clubMembers, clubMembersLoaded, autoCoins };
+
+  return {
+    user,
+    referrals,
+    clubMembers,
+    clubMembersLoaded,
+    autoCoins,
+    transactions,
+  };
 });
 
 export const useBoostsStore = defineStore("boost", () => {

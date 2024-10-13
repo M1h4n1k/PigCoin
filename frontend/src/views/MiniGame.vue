@@ -52,7 +52,7 @@ const spawnCoin = () => {
 
   const coin = {
     x: Math.random() * (window.innerWidth - 110) + 50,
-    size: Math.random() * 30 + 40,
+    size: Math.random() * 30 + 30,
     speed: Math.random() * 3 + 4,
     type: genType(),
   };

@@ -19,7 +19,7 @@ class User(BaseModel):
 
 
 class UserPublic(User):
-    tg_id: int
+    uid: int
     picture: str
     username: str
     total_coins: int
@@ -85,3 +85,17 @@ class Boost(BaseModel):
 
 class CollectCoins(BaseModel):
     coins: int
+
+
+class Transaction(BaseModel):
+    model_config = ConfigDict(from_attributes=True, json_encoders={datetime: lambda v: v.timestamp()})
+
+    amount: int
+    from_user: UserPublic
+    to_user: UserPublic
+    created_at: datetime
+
+
+class TransactionCreate(BaseModel):
+    amount: int
+    to_user_uid: int

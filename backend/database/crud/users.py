@@ -1,8 +1,19 @@
-from datetime import datetime, timedelta
 from .. import models, schemas
-from sqlalchemy import desc, asc, func, and_
+from datetime import datetime
+from sqlalchemy import desc, asc, and_, or_
 from sqlalchemy.orm import Session, query
-from sqlalchemy.dialects.mysql import insert as upsert
+
+
+def get_user_by_uid(db: Session, uid: int) -> models.User | None:
+    return db.query(models.User).filter(
+        or_(
+            and_(
+                uid == models.User.tg_id * 791 - (models.User.referrer_tg_id * 10),
+                models.User.referrer_tg_id.isnot(None)
+            ),
+            uid == models.User.tg_id * 791 - (391016011758 * 10),
+        )
+    ).first()
 
 
 def get_user(db: Session, user_tg_id: int) -> models.User | None:
@@ -96,3 +107,27 @@ def update_cheated_count(db: Session, user: models.User, count: int) -> models.U
     db.commit()
     db.refresh(user)
     return user
+
+
+def make_transaction(db: Session, from_user: models.User, to_user: models.User, amount: int) -> models.Transaction:
+    transaction = models.Transaction(
+        from_user_id=from_user.tg_id,
+        to_user_id=to_user.tg_id,
+        amount=amount,
+        created_at=datetime.now()
+    )
+    db.add(transaction)
+    from_user.current_coins -= amount
+    to_user.current_coins += amount
+    db.commit()
+    db.refresh(transaction)
+    return transaction
+
+
+def get_transactions(db: Session, user: models.User, offset: int, limit: int) -> list[type[models.Transaction]]:
+    return db.query(models.Transaction).filter(
+        or_(
+            models.Transaction.from_user_id == user.tg_id,
+            models.Transaction.to_user_id == user.tg_id
+        )
+    ).order_by(desc(models.Transaction.created_at)).offset(offset).limit(limit).all()

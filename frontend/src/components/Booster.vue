@@ -113,6 +113,8 @@ const selected = ref(false);
       </div>
     </div>
     <button
+      @touchend.stop
+      @touchstart.stop
       @click="buyBoost"
       class="mt-2 w-full rounded-xl border px-4 py-2 font-semibold"
     >

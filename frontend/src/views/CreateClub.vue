@@ -3,6 +3,7 @@ import { ref, computed } from "vue";
 import { useUserStore, useAlertStore } from "@/store";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
+import LoadingIcon from "@/components/LoadingIcon.vue";
 
 const { t } = useI18n();
 const router = useRouter();
@@ -10,6 +11,7 @@ const router = useRouter();
 const userStore = useUserStore();
 const alertStore = useAlertStore();
 const channelLink = ref("");
+const isCreatingClub = ref(false);
 
 const formatChannelLink = (link: string) => {
   const banWords = ["https://", "http://", "t.me/", "@"];
@@ -36,6 +38,9 @@ const createClub = () => {
   if (validateChannelLink.value !== 0) {
     alertStore.displayAlert(t("club.create.invalid"), "error");
   }
+  if (isCreatingClub.value) return;
+
+  isCreatingClub.value = true;
   fetch(import.meta.env.VITE_API_URL + "/clubs/", {
     method: "POST",
     credentials: "include",
@@ -90,7 +95,10 @@ const createClub = () => {
       v-model="channelLink"
     />
 
+    <LoadingIcon v-if="isCreatingClub" class="mx-auto mt-4" />
+
     <button
+      v-else
       @click="createClub"
       class="mt-4 w-full rounded-full bg-[#2481cc] px-5 py-2 font-semibold text-white hover:!bg-[#1a8ad5]"
     >

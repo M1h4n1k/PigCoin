@@ -49,13 +49,19 @@ const slideModal = (e: TouchEvent) => {
       if (!modalContainerRef.value) return;
       const style = window.getComputedStyle(modalContainerRef.value);
       const matrix = new DOMMatrixReadOnly(style.transform);
-      if (matrix.m42 > 50) {
+      if (matrix.m42 > 30) {
         modalContainerRef.value.style.removeProperty("transition-duration");
         modalContainerRef.value.style.removeProperty(
           "transition-timing-function",
         );
         emit("close");
+        return;
       }
+      modalContainerRef.value.style.removeProperty("transform");
+      modalContainerRef.value.style.removeProperty("transition-duration");
+      modalContainerRef.value.style.removeProperty(
+        "transition-timing-function",
+      );
     },
     { once: true },
   );
@@ -65,12 +71,10 @@ const slideModal = (e: TouchEvent) => {
 <template>
   <div
     ref="modalContainerRef"
+    @touchstart.prevent.stop="slideModal"
     class="fixed bottom-0 left-0 w-full rounded-t-xl border-2 bg-white pb-4 opacity-100 shadow-2xl transition-all duration-150 ease-in-out"
   >
-    <p
-      @touchstart.prevent.stop="slideModal"
-      class="border-b-2 px-4 py-2 text-center text-2xl font-bold"
-    >
+    <p class="border-b-2 px-4 py-2 text-center text-2xl font-bold">
       {{ header }}
     </p>
     <div class="px-4 py-2">

@@ -126,10 +126,10 @@ if (userStore.clubMembers.length === 0 && userStore.user?.club_id) {
       <RatingUserCard
         class="bottom-0 top-0 rounded-xl p-2"
         :class="{
-          'toned-image-bg': row.tg_id === userStore.user?.tg_id,
+          'toned-image-bg': row.uid === userStore.user?.uid,
         }"
         :style="{
-          position: row.tg_id === userStore.user?.tg_id ? 'sticky' : 'static',
+          position: row.uid === userStore.user?.uid ? 'sticky' : 'static',
         }"
         v-for="(row, i) in userStore.clubMembers"
         :key="i"
@@ -137,7 +137,7 @@ if (userStore.clubMembers.length === 0 && userStore.user?.club_id) {
         :rating="i + 1"
         :coins="row.total_coins"
         :name="row.username"
-        :is-you="row.tg_id === userStore.user?.tg_id"
+        :is-you="row.uid === userStore.user?.uid"
       />
 
       <RatingRowCard

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import HomeSquadHeader from "@/components/HomeSquadHeader.vue";
 import HomeUserStatsHeader from "@/components/HomeUserStatsHeader.vue";
-import HomePorkNose from "@/components/HomePorkNose.vue";
+import HomePigNose from "@/components/HomePigNose.vue";
 import HomeFooterActions from "@/components/HomeFooterActions.vue";
 import { ref, Ref, onMounted, watchEffect } from "vue";
 import { useUserStore } from "@/store";
@@ -95,7 +95,7 @@ onMounted(() => {
       <HomeUserStatsHeader class="mt-3" />
     </div>
     <div class="select-none" ref="noseContainer">
-      <HomePorkNose />
+      <HomePigNose />
     </div>
     <HomeFooterActions class="px-2" />
   </div>

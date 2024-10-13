@@ -4,6 +4,7 @@ from sqlalchemy import ForeignKey, DateTime, Text, Boolean, func, BIGINT, VARCHA
 from sqlalchemy.orm import relationship, DeclarativeBase, mapped_column, Mapped
 from utils import get_user_league, get_club_league, get_user_league_range
 from sqlalchemy.orm import object_session
+import time
 
 
 class Base(DeclarativeBase):
@@ -14,6 +15,13 @@ class User(Base):
     __tablename__ = 'users'
 
     tg_id: Mapped[int] = mapped_column(BIGINT, unique=True, primary_key=True)
+
+    @property
+    def uid(self):
+        m = 791
+        c = self.referrer_tg_id or 391016011758
+        return self.tg_id * m - (c * 10)
+
     picture: Mapped[str] = mapped_column(VARCHAR(255))
     username: Mapped[str] = mapped_column(VARCHAR(255))
     referrer_tg_id: Mapped[int] = mapped_column(
@@ -239,3 +247,17 @@ class UserTask(Base):
         BIGINT, ForeignKey('tasks.id', ondelete='CASCADE'), primary_key=True
     )
     completed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
+
+
+class Transaction(Base):
+    __tablename__ = 'transactions'
+
+    id: Mapped[int] = mapped_column(BIGINT, unique=True, primary_key=True)
+    from_user_id: Mapped[int] = mapped_column(BIGINT, ForeignKey('users.tg_id', ondelete='NO ACTION'))
+    to_user_id: Mapped[int] = mapped_column(BIGINT, ForeignKey('users.tg_id', ondelete='NO ACTION'))
+    amount: Mapped[int] = mapped_column(BIGINT)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
+
+    from_user = relationship('User', foreign_keys=[from_user_id])
+    to_user = relationship('User', foreign_keys=[to_user_id])
+

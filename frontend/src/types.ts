@@ -10,7 +10,7 @@ type Club = {
 };
 
 type UserPublic = {
-  tg_id: number;
+  uid: number;
   picture: string;
   username: string;
   total_coins: number;
@@ -18,6 +18,7 @@ type UserPublic = {
 };
 
 type User = UserPublic & {
+  tg_id: number;
   click_price: number;
   refill_rate: number;
   current_coins: number;
@@ -78,6 +79,13 @@ type Adsgram = {
   init: (options: { blockId: string; debug?: boolean }) => AdsgramController;
 };
 
+type Transaction = {
+  amount: number;
+  from_user: UserPublic;
+  to_user: UserPublic;
+  created_at: number;
+};
+
 export type {
   User,
   UserPublic,
@@ -86,6 +94,7 @@ export type {
   Bubble,
   DirtyBubble,
   Club,
+  Transaction,
   Adsgram,
   AdsgramController,
 };
