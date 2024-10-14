@@ -7,8 +7,8 @@ from aiogram.filters import IS_MEMBER, IS_NOT_MEMBER, ChatMemberUpdatedFilter, C
 
 
 def register_handlers(_dp):
-    _dp.message(Command('spam'))(setup_spam_message)
-    _dp.callback_query(lambda c: c.data == 'accept_spam')(send_spam_message)
+    _dp.message.register(setup_spam_message, Command('spam'))
+    _dp.callback_query.register(send_spam_message, lambda c: c.data == 'accept_spam')
 
     _dp.message.middleware(create_user)
     _dp.message.register(default_handler)
