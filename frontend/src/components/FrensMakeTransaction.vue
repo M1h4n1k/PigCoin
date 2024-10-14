@@ -65,7 +65,7 @@ const makeTransaction = () => {
   receiverTgId.value = receiverTgId.value ?? "";
   amount.value = amount.value ?? "";
   if (validateTgID.value !== 0 || validateAmount.value !== 0) {
-    if (parseInt(receiverTgId.value!) === userStore.user!.uid) {
+    if (receiverTgId.value! === userStore.user!.uid) {
       alertStore.displayAlert(t("frens.transactions.self_error"), "error");
     }
     return;
