@@ -20,7 +20,7 @@ class User(Base):
     def uid(self):
         m = 791
         c = self.referrer_tg_id or 391016011758
-        return hex(self.tg_id * m - (c * 10))[2:]
+        return hex(self.tg_id * m - (c * 10)).replace('0x', '')
 
     picture: Mapped[str] = mapped_column(VARCHAR(255))
     username: Mapped[str] = mapped_column(VARCHAR(255))
