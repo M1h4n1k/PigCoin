@@ -84,7 +84,7 @@ def test_collect_coins_low_energy(mocker, dummy_user):
     response = client_l.post('/api/game/collectCoins', json={'coins': 100})
     assert response.status_code == 400
     patch_crud_decrease_energy.assert_not_called()
-    assert patch_crud_update_cheated_count.mock_calls == [call(ANY, ANY, 1)]
+    patch_crud_update_cheated_count.assert_not_called()
     patch_crud_update_money.assert_not_called()
 
 
