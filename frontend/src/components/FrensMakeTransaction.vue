@@ -100,12 +100,13 @@ const makeTransaction = () => {
       return res.json();
     })
     .then((data) => {
+      userStore.transactions.unshift(data); // assuming that user will not have a lot of transactions, so unshift is fine
+
+      userStore.user!.current_coins -= parseInt(amount.value!);
       isSending.value = false;
       receiverTgId.value = undefined;
       receiver.value = undefined;
       amount.value = undefined;
-      userStore.transactions.unshift(data); // assuming that user will not have a lot of transactions, so unshift is fine
-      userStore.user!.current_coins -= parseInt(amount.value!);
     })
     .catch((err) => {
       alertStore.displayAlert(err, "error");

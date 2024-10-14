@@ -140,7 +140,7 @@ async def collect_auto_coins(
     response_model=schemas.Transaction,
     status_code=200,
     responses={
-        400: {'description': 'Amount must be positive'},
+        400: {'description': 'Amount must be positive | Invalid user_uid | Cannot send coins to yourself'},
         402: {'description': 'Not enough coins'},
         404: {'description': 'User not found'},
     }
@@ -150,6 +150,8 @@ async def make_transaction(
     db: Session = Depends(get_db),
     user: models.User = Depends(get_user),
 ):
+    if not re.match(r'^[\da-f]+$', transaction.to_user_uid):
+        raise HTTPException(status_code=400, detail='Invalid user_uid')
     if transaction.amount <= 0:
         raise HTTPException(status_code=400, detail='Amount must be positive')
     if user.current_coins < transaction.amount:
@@ -180,11 +182,17 @@ async def get_transactions(
     '/{user_uid}',
     response_model=schemas.UserPublic,
     status_code=200,
+    responses={
+        404: {'description': 'User not found'},
+        400: {'description': 'Invalid user_uid'},
+    }
 )
 async def get_user_by_id(
     user_uid: str,
     db: Session = Depends(get_db),
 ):
+    if not re.match(r'^[\da-f]+$', user_uid):
+        raise HTTPException(status_code=400, detail='Invalid user_uid')
     user = crud.users.get_user_by_uid(db, user_uid)
     if not user:
         raise HTTPException(status_code=404, detail='User not found')
