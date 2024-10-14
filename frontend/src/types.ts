@@ -10,7 +10,7 @@ type Club = {
 };
 
 type UserPublic = {
-  uid: number;
+  uid: string;
   picture: string;
   username: string;
   total_coins: number;

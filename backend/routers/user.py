@@ -182,7 +182,7 @@ async def get_transactions(
     status_code=200,
 )
 async def get_user_by_id(
-    user_uid: int,
+    user_uid: str,
     db: Session = Depends(get_db),
 ):
     user = crud.users.get_user_by_uid(db, user_uid)

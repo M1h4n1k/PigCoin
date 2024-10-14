@@ -17,6 +17,10 @@ const receiverGetterTimeout = ref<number | undefined>(undefined);
 const receiver = ref<UserPublic | undefined>(undefined);
 
 const getReceiver = () => {
+  if (validateTgID.value !== 0) {
+    receiver.value = undefined;
+    return;
+  }
   fetch(import.meta.env.VITE_API_URL + `/user/${receiverTgId.value}`, {
     credentials: "include",
   })
@@ -37,10 +41,7 @@ const getReceiver = () => {
 
 const validateTgID = computed(() => {
   if (receiverTgId.value === undefined) return 1;
-  if (
-    receiverTgId.value === "" ||
-    parseInt(receiverTgId.value) === userStore.user!.uid
-  )
+  if (receiverTgId.value === "" || receiverTgId.value === userStore.user!.uid)
     return -1;
   return 0;
 });
@@ -128,7 +129,7 @@ const makeTransaction = () => {
       :style="{
         borderColor: validateTgID === -1 ? '#ff4141' : '',
       }"
-      type="number"
+      type="text"
       :placeholder="$t('frens.transactions.input_tg_id')"
       v-model="receiverTgId"
     />

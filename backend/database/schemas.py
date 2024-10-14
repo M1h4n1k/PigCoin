@@ -19,7 +19,7 @@ class User(BaseModel):
 
 
 class UserPublic(User):
-    uid: int
+    uid: str
     picture: str
     username: str
     total_coins: int
@@ -98,4 +98,4 @@ class Transaction(BaseModel):
 
 class TransactionCreate(BaseModel):
     amount: int
-    to_user_uid: int
+    to_user_uid: str

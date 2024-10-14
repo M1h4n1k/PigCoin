@@ -4,7 +4,9 @@ from sqlalchemy import desc, asc, and_, or_
 from sqlalchemy.orm import Session, query
 
 
-def get_user_by_uid(db: Session, uid: int) -> models.User | None:
+def get_user_by_uid(db: Session, uid: str) -> models.User | None:
+    uid = int(uid, 16)
+
     return db.query(models.User).filter(
         or_(
             and_(
