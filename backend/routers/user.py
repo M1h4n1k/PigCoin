@@ -150,7 +150,7 @@ async def make_transaction(
     db: Session = Depends(get_db),
     user: models.User = Depends(get_user),
 ):
-    if not re.match(r'^[\da-f]+$', transaction.to_user_uid):
+    if not re.match(r'^-?[\da-f]+$', transaction.to_user_uid):
         raise HTTPException(status_code=400, detail='Invalid user_uid')
     if transaction.amount <= 0:
         raise HTTPException(status_code=400, detail='Amount must be positive')
@@ -191,7 +191,7 @@ async def get_user_by_id(
     user_uid: str,
     db: Session = Depends(get_db),
 ):
-    if not re.match(r'^[\da-f]+$', user_uid):
+    if not re.match(r'^-?[\da-f]+$', user_uid):
         raise HTTPException(status_code=400, detail='Invalid user_uid')
     user = crud.users.get_user_by_uid(db, user_uid)
     if not user:
