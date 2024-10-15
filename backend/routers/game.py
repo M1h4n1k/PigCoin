@@ -1,9 +1,8 @@
-from typing import Annotated
-
 from fastapi import Request, APIRouter, Depends, HTTPException, Body, Form
 from database import crud, schemas, models
 from sqlalchemy.orm import Session
 from dependencies import get_db, get_user
+import logging
 
 
 router = APIRouter(prefix='/game', responses={404: {'description': 'User not found'}})
@@ -28,6 +27,7 @@ async def collect_coin(
     if user.current_energy < coins:
         raise HTTPException(status_code=400, detail='Not enough energy')
     if coins > user.click_price * 45:
+        logging.warning(f'Cheated while collecting: {coins}')
         crud.users.update_cheated_count(db, user, 1)
     user = crud.users.update_user_money(db, user, coins)
     crud.users.decrease_user_energy(db, user, coins)
