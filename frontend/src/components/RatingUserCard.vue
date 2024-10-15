@@ -37,12 +37,21 @@ defineProps({
       {{ rating }}
     </span>
     <div class="flex items-center">
-      <img
-        class="h-10 w-10 rounded-full"
-        draggable="false"
-        alt=""
-        :src="picture"
-      />
+      <div class="relative">
+        <img
+          class="h-10 w-10 rounded-full"
+          draggable="false"
+          alt=""
+          loading="lazy"
+          :src="picture"
+        />
+        <img
+          loading="lazy"
+          class="absolute -top-3 h-auto w-full"
+          src="/crown.webp"
+          alt=""
+        />
+      </div>
       <div class="ml-2">
         <p class="max-w-36 truncate font-medium">{{ name }}</p>
         <p class="flex items-center text-gray-600">

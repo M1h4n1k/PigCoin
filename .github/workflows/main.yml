@@ -1,4 +1,4 @@
-name: Run Tests
+name: CI/CD
 
 on:
   push:
@@ -16,17 +16,17 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-
-      - name: Create .env file and add environment variables
-        run: echo "${{ secrets.TEST_ENV }}" > ../backend/.env
-
-      - name: Install dependencies for Vue.js app
-        run: npm i
-
-      - name: check linting
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+      - run: echo "${{ secrets.TEST_ENV }}" > ../backend/.env
+      - name: Install dependencies
+        run: npm ci
+      - name: Check linting
         run: npm run lint
-
-      - name: Build Vue.js app
+      - name: Build app
         run: npm run build
 
   test-backend:
@@ -38,16 +38,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-
-      - name: Create .env file and add environment variables
-        run: echo "${{ secrets.TEST_ENV }}" > .env
+      - run: echo "${{ secrets.TEST_ENV }}" > .env
 
       - name: Build and start Docker containers
         run: docker compose up --build -d mysql backend
 
-      - name: Run FastAPI tests
-        run: |
-          docker compose exec backend pytest -v
+      - name: Run tests
+        run: docker compose exec backend pytest
 
   deploy:
     needs: [ test-frontend, test-backend ]
@@ -55,7 +52,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
 
       - name: Setup SSH
         run: |
@@ -73,8 +75,7 @@ jobs:
           npm install
           npm run build
 
-      - name: Archive Build Artifacts
-        run: tar -czf frontend-build.tar.gz -C frontend/dist .
+      - run: tar -czf frontend-build.tar.gz -C frontend/dist .
 
       - name: Transfer Build to Server
         run: scp frontend-build.tar.gz root@188.130.206.99:/tmp/frontend-build.tar.gz

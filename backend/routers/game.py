@@ -27,7 +27,7 @@ async def collect_coin(
     if user.current_energy < coins:
         raise HTTPException(status_code=400, detail='Not enough energy')
     if coins > user.click_price * 45:
-        logging.warning(f'Cheated while collecting: {coins} allowed treshold: {user.click_price * 45}')
+        logging.warning(f'Cheated while collecting: {coins} allowed threshold: {user.click_price * 45}')
         crud.users.update_cheated_count(db, user, 1)
     user = crud.users.update_user_money(db, user, coins)
     crud.users.decrease_user_energy(db, user, coins)
