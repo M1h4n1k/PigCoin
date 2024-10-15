@@ -48,7 +48,10 @@ async def create_club(
         try:
             channel = await bot.get_chat('@' + club_tag)
         except Exception:
-            raise HTTPException(status_code=404, detail='Channel not found')
+            import traceback
+            traceback.print_exc()
+            raise HTTPException(status_code=404, detail='Channel not found, error')
+
         if not channel:
             raise HTTPException(status_code=404, detail='Channel not found')
 
