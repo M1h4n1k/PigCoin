@@ -9,12 +9,27 @@ type Club = {
   members_count: number;
 };
 
+type DecorationShort = {
+  picture: string;
+};
+
+type Decoration = DecorationShort & {
+  id: number;
+  title: string;
+  initial_price: number;
+  last_bet: number;
+  last_bet_user: UserPublic;
+  type: string;
+  betting_ends_at: number;
+};
+
 type UserPublic = {
   uid: string;
   picture: string;
   username: string;
   total_coins: number;
   league: number;
+  decorations: DecorationShort[];
 };
 
 type User = UserPublic & {
@@ -87,6 +102,8 @@ type Transaction = {
 };
 
 export type {
+  DecorationShort,
+  Decoration,
   User,
   UserPublic,
   Boost,

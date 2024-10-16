@@ -1,0 +1,48 @@
+from fastapi import Request, APIRouter, Depends, HTTPException, Body, Form
+from database import crud, schemas, models
+from sqlalchemy.orm import Session
+from dependencies import get_db, get_user
+from datetime import datetime
+import logging
+
+router = APIRouter(prefix='/decorations', responses={404: {'description': 'User not found'}})
+
+
+@router.post(
+    '/bet',
+    response_model=schemas.Decoration,
+    status_code=200,
+    responses={
+        400: {'description': 'Decoration not found'},
+        403: {'description': 'Auction has ended'},
+        412: {'description': 'Not enough coins'},
+        406: {'description': 'Bet must be higher than last bet'},
+
+    }
+)
+async def bet_decoration(
+    decoration_id: int = Body(...),
+    amount: int = Body(...),
+    db: Session = Depends(get_db),
+    user: models.User = Depends(get_user),
+):
+    decoration = crud.decorations.get_decoration_by_id(db, decoration_id)
+    if not decoration:
+        raise HTTPException(status_code=400, detail='Decoration not found')
+    if decoration.betting_ends_at < datetime.now():
+        raise HTTPException(status_code=403, detail='Auction has ended')
+    if user.current_coins < amount:
+        raise HTTPException(status_code=412, detail='Not enough coins')
+    if amount <= decoration.last_bet:
+        raise HTTPException(status_code=406, detail='Bet must be higher than last bet')
+    logging.info(f'{user.tg_id}:{user.username} bet {amount} on decoration {decoration.id}')
+    return crud.decorations.make_bet(db, user, decoration, amount)
+
+
+@router.get(
+    '/',
+    response_model=schemas.Decoration | None,  # for now, I think that only one decoration can on the auction
+    status_code=200,
+)
+async def get_decoration(db: Session = Depends(get_db)):
+    return crud.decorations.get_decoration_on_auction(db)

@@ -180,6 +180,11 @@ preloadRating();
         :rating="i + 1"
         :coins="row.total_coins"
         :name="(row as UserPublic).username ?? (row as Club).name"
+        :decoration-src="
+          (row as UserPublic).decorations?.length > 0
+            ? (row as UserPublic).decorations[0].picture
+            : undefined
+        "
         :is-you="(row as UserPublic).uid === userStore.user?.uid"
       />
 
@@ -199,6 +204,11 @@ preloadRating();
         :picture="userStore.user!.picture"
         :rating="userStore.user!.position!"
         :coins="userStore.user!.total_coins"
+        :decoration-src="
+          userStore.user!.decorations.length > 0
+            ? userStore.user!.decorations[0].picture
+            : undefined
+        "
         :name="userStore.user!.username"
         :is-you="true"
       />

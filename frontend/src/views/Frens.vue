@@ -4,6 +4,7 @@ import RatingUserCard from "@/components/RatingUserCard.vue";
 import { useUserStore } from "@/store";
 import LoadingIcon from "@/components/LoadingIcon.vue";
 import { vInfiniteScroll } from "@/directives.ts";
+import { Transaction } from "@/types.ts";
 import InputSwitch from "@/components/InputSwitch.vue";
 import FrensInviteHeader from "@/components/FrensInviteHeader.vue";
 import FrensMakeTransaction from "@/components/FrensMakeTransaction.vue";
@@ -45,7 +46,7 @@ const loadTransactions = (offset = 0, limit = 20) => {
 
   fetch(
     import.meta.env.VITE_API_URL +
-      `/user/transactions?offset=${offset}&limit=${limit}`,
+      `/transactions?offset=${offset}&limit=${limit}`,
     {
       credentials: "include",
     },
@@ -73,6 +74,11 @@ watch(
   },
   { immediate: true },
 );
+
+const getOtherUser = (transaction: Transaction) =>
+  transaction.from_user.uid === userStore.user!.uid
+    ? transaction.to_user
+    : transaction.from_user;
 
 const formatDate = (date: number) => {
   const d = new Date(date * 1000);
@@ -116,6 +122,11 @@ const formatDate = (date: number) => {
           :rating="ix + 1"
           :coins="referral.total_coins"
           :name="referral.username"
+          :decoration-src="
+            referral.decorations.length > 0
+              ? referral.decorations[0].picture
+              : undefined
+          "
         />
       </div>
       <div v-else>
@@ -125,25 +136,25 @@ const formatDate = (date: number) => {
           class="relative flex items-center px-4 py-2"
         >
           <div class="flex items-center">
-            <img
-              class="h-7 w-7 rounded-full"
-              draggable="false"
-              alt=""
-              :src="
-                transaction.from_user.uid === userStore.user!.uid
-                  ? transaction.to_user.picture
-                  : transaction.from_user.picture
-              "
-            />
+            <div class="relative">
+              <img
+                class="h-7 w-7 rounded-full"
+                draggable="false"
+                alt=""
+                :src="getOtherUser(transaction).picture"
+              />
+              <img
+                v-if="getOtherUser(transaction).decorations.length > 0"
+                :src="getOtherUser(transaction).decorations[0].picture"
+                alt=""
+                class="absolute -top-5"
+              />
+            </div>
             <div
               class="ml-2 max-w-36 flex-col items-center justify-center overflow-x-clip"
             >
               <p class="truncate font-semibold">
-                {{
-                  transaction.from_user.uid === userStore.user!.uid
-                    ? transaction.to_user.username
-                    : transaction.from_user.username
-                }}
+                {{ getOtherUser(transaction).username }}
               </p>
               <p class="text-gray-600">
                 {{ formatDate(transaction.created_at) }}

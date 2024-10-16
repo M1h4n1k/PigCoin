@@ -8,6 +8,10 @@ defineProps({
     type: Number,
     required: true,
   },
+  decorationSrc: {
+    type: String,
+    required: false,
+  },
   picture: {
     type: String,
     required: false,
@@ -46,9 +50,10 @@ defineProps({
           :src="picture"
         />
         <img
+          v-if="decorationSrc"
           loading="lazy"
-          class="absolute -top-3 h-auto w-full"
-          src="/crown.webp"
+          class="absolute -top-6 h-auto w-full"
+          :src="decorationSrc"
           alt=""
         />
       </div>

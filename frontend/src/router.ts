@@ -8,6 +8,7 @@ const Frens = () => import("@/views/Frens.vue");
 const Club = () => import("@/views/Club.vue");
 const CreateClub = () => import("@/views/CreateClub.vue");
 const MiniGame = () => import("@/views/MiniGame.vue");
+const Auction = () => import("@/views/Auction.vue");
 
 const routes = [
   { path: "/", component: Home },
@@ -18,6 +19,7 @@ const routes = [
   { path: "/club", component: Club },
   { path: "/createClub", component: CreateClub },
   { path: "/minigame", component: MiniGame },
+  { path: "/auction", component: Auction },
 ];
 
 const router = createRouter({

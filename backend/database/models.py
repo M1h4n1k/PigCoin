@@ -157,6 +157,7 @@ class User(Base):
         'User', remote_side=[referrer_tg_id], order_by='User.total_coins.desc()', lazy='dynamic'
     )
     tasks_completed: Mapped[list['Task']] = relationship('Task', secondary='user_tasks')
+    decorations: Mapped[list['Decoration']] = relationship('Decoration', back_populates='owner', foreign_keys='Decoration.owner_tg_id')
 
 
 # it's possible to do it via simple json array, since I'm not planning to add any new boosts
@@ -261,3 +262,19 @@ class Transaction(Base):
     from_user = relationship('User', foreign_keys=[from_user_id])
     to_user = relationship('User', foreign_keys=[to_user_id])
 
+
+class Decoration(Base):
+    __tablename__ = 'decorations'
+
+    id: Mapped[int] = mapped_column(BIGINT, unique=True, primary_key=True)
+    title: Mapped[str] = mapped_column(VARCHAR(255))
+    picture: Mapped[str] = mapped_column(VARCHAR(255))
+    initial_price: Mapped[int] = mapped_column(BIGINT)
+    last_bet: Mapped[int] = mapped_column(BIGINT)
+    last_bet_user_id: Mapped[int] = mapped_column(BIGINT, ForeignKey('users.tg_id', ondelete='SET NULL'), nullable=True)
+    type: Mapped[str] = mapped_column(VARCHAR(255))
+    owner_tg_id: Mapped[int] = mapped_column(BIGINT, ForeignKey('users.tg_id', ondelete='SET NULL'), nullable=True)
+    betting_ends_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
+
+    owner = relationship('User', foreign_keys=[owner_tg_id], back_populates='decorations')
+    last_bet_user = relationship('User', foreign_keys=[last_bet_user_id])

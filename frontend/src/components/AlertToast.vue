@@ -17,7 +17,10 @@ const alertStore = useAlertStore();
       class="flex h-fit min-h-[45px] w-full select-none items-center rounded-xl bg-gray-800 py-2 pl-2"
     >
       <IconAlertError v-if="alertStore.type === 'error'" />
-      <IconAlertInfo class="ml-[10px]" v-else-if="alertStore.type === 'info'" />
+      <IconAlertInfo
+        class="ml-[10px] text-white"
+        v-else-if="alertStore.type === 'info'"
+      />
       <span class="ml-[5px] w-full text-white">{{ alertStore.message }}</span>
     </div>
   </div>

@@ -77,6 +77,13 @@
   "boosts.herdsman.desc": "Gains 300 coins per herdsman per hour up to 5 hours",
   "boosts.count": "Count",
 
+  "auction": "Auction",
+  "auction.ends_at": "Ends at",
+  "auction.last_bet": "Last bet",
+  "auction.last_user": "Last better",
+  "auction.explain": "After the bet, the amount will be deducted from the balance. If someone outbids your bet, HryCoins will be returned to the account",
+  "auction.bet": "Bet",
+
   "invite.default": "as a first time gift",
   "invite.premium": "if you have Telegram Premium"
 }

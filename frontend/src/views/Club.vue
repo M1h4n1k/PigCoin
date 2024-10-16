@@ -138,6 +138,9 @@ if (userStore.clubMembers.length === 0 && userStore.user?.club_id) {
         :coins="row.total_coins"
         :name="row.username"
         :is-you="row.uid === userStore.user?.uid"
+        :decoration-src="
+          row.decorations.length > 0 ? row.decorations[0].picture : undefined
+        "
       />
 
       <RatingRowCard
@@ -148,6 +151,11 @@ if (userStore.clubMembers.length === 0 && userStore.user?.club_id) {
         :coins="userStore.user!.total_coins"
         :name="userStore.user!.username"
         :is-you="true"
+        :decoration-src="
+          userStore.user!.decorations.length > 0
+            ? userStore.user!.decorations[0].picture
+            : undefined
+        "
       />
 
       <div v-if="loading" class="flex w-full items-center justify-center p-4">

@@ -14,6 +14,11 @@ class Club(BaseModel):
     members_count: int
 
 
+class DecorationShort(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    picture: str
+
+
 class User(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
@@ -23,6 +28,7 @@ class UserPublic(User):
     picture: str
     username: str
     total_coins: int
+    decorations: list[DecorationShort]
 
 
 class UserPrivate(UserPublic):
@@ -99,3 +105,16 @@ class Transaction(BaseModel):
 class TransactionCreate(BaseModel):
     amount: int
     to_user_uid: str
+
+
+class Decoration(DecorationShort):
+    id: int
+    title: str
+    initial_price: int
+    last_bet: int
+    last_bet_user: UserPublic | None = None
+    type: str
+    betting_ends_at: datetime
+
+    class Config:
+        json_encoders = { datetime: lambda v: v.timestamp() }

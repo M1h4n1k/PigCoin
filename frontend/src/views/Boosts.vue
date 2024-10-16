@@ -5,6 +5,8 @@ import { useUserStore, useBoostsStore, useAlertStore } from "@/store";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import LoadingIcon from "@/components/LoadingIcon.vue";
+import IconArrowRight from "@/components/IconArrowRight.vue";
+import IconGraph from "@/components/IconGraph.vue";
 
 const router = useRouter();
 const { t } = useI18n();
@@ -99,7 +101,18 @@ const useFreeBooster = (type: number) => {
       </div>
     </div>
 
-    <div class="mt-5">
+    <router-link
+      to="/auction"
+      class="toned-bg relative mt-3 flex w-full justify-between px-3 py-3"
+    >
+      <div class="flex items-center">
+        <IconGraph height="25px" width="25px" />
+        <span class="ml-2">{{ $t("auction") }}</span>
+      </div>
+      <IconArrowRight height="25px" width="25px" />
+    </router-link>
+
+    <div class="mt-3">
       <div
         class="toned-bg mt-2 flex flex-col justify-around gap-4 rounded-xl p-3"
       >
