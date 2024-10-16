@@ -82,6 +82,7 @@
   "auction.ends_at": "Ends in",
   "auction.last_bet": "Last bet",
   "auction.last_user": "From",
+  "auction.winner": "Winner",
   "auction.explain": "After the bet, the amount will be deducted from the balance. If someone outbids your bet, HryCoins will be returned to the account. Each bet increases the time of the auction by 1 hour",
   "auction.bet": "Bet",
 

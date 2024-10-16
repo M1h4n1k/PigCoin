@@ -1,3 +1,4 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -6,10 +7,18 @@ import os
 
 from bot.loader import WEB_LINK
 from database.initialization import init
+from database.loader import scheduler
 from routers import router
 
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    scheduler.start()
+    yield
+    scheduler.shutdown()
+
+
+app = FastAPI(lifespan=lifespan)
 app.include_router(router)
 os.makedirs('photos', exist_ok=True)
 app.mount('/api/photos', StaticFiles(directory='photos'), name='photos')

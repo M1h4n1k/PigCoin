@@ -1,5 +1,13 @@
 import { defineStore } from "pinia";
-import { User, UserPublic, Boost, Task, Club, Transaction } from "@/types.ts";
+import {
+  User,
+  UserPublic,
+  Boost,
+  Task,
+  Club,
+  Transaction,
+  Decoration,
+} from "@/types.ts";
 import { Ref, ref } from "vue";
 
 export const useAlertStore = defineStore("alert", () => {
@@ -64,6 +72,12 @@ export const useRatingStore = defineStore("rating", () => {
     };
   }> = ref({});
   return { users, clubs };
+});
+
+export const useAuctionStore = defineStore("auction", () => {
+  const decorations: Ref<Decoration[]> = ref([]);
+
+  return { decorations };
 });
 
 export const useTasksStore = defineStore("tasks", () => {

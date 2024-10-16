@@ -16,12 +16,27 @@ const decoration = computed(() => {
 
 const currentDate = ref(Date.now() / 1000);
 
+const updaterInterval = setInterval(() => {
+  fetch(import.meta.env.VITE_API_URL + "/decorations/", {
+    credentials: "include",
+  })
+    .then((res) => res.json())
+    .then((data: Decoration | null) => {
+      if (!data) {
+        clearInterval(updaterInterval);
+        return;
+      }
+      auctionStore.decorations[0] = data;
+    });
+}, 5000);
+
 const timerInterval = setInterval(() => {
   currentDate.value = Date.now() / 1000;
 }, 1000);
 
 onUnmounted(() => {
   clearInterval(timerInterval);
+  if (updaterInterval) clearInterval(updaterInterval);
 });
 
 const timeLeft = computed(() => {
@@ -111,13 +126,27 @@ const makeBet = () => {
         </div>
         <p class="text-3xl">{{ decoration.title }}</p>
         <!--        <p class="mt-2 text-lg">Decoration for user picture</p>-->
-        <p class="mt-2 text-lg">
+        <p v-if="timeLeft > 0" class="mt-2 text-lg">
           {{ $t("auction.ends_at") }}
           {{ formattedTimeLeft }}
         </p>
+
+        <div v-else class="mt-2 flex text-lg">
+          {{ $t("auction.winner") }}:
+          <div class="ml-1 flex items-center">
+            <img
+              :src="decoration.last_bet_user.picture"
+              alt=""
+              class="aspect-square h-5 w-5 rounded-full"
+            />
+            <p class="ml-1 w-44 truncate">
+              {{ decoration.last_bet_user.username }}
+            </p>
+          </div>
+        </div>
       </div>
 
-      <div class="toned-bg mt-3 w-full px-3 py-3">
+      <div v-if="timeLeft > 0" class="toned-bg mt-3 w-full px-3 py-3">
         <p class="flex items-center text-lg">
           {{ $t("auction.last_bet") }}: {{ decoration.last_bet
           }}<img
@@ -154,13 +183,13 @@ const makeBet = () => {
 
         <button
           @click="makeBet"
-          class="mt-3 w-full rounded-full bg-[#2481cc] px-5 py-2 font-semibold text-white hover:!bg-[#1a8ad5]"
+          class="mt-3 w-full select-none rounded-full bg-[#2481cc] px-5 py-2 font-semibold text-white hover:!bg-[#1a8ad5]"
         >
           {{ $t("auction.bet") }}
         </button>
       </div>
 
-      <div class="toned-bg mt-3 px-3 py-3">
+      <div v-if="timeLeft > 0" class="toned-bg mt-3 px-3 py-3">
         <IconAlertInfo
           height="20"
           width="20"

@@ -1,7 +1,7 @@
-from .. import models, schemas
+from .. import models
 from datetime import datetime, timedelta
-from sqlalchemy import desc, asc, and_, or_
-from sqlalchemy.orm import Session, query
+from sqlalchemy import asc
+from sqlalchemy.orm import Session
 
 
 def get_decoration_by_id(db: Session, decoration_id: int) -> models.Decoration | None:

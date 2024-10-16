@@ -1,11 +1,27 @@
-from fastapi import Request, APIRouter, Depends, HTTPException, Body, Form
+from fastapi import APIRouter, Depends, HTTPException, Body
+import asyncio
+from apscheduler.triggers.date import DateTrigger
 from database import crud, schemas, models
+from database.loader import scheduler, SessionLocal
 from sqlalchemy.orm import Session
 from dependencies import get_db, get_user
 from datetime import datetime
 import logging
+from bot import bot
 
 router = APIRouter(prefix='/decorations', responses={404: {'description': 'User not found'}})
+
+
+def wrapper_finish_auction(decoration_id: int):
+    asyncio.run(finish_auction(decoration_id))
+
+
+async def finish_auction(decoration_id: int):
+    db = SessionLocal()
+    decoration = crud.decorations.get_decoration_by_id(db, decoration_id)
+    crud.decorations.finish_auction(db, decoration)
+    await bot.send_message(decoration.last_bet_user.tg_id, f'Ваш выигрыш на аукционе {decoration.title}!')
+    db.close()
 
 
 @router.post(
@@ -36,7 +52,16 @@ async def bet_decoration(
     if amount <= decoration.last_bet:
         raise HTTPException(status_code=406, detail='Bet must be higher than last bet')
     logging.info(f'{user.tg_id}:{user.username} bet {amount} on decoration {decoration.id}')
-    return crud.decorations.make_bet(db, user, decoration, amount)
+
+    updated_decoration = crud.decorations.make_bet(db, user, decoration, amount)
+    date_trigger = DateTrigger(run_date=updated_decoration.betting_ends_at)
+    job_id = f'decoration_auction_{updated_decoration.id}'
+    if scheduler.get_job(job_id):
+        scheduler.reschedule_job(job_id, trigger=date_trigger)
+    else:
+        scheduler.add_job(wrapper_finish_auction, trigger=date_trigger, args=(updated_decoration.id,), id=job_id)
+
+    return updated_decoration
 
 
 @router.get(

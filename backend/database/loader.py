@@ -1,3 +1,6 @@
+from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
+from apscheduler.executors.pool import ThreadPoolExecutor
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy_utils import database_exists, create_database
@@ -7,6 +10,14 @@ import os
 SQLALCHEMY_DATABASE_URL = (f'mysql+pymysql://'
                            f'root:{os.getenv("MYSQL_PASSWORD", "rectione")}@{os.getenv("MYSQL_HOST", "127.0.0.1")}/'
                            f'{os.getenv("MYSQL_DATABASE", "coin")}?charset=utf8mb4')
+
+jobstores = {
+    'default': SQLAlchemyJobStore(url=SQLALCHEMY_DATABASE_URL)
+}
+executors = {
+    'default': ThreadPoolExecutor(10),
+}
+scheduler = BackgroundScheduler(jobstores=jobstores, executors=executors)
 
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL, pool_recycle=3600, pool_size=5, max_overflow=10, pool_pre_ping=True)

@@ -75,7 +75,7 @@ fetch(import.meta.env.VITE_API_URL + "/user/login", {
     alertStore.displayAlert(error, "error", 15000);
   });
 
-fetch(import.meta.env.VITE_API_URL + "/decorations", {
+fetch(import.meta.env.VITE_API_URL + "/decorations/", {
   credentials: "include",
 })
   .then((res) => {
@@ -85,6 +85,7 @@ fetch(import.meta.env.VITE_API_URL + "/decorations", {
     return res.json();
   })
   .then((data) => {
+    if (!data) return;
     auctionStore.decorations = [data];
   })
   .catch((err) => {
