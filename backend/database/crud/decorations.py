@@ -1,5 +1,5 @@
 from .. import models, schemas
-from datetime import datetime
+from datetime import datetime, timedelta
 from sqlalchemy import desc, asc, and_, or_
 from sqlalchemy.orm import Session, query
 
@@ -14,6 +14,7 @@ def make_bet(db: Session, user: models.User, decoration: models.Decoration, amou
 
     decoration.last_bet = amount
     decoration.last_bet_user = user
+    decoration.betting_ends_at = max(decoration.betting_ends_at, datetime.now() + timedelta(hours=1))
     db.commit()
     return decoration
 
@@ -21,3 +22,10 @@ def make_bet(db: Session, user: models.User, decoration: models.Decoration, amou
 def get_decoration_on_auction(db: Session) -> models.Decoration | None:
     return db.query(models.Decoration).filter(models.Decoration.betting_ends_at > datetime.now()).order_by(
         asc(models.Decoration.betting_ends_at)).first()
+
+
+def finish_auction(db: Session, decoration: models.Decoration):
+    decoration.last_bet_user.decorations.append(decoration)
+    decoration.betting_ends_at = datetime.now()
+    db.commit()
+    return decoration

@@ -1,7 +1,12 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import Booster from "@/components/Booster.vue";
-import { useUserStore, useBoostsStore, useAlertStore } from "@/store";
+import {
+  useUserStore,
+  useBoostsStore,
+  useAlertStore,
+  useAuctionStore,
+} from "@/store";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import LoadingIcon from "@/components/LoadingIcon.vue";
@@ -14,6 +19,8 @@ const { t } = useI18n();
 const userStore = useUserStore();
 const alertStore = useAlertStore();
 const boostsStore = useBoostsStore();
+const auctionStore = useAuctionStore();
+
 const loading = ref(boostsStore.boosts.length === 0);
 
 if (boostsStore.boosts.length === 0) {
@@ -102,6 +109,7 @@ const useFreeBooster = (type: number) => {
     </div>
 
     <router-link
+      v-if="auctionStore.decorations.length > 0"
       to="/auction"
       class="toned-bg relative mt-3 flex w-full justify-between px-3 py-3"
     >

@@ -4,7 +4,7 @@ import App from "./App.vue";
 import router from "./router";
 import i18n from "./i18n-setup";
 import { createPinia } from "pinia";
-import { useUserStore, useAlertStore } from "./store";
+import { useUserStore, useAlertStore, useAuctionStore } from "./store";
 import VueGtag from "vue-gtag-next";
 import { Adsgram } from "@/types.ts";
 
@@ -38,6 +38,7 @@ const app = createApp(App)
   });
 
 const userStore = useUserStore();
+const auctionStore = useAuctionStore();
 
 app.mount("#app");
 
@@ -72,4 +73,20 @@ fetch(import.meta.env.VITE_API_URL + "/user/login", {
     const alertStore = useAlertStore();
     console.error(error);
     alertStore.displayAlert(error, "error", 15000);
+  });
+
+fetch(import.meta.env.VITE_API_URL + "/decorations", {
+  credentials: "include",
+})
+  .then((res) => {
+    if (!res.ok) {
+      throw new Error(res.statusText);
+    }
+    return res.json();
+  })
+  .then((data) => {
+    auctionStore.decorations = [data];
+  })
+  .catch((err) => {
+    console.log(err);
   });

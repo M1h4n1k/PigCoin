@@ -1,13 +1,48 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, onUnmounted } from "vue";
 import { Decoration } from "@/types.ts";
-import { useUserStore, useAlertStore } from "@/store.ts";
+import { useUserStore, useAlertStore, useAuctionStore } from "@/store.ts";
 import IconAlertInfo from "@/components/IconAlertInfo.vue";
+import LoadingIcon from "@/components/LoadingIcon.vue";
 
 const userStore = useUserStore();
 const alertStore = useAlertStore();
+const auctionStore = useAuctionStore();
 
-const decoration = ref<Decoration | undefined | null>(undefined);
+const decoration = computed(() => {
+  if (auctionStore.decorations.length === 0) return null;
+  return auctionStore.decorations[0];
+});
+
+const currentDate = ref(Date.now() / 1000);
+
+const timerInterval = setInterval(() => {
+  currentDate.value = Date.now() / 1000;
+}, 1000);
+
+onUnmounted(() => {
+  clearInterval(timerInterval);
+});
+
+const timeLeft = computed(() => {
+  return decoration.value!.betting_ends_at - currentDate.value;
+});
+
+const formattedTimeLeft = computed(() => {
+  return (
+    Math.floor(timeLeft.value / 60 / 60)
+      .toString()
+      .padStart(2, "0") +
+    ":" +
+    Math.floor((timeLeft.value % 3600) / 60)
+      .toString()
+      .padStart(2, "0") +
+    ":" +
+    Math.floor(timeLeft.value % 60)
+      .toString()
+      .padStart(2, "0")
+  );
+});
 
 const amount = ref<string | undefined>(undefined);
 
@@ -20,22 +55,6 @@ const validateAmount = computed(() => {
     return -1;
   return 0;
 });
-
-fetch(import.meta.env.VITE_API_URL + "/decorations", {
-  credentials: "include",
-})
-  .then((res) => {
-    if (!res.ok) {
-      throw new Error(res.statusText);
-    }
-    return res.json();
-  })
-  .then((data: Decoration | null) => {
-    decoration.value = data;
-  })
-  .catch((err) => {
-    console.log(err);
-  });
 
 const makeBet = () => {
   if (amount.value === undefined) amount.value = "";
@@ -62,7 +81,7 @@ const makeBet = () => {
       if (decoration.value!.last_bet_user.uid === userStore.user!.uid) {
         userStore.user!.current_coins += decoration.value!.last_bet;
       }
-      decoration.value = data;
+      auctionStore.decorations[0] = data;
       amount.value = undefined;
     })
     .catch((err) => {
@@ -73,11 +92,15 @@ const makeBet = () => {
 </script>
 
 <template>
-  <div class="px-2 pt-10">
-    <p v-if="decoration === null">No decoration</p>
-    <p v-else-if="decoration === undefined">Loading...</p>
+  <div class="px-2 pt-6">
+    <p class="toned-bg p-3 text-center text-lg" v-if="decoration === null">
+      {{ $t("auction.no") }}
+    </p>
+    <p class="flex w-full justify-center" v-else-if="decoration === undefined">
+      <LoadingIcon />
+    </p>
     <div v-else class="flex flex-col items-center">
-      <div class="toned-bg flex w-full flex-col items-center px-3 pb-3 pt-7">
+      <div class="toned-bg flex w-full flex-col items-center px-3 pb-3 pt-9">
         <div class="relative h-20 w-20 rounded-full bg-gray-200">
           <img
             :src="userStore.user!.picture"
@@ -90,7 +113,7 @@ const makeBet = () => {
         <!--        <p class="mt-2 text-lg">Decoration for user picture</p>-->
         <p class="mt-2 text-lg">
           {{ $t("auction.ends_at") }}
-          {{ new Date(decoration.betting_ends_at * 1000).toLocaleString() }}
+          {{ formattedTimeLeft }}
         </p>
       </div>
 
@@ -107,13 +130,13 @@ const makeBet = () => {
 
         <div class="mt-1 flex w-full" v-if="decoration.last_bet_user">
           <span class="">{{ $t("auction.last_user") }}:</span>
-          <div class="ml-3 flex items-center">
+          <div class="ml-1 flex items-center">
             <img
               :src="decoration.last_bet_user.picture"
               alt=""
               class="aspect-square h-5 w-5 rounded-full"
             />
-            <p class="ml-1 w-36 truncate">
+            <p class="ml-1 w-44 truncate">
               {{ decoration.last_bet_user.username }}
             </p>
           </div>
@@ -138,7 +161,11 @@ const makeBet = () => {
       </div>
 
       <div class="toned-bg mt-3 px-3 py-3">
-        <IconAlertInfo class="mr-1 inline text-gray-400" />
+        <IconAlertInfo
+          height="20"
+          width="20"
+          class="mr-0.5 inline text-gray-400"
+        />
         {{ $t("auction.explain") }}
       </div>
     </div>

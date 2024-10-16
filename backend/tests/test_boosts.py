@@ -1,12 +1,10 @@
 from unittest.mock import AsyncMock, Mock, ANY
-import pytest
-from .utils import client, dummy_user, get_client_with_dep
-from database.schemas import Club
-from fastapi.testclient import TestClient
+from .utils import dummy_user, get_client_with_dep
 
 
-def test_get_boosts():
-    response = client.get('/api/boosts/')
+def test_get_boosts(dummy_user):
+    client_l = get_client_with_dep(lambda : dummy_user)
+    response = client_l.get('/api/boosts/')
     assert response.status_code == 200
     assert sorted(response.json(), key=lambda r: r['id']) == response.json()
 

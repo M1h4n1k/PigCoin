@@ -4,7 +4,7 @@ from unittest.mock import Mock, call, ANY
 
 def test_make_transaction(mocker, dummy_user):
     def patch_get_user():
-        return Mock(tg_id=1, uid='123', picture='test', username='test', total_coins=500, current_coins=500)
+        return Mock(tg_id=1, uid='123', picture='test', username='test', total_coins=500, current_coins=500, decorations=[])
     get_user_patch = mocker.patch('routers.user.crud.users.get_user_by_uid', Mock(return_value=dummy_user))
     make_transaction_patch = mocker.patch(
         'routers.user.crud.users.make_transaction',
