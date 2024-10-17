@@ -149,7 +149,7 @@ const makeBet = () => {
 
       <div v-if="timeLeft > 0" class="toned-bg mt-3 w-full px-3 py-3">
         <p class="flex items-center text-lg">
-          {{ $t("auction.last_bet") }}: {{ decoration.last_bet
+          {{ $t("auction.last_bet") }}: {{ decoration.last_bet.toLocaleString()
           }}<img
             class="ml-1 h-3 w-3"
             src="/pigNoseCoin.svg"
