@@ -9,6 +9,7 @@ from bot.loader import WEB_LINK
 from database.initialization import init
 from database.loader import scheduler
 from routers import router
+import logging
 
 
 @asynccontextmanager
@@ -23,6 +24,14 @@ app.include_router(router)
 os.makedirs('photos', exist_ok=True)
 app.mount('/api/photos', StaticFiles(directory='photos'), name='photos')
 init()
+
+
+@app.middleware("http")
+async def verify_headers(request: Request, call_next):
+    headers = request.headers.get('User-Agent', '').lower()
+    if 'mozilla' not in headers and 'chrome' not in headers and 'apple' not in headers:
+        logging.warning(f'Cheating detected: {request.url} | {request.headers.get("User-Agent")} | {request.cookies.get("tg_data")}')
+    return await call_next(request)
 
 app.add_middleware(
     CORSMiddleware,
