@@ -65,7 +65,8 @@ const validateAmount = computed(() => {
   if (amount.value === undefined) return 1;
   if (
     amount.value === "" ||
-    parseInt(amount.value) <= decoration.value!.last_bet
+    parseInt(amount.value) <= decoration.value!.last_bet ||
+    parseInt(amount.value) > userStore.user!.current_coins
   )
     return -1;
   return 0;

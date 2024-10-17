@@ -9,7 +9,8 @@ def get_decoration_by_id(db: Session, decoration_id: int) -> models.Decoration |
 
 
 def make_bet(db: Session, user: models.User, decoration: models.Decoration, amount: int) -> models.Decoration:
-    decoration.last_bet_user.current_coins += decoration.last_bet
+    if decoration.last_bet_user:
+        decoration.last_bet_user.current_coins += decoration.last_bet
     user.current_coins -= amount
 
     decoration.last_bet = amount
