@@ -145,7 +145,7 @@ const collectCoinsBatch = () => {
     .catch((error) => {
       console.error("Error:", error);
     });
-	coinsCollectedBatch.value = 0;
+  coinsCollectedBatch.value = 0;
 };
 
 const collectInterval = ref<number | null>(null);
