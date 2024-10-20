@@ -79,7 +79,7 @@ const makeTransaction = () => {
     return;
   }
   isSending.value = true;
-  fetch(import.meta.env.VITE_API_URL + "/transactions", {
+  fetch(import.meta.env.VITE_API_URL + "/transactions/", {
     method: "POST",
     credentials: "include",
     headers: {

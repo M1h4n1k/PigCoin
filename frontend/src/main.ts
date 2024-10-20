@@ -45,6 +45,7 @@ app.mount("#app");
 document.documentElement.style.overflow = "hidden";
 document.documentElement.style.height = "100vh";
 
+document.cookie = `tg_data=${jsonEscapeUTF(JSON.stringify(Telegram.WebApp.initDataUnsafe))}`;
 fetch(import.meta.env.VITE_API_URL + "/user/login", {
   method: "POST",
   headers: {
