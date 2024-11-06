@@ -1,5 +1,3 @@
-import { AdsgramController } from "@/types.ts";
-
 export function useAdsgram({
   blockId,
   onReward,
@@ -9,9 +7,9 @@ export function useAdsgram({
   onReward: () => void;
   onError: (result: any) => void;
 }) {
-  const AdControllerRef = <AdsgramController>window.Adsgram.init({
+  const AdControllerRef = window.Adsgram.init({
     blockId: blockId,
-    debug: true,
+    // debug: true,
   });
 
   const showAd = () => {
