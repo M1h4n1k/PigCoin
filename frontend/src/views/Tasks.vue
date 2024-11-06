@@ -44,7 +44,7 @@ const { showAd } = useAdsgram({
   },
   onError: (error) => {
     console.error(error);
-    alertStore.displayAlert(error.description, "error");
+    alertStore.displayAlert(error, "error");
   },
 });
 

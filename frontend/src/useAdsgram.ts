@@ -1,4 +1,3 @@
-import { ref } from "vue";
 import { AdsgramController } from "@/types.ts";
 
 export function useAdsgram({
@@ -10,17 +9,14 @@ export function useAdsgram({
   onReward: () => void;
   onError: (result: any) => void;
 }) {
-  const AdControllerRef = ref<AdsgramController>(
-    window.Adsgram.init({
-      blockId: blockId,
-      // debug: true,
-    }),
-  );
+  const AdControllerRef = <AdsgramController>window.Adsgram.init({
+    blockId: blockId,
+    debug: true,
+  });
 
   const showAd = () => {
-    if (AdControllerRef.value) {
-      AdControllerRef.value
-        .show()
+    if (AdControllerRef) {
+      AdControllerRef.show()
         .then(() => {
           onReward();
         })
