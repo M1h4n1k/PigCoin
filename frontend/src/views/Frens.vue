@@ -46,7 +46,7 @@ const loadTransactions = (offset = 0, limit = 20) => {
 
   fetch(
     import.meta.env.VITE_API_URL +
-      `/transactions/?offset=${offset}&limit=${limit}`,
+      `/transactions?offset=${offset}&limit=${limit}`,
     {
       credentials: "include",
     },
