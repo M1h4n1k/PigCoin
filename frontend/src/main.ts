@@ -29,7 +29,7 @@ const app = createApp(App)
   .use(i18n)
   .use(VueGtag, {
     property: {
-      id: "G-TPX8945YE8",
+      id: "G-TAGID",
       params: {
         user_id: Telegram.WebApp.initDataUnsafe.user?.id,
         send_page_view: true,

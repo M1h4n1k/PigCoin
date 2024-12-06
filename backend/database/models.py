@@ -18,6 +18,9 @@ class User(Base):
 
     @property
     def uid(self):
+        # obfuscation of tg user id, because it's not secure to expose it. I thought of it too late,
+        # but it's better than nothing. If I had to do it again, I would just create my own ids in the
+        # database that are not dependent on the telegram user id.
         m = 791
         c = self.referrer_tg_id or 391016011758
         return hex(self.tg_id * m - (c * 10)).replace('0x', '')

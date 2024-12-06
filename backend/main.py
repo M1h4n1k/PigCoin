@@ -35,7 +35,7 @@ async def verify_headers(request: Request, call_next):
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=['http://127.0.0.1:3000', 'http://84.249.17.76:3000', WEB_LINK],
+    allow_origins=['http://127.0.0.1:3000', WEB_LINK],
     allow_credentials=True,
     allow_methods=['*'],
     allow_headers=['*'],
