@@ -12,10 +12,6 @@ services:
       interval: 5s
       timeout: 5s
       retries: 55
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
   backend:
     restart: always
     build:
@@ -30,10 +26,6 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
   bot:
     restart: always
     build:
@@ -44,10 +36,6 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
     volumes:
       - backend-images:/backend/photos
   notifier:
@@ -60,17 +48,13 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
-#  frontend:
-#    restart: always
-#    build:
-#      context: ./frontend
-#      dockerfile: ./Dockerfile
-#    ports:
-#      - "3000:80"
-#    logging:
-#      driver: "json-file"
-#      options:
-#        max-size: "10m"
+  frontend:
+    restart: always
+    build:
+      context: ./frontend
+      dockerfile: ./Dockerfile
+    ports:
+      - "3000:80"
 
 volumes:
   mysql-volume:

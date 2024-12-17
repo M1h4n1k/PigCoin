@@ -65,7 +65,7 @@ jobs:
           chmod 700 ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan 188.130.206.99 >> ~/.ssh/known_hosts
+          ssh-keyscan ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
 
       - name: Install and Build Frontend
@@ -78,10 +78,10 @@ jobs:
       - run: tar -czf frontend-build.tar.gz -C frontend/dist .
 
       - name: Transfer Build to Server
-        run: scp frontend-build.tar.gz root@188.130.206.99:/tmp/frontend-build.tar.gz
+        run: scp frontend-build.tar.gz root@${{ secrets.SERVER_IP }}:/tmp/frontend-build.tar.gz
 
       - name: Deploy to server
-        run: ssh root@188.130.206.99 "
+        run: ssh root@${{ secrets.SERVER_IP }} "
           cd ~/PigCoin &&
           git pull &&
           echo '${{ secrets.PROD_BACK_ENV }}' > ./backend/.env &&
