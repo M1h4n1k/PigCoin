@@ -1,7 +1,6 @@
-from .. import models, schemas
-from sqlalchemy import desc, asc, func, and_
-from sqlalchemy.orm import Session, query
-from sqlalchemy.dialects.mysql import insert as upsert
+from .. import models
+from sqlalchemy import desc
+from sqlalchemy.orm import Session
 
 
 def create_club(db: Session, club: models.Club) -> models.Club:
@@ -19,7 +18,13 @@ def get_club_by_name(db: Session, name: str) -> models.Club | None:
     return db.query(models.Club).filter(models.Club.tg_tag == name).first()
 
 
-def get_clubs_within_coins_range(db: Session, min_total_coins: int, max_total_coins: int | None, offset: int, limit: int) -> list:
+def get_clubs_within_coins_range(
+    db: Session,
+    min_total_coins: int,
+    max_total_coins: int | None,
+    offset: int,
+    limit: int,
+) -> list:
     qr = db.query(models.Club).filter(models.Club.total_coins >= min_total_coins)
     if max_total_coins:
         qr = qr.filter(models.Club.total_coins <= max_total_coins)

@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel, ConfigDict
 from datetime import datetime
 
 
@@ -64,8 +64,8 @@ class UserCreate(User):
     tg_id: int
     picture: str
     username: str
-    referrer_tg_id: int| None = None
-    club_id: int| None = None
+    referrer_tg_id: int | None = None
+    club_id: int | None = None
 
 
 class Task(BaseModel):
@@ -94,7 +94,9 @@ class CollectCoins(BaseModel):
 
 
 class Transaction(BaseModel):
-    model_config = ConfigDict(from_attributes=True, json_encoders={datetime: lambda v: v.timestamp()})
+    model_config = ConfigDict(
+        from_attributes=True, json_encoders={datetime: lambda v: v.timestamp()}
+    )
 
     amount: int
     from_user: UserPublic
@@ -117,4 +119,4 @@ class Decoration(DecorationShort):
     betting_ends_at: datetime
 
     class Config:
-        json_encoders = { datetime: lambda v: v.timestamp() }
+        json_encoders = {datetime: lambda v: v.timestamp()}

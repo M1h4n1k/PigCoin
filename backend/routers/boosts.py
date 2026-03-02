@@ -1,13 +1,13 @@
-from fastapi import Request, APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from database import crud, schemas, models
 from sqlalchemy.orm import Session
 from dependencies import get_db, get_user
 
-router = APIRouter(prefix='/boosts')
+router = APIRouter(prefix="/boosts")
 
 
 @router.get(
-    '/',
+    "/",
     response_model=list[schemas.Boost],
     status_code=200,
 )
@@ -33,10 +33,13 @@ async def get_user_boosts(
 
 
 @router.post(
-    '/buy/{boost_id}',
+    "/buy/{boost_id}",
     response_model=schemas.UserPrivate,
     status_code=200,
-    responses={404: {'description': 'Boost not found'}, 400: {'description': 'Not enough coins'}},
+    responses={
+        404: {"description": "Boost not found"},
+        400: {"description": "Not enough coins"},
+    },
 )
 async def buy_boost(
     boost_id: int,
@@ -45,12 +48,12 @@ async def buy_boost(
 ):
     boost = crud.boosts.get_boost(db, boost_id)
     if not boost:
-        raise HTTPException(status_code=404, detail='Boost not found')
+        raise HTTPException(status_code=404, detail="Boost not found")
 
     user_boost = next((x for x in user.boosts if x.boost_id == boost_id), None)
     total_price = boost.base_price + (100 * user_boost.count if user_boost else 0)
     if user.current_coins < total_price:
-        raise HTTPException(status_code=402, detail='Not enough coins')
+        raise HTTPException(status_code=402, detail="Not enough coins")
 
     crud.boosts.buy_boost(db, user.tg_id, boost_id, boost.type)
     user = crud.users.update_user_money(db, user, -total_price)
@@ -58,28 +61,29 @@ async def buy_boost(
 
 
 @router.post(
-    '/use/{boost_id}',
+    "/use/{boost_id}",
     response_model=schemas.UserPrivate,
     status_code=200,
-    responses={404: {'description': 'Boost not found'}, 400: {'description': 'Not enough boosts'}},
+    responses={
+        404: {"description": "Boost not found"},
+        400: {"description": "Not enough boosts"},
+    },
 )
 async def use_boost(
     boost_id: int,
     user: models.User = Depends(get_user),
     db: Session = Depends(get_db),
 ):
-    free_boosts = ['free_turbo', 'free_refills']
+    free_boosts = ["free_turbo", "free_refills"]
     if boost_id not in range(len(free_boosts)):
-        raise HTTPException(status_code=404, detail='Boost not found')
+        raise HTTPException(status_code=404, detail="Boost not found")
 
     if boost_id == 0:
         if user.free_turbo < 1:
-            raise HTTPException(status_code=400, detail='Not enough boosts')
+            raise HTTPException(status_code=400, detail="Not enough boosts")
         user = crud.users.user_use_free_turbo(db, user)
     elif boost_id == 1:
         if user.free_refills < 1:
-            raise HTTPException(status_code=400, detail='Not enough boosts')
+            raise HTTPException(status_code=400, detail="Not enough boosts")
         user = crud.users.user_use_free_refill(db, user)
     return user
-
-
