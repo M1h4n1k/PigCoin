@@ -4,4 +4,4 @@ from . import clubs
 from . import boosts
 from . import decorations
 
-__all__ = ['users', 'tasks', 'clubs', 'boosts', 'decorations']
+__all__ = ["users", "tasks", "clubs", "boosts", "decorations"]

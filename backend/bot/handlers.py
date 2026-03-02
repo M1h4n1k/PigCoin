@@ -1,32 +1,33 @@
 import os
 
-from aiogram import types, exceptions
+from aiogram import types
 from aiogram.types.web_app_info import WebAppInfo
-from aiogram.types import (
-    InlineKeyboardButton,
-    Message,
-    ChatMemberUpdated
-)
-from utils import get_locale as __, load_image
-from .loader import WEB_LINK, bot
+from aiogram.types import InlineKeyboardButton, Message, ChatMemberUpdated
+from utils import get_locale as __
+from .loader import WEB_LINK
 from database.loader import SessionLocal
-from database import crud, schemas
+from database import crud
 
 
 async def default_handler(message: Message):
-    kb = types.InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(
-        text=__('open', message.from_user.language_code),
-        web_app=WebAppInfo(url=WEB_LINK))
-    ]])
+    kb = types.InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(
+                    text=__("open", message.from_user.language_code),
+                    web_app=WebAppInfo(url=WEB_LINK),
+                )
+            ]
+        ]
+    )
     await message.answer(
-        __("start", message.from_user.language_code),
-        reply_markup=kb, parse_mode='HTML'
+        __("start", message.from_user.language_code), reply_markup=kb, parse_mode="HTML"
     )
 
 
 async def on_user_join(event: ChatMemberUpdated):
     channel_tasks = {
-        name: i + 1 for i, name in enumerate(os.getenv('PROMO_CHANNELS').split(','))
+        name: i + 1 for i, name in enumerate(os.getenv("PROMO_CHANNELS").split(","))
     }
     db = SessionLocal()
     user = crud.users.get_user(db, event.from_user.id)
@@ -46,7 +47,9 @@ async def on_user_join(event: ChatMemberUpdated):
         #     picture=picture_path,
         # ))
         # user = crud.users.get_user(db, event.from_user.id)
-    if any(task.id == channel_tasks[event.chat.username] for task in user.tasks_completed):
+    if any(
+        task.id == channel_tasks[event.chat.username] for task in user.tasks_completed
+    ):
         db.close()
         return
     crud.tasks.complete_task(db, channel_tasks[event.chat.username], event.from_user.id)
